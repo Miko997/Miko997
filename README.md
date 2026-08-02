@@ -40,7 +40,7 @@ I build software where **virtual worlds meet physical systems**: simulation, rob
 
 <p align="center">
   <a href="https://github.com/Miko997/metriplane">
-    <img src="https://raw.githubusercontent.com/Miko997/metriplane/main/docs/assets/metriplane-hero.jpg" width="72%" alt="Metriplane — open-source workcell evidence and replay" />
+    <img src="https://raw.githubusercontent.com/Miko997/metriplane/main/docs/assets/metriplane-hero.jpg" width="100%" alt="Metriplane — open-source workcell evidence and replay" />
   </a>
 </p>
 
