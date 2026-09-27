@@ -11,6 +11,7 @@
 
 <p align="center">
   <a href="#capability-map">Capabilities</a> ·
+  <a href="#open-source-impact">Open source</a> ·
   <a href="#selected-work">Selected work</a> ·
   <a href="#contact">Contact</a>
 </p>
@@ -24,6 +25,19 @@ I build software where **virtual worlds meet physical systems**: simulation, rob
 <p align="center">
   <img src="./assets/capability-panel.png" width="100%" alt="Core capabilities across simulation, robotics, real-time 3D, XR, software systems, AI, and perception" />
 </p>
+
+---
+
+## Open-source impact
+
+<p align="center">
+  <a href="https://github.com/conda-forge/metriplane-feedstock"><img alt="conda-forge feedstock maintainer" src="https://img.shields.io/badge/conda--forge-Feedstock_Maintainer-44A833?style=flat-square&amp;logo=anaconda&amp;logoColor=white" /></a>
+  <a href="https://github.com/ros2/rclpy/pull/1735"><img alt="ROS 2 merged contributor" src="https://img.shields.io/badge/ROS_2-Merged_Contributor-22314E?style=flat-square&amp;logo=ros&amp;logoColor=white" /></a>
+  <a href="https://github.com/newton-physics/newton/pull/3900"><img alt="Newton Physics merged contributor" src="https://img.shields.io/badge/Newton_Physics-Merged_Contributor-76B900?style=flat-square" /></a>
+  <a href="https://github.com/microsoft/typespec/pull/12042"><img alt="Microsoft TypeSpec merged contributor" src="https://img.shields.io/badge/Microsoft_TypeSpec-Merged_Contributor-5C2D91?style=flat-square&amp;logo=microsoft&amp;logoColor=white" /></a>
+</p>
+
+Maintainer of the [Metriplane conda-forge feedstock](https://github.com/conda-forge/metriplane-feedstock), with focused, regression-covered fixes merged into [ROS 2](https://github.com/ros2/rclpy/pull/1735), [Newton Physics](https://github.com/newton-physics/newton/pull/3900), and [Microsoft TypeSpec](https://github.com/microsoft/typespec/pull/12042).
 
 ---
 
