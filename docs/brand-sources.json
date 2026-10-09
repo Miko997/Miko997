@@ -1,0 +1,472 @@
+{
+  "checked_on": "2026-10-09",
+  "purpose": "Official artwork for the existing profile buttons; no affiliation or endorsement claim.",
+  "presentation": "Original vector paths or original embedded PNG bytes. White variants and restrained lavender presentation match the existing plaque theme.",
+  "presentation_filters": {
+    "newton": "Constant #b1bdd7 SVG paint matrix; source alpha and original PNG bytes preserved.",
+    "rviz": "Luminance-to-#b1bdd7 SVG paint matrix; original PNG bytes and alpha preserved."
+  },
+  "sources": {
+    "science": {
+      "verified_at_utc": "2026-10-09T17:37:26.070073+00:00",
+      "palette": "#aa91ff explicit fills for vector variants; root renderer controls final presentation.",
+      "assets": [
+        {
+          "id": "newton",
+          "name": "Newton Physics",
+          "kind": "official raster symbol embedded in SVG",
+          "project_url": "https://github.com/newton-physics/newton",
+          "official_source_url": "https://raw.githubusercontent.com/newton-physics/newton/c361452db95979eac77679bc49ef3c6b7c6dd9c4/docs/_static/newton-logo-dark.png",
+          "source_page": "https://newton-physics.github.io/newton/latest/",
+          "source_revision": "c361452db95979eac77679bc49ef3c6b7c6dd9c4",
+          "original": {
+            "path": "assets/brands/originals/newton-official-dark.png",
+            "bytes": 7563,
+            "sha256": "19e78dd1adbf572b4887589dd38e311eb734ba9e231bc7cb061618674ab2f0d6"
+          },
+          "normalized": {
+            "path": "assets/brands/icons/newton.svg",
+            "bytes": 10553,
+            "sha256": "87d414b66255157de59b5cce93da2678326f9687b14389e3529165d26d44b3b3"
+          },
+          "viewBox": "16 14 232 132",
+          "source_dimensions": [
+            265,
+            159
+          ],
+          "source_variant": "dark-background logo; colored blue/green cradle with pale suspension lines, not an all-white version",
+          "transformations": [
+            "Original PNG bytes embedded unchanged as a data URI.",
+            "ViewBox trims transparent margins. No tracing or geometry approximation.",
+            "SVG paint filter maps the preserved alpha silhouette to #b1bdd7."
+          ],
+          "rights": {
+            "documentation_license": "CC-BY-4.0 as stated for Newton documentation in the official README; asset is within docs/_static. No separate file-level logo grant was found.",
+            "software_license": "Apache-2.0; distinct from documentation and trademark terms.",
+            "license_source": "https://github.com/newton-physics/newton/blob/c361452db95979eac77679bc49ef3c6b7c6dd9c4/README.md",
+            "license_copy": "assets/brands/originals/newton-docs-CC-BY-4.0.txt",
+            "brand_guidance_url": "https://www.linuxfoundation.org/legal/trademark-usage",
+            "brand_guidance": "Linux Foundation guidance requires official logo versions and says not to alter logo colors or design elements. The copyright license does not itself grant trademark rights. The planned palette filter is a user-requested presentation adaptation, not a claim of official brand approval.",
+            "attribution": "Newton Physics project / The Linux Foundation and Newton contributors; project initiated by Disney Research, Google DeepMind and NVIDIA."
+          },
+          "fallback_concerns": [
+            "Official sources supplied a raster mark; source pixels are retained.",
+            "Palette adaptation is a user-requested presentation, not an official brand variant."
+          ]
+        },
+        {
+          "id": "mujoco",
+          "name": "MuJoCo",
+          "kind": "complete official vector wordmark",
+          "project_url": "https://mujoco.org/",
+          "official_source_url": "https://raw.githubusercontent.com/google-deepmind/mujoco/0998957cf026b78f35e3a1eebd2cd3312d810b08/doc/images/banner.svg",
+          "source_page": "https://github.com/google-deepmind/mujoco/blob/0998957cf026b78f35e3a1eebd2cd3312d810b08/doc/images/banner.svg",
+          "source_revision": "0998957cf026b78f35e3a1eebd2cd3312d810b08",
+          "original": {
+            "path": "assets/brands/originals/mujoco-official-banner.svg",
+            "bytes": 3885,
+            "sha256": "e3af847f5bf5553f7c525a338a9ec37732f1eceaa762afe15b81d281a6701daf"
+          },
+          "normalized": {
+            "path": "assets/brands/icons/mujoco.svg",
+            "bytes": 3077,
+            "sha256": "41dde932d67ee6c2e687d1c77dd3c7ad41d64772368975b0a1a8fe2e27b6c82a"
+          },
+          "viewBox": "96.5 31.8 408 86.6",
+          "path_count": 6,
+          "transformations": [
+            "All six original wordmark path-data strings retained exactly after XML parsing.",
+            "Removed only gradient banner rectangle, gradient definitions, stylesheet, grouping/editor metadata.",
+            "White wordmark fills changed to explicit #aa91ff; parent renderer may use its existing explicit palette fill.",
+            "ViewBox tightened to exact path bounds with fontTools BoundsPen; original coordinate system retained."
+          ],
+          "rights": {
+            "repository_license": "Apache-2.0; official root LICENSE retained locally. Banner asset has no additional file-specific license notice.",
+            "license_source": "https://github.com/google-deepmind/mujoco/blob/0998957cf026b78f35e3a1eebd2cd3312d810b08/LICENSE",
+            "license_copy": "assets/brands/originals/mujoco-APACHE-2.0.txt",
+            "trademark_statement": "The official site identifies MuJoCo as a trademark of Google DeepMind. Apache-2.0 section6 does not grant general trademark rights.",
+            "trademark_statement_url": "https://mujoco.org/",
+            "brand_guidance_url": "https://policies.google.com/terms",
+            "brand_guidance": "The site links to Google Terms, which retain Google branding rights and direct logo use to Google Brand Permissions. No MuJoCo-specific color specification or standalone vector symbol was located.",
+            "attribution": "MuJoCo / Google DeepMind."
+          },
+          "fallback_concerns": [
+            "Only a complete wordmark was found as an official vector asset. No initial, monogram or separate symbol was invented.",
+            "Its width-to-height ratio is about4.71; a28px square makes it too small. Root approved a wider slot within the existing top band."
+          ]
+        },
+        {
+          "id": "openusd",
+          "name": "OpenUSD / Universal Scene Description",
+          "kind": "official standalone vector symbol",
+          "project_url": "https://openusd.org/release/",
+          "official_source_url": "https://openusd.org/images/USDLogoUnsized.svg",
+          "source_page": "https://openusd.org/release/",
+          "original": {
+            "path": "assets/brands/originals/openusd-official.svg",
+            "bytes": 560,
+            "sha256": "529dea685836be7de95800d9688db4e1df6a8a3f341130069abdd2b5b1572128"
+          },
+          "normalized": {
+            "path": "assets/brands/icons/openusd.svg",
+            "bytes": 751,
+            "sha256": "b83c7d9067ed5c1d42a08706fc96ebb63ca705ba1d330264e3cf5b97bb5a2043"
+          },
+          "viewBox": "0 0 9.99997 11.3582",
+          "path_count": 4,
+          "transformations": [
+            "All four official path-data strings retained exactly after XML parsing.",
+            "Original blue/cyan fills replaced with explicit #aa91ff for the requested monochrome palette.",
+            "Tight viewBox excludes empty right and bottom margins; original path coordinates unchanged."
+          ],
+          "rights": {
+            "logo_license": "No license or copyright notice is embedded in the official website SVG. No separate official color-reuse guideline was located.",
+            "software_license": "The OpenUSD repository currently uses Tomorrow Open Source Technology License1.0 (modified Apache-style license with a different trademark section); this is not assumed to license the website logo.",
+            "software_license_url": "https://github.com/PixarAnimationStudios/OpenUSD/blob/5bc38c9d8799d16ce20ade219a464beaeae548cc/LICENSE.txt",
+            "website_terms_url": "https://disneytermsofuse.com/",
+            "brand_guidance": "Use is descriptive project identification; no affiliation or endorsement is asserted. The palette derivative is requested by the user and is not an official recolored brand asset.",
+            "attribution": "OpenUSD / Pixar Animation Studios."
+          },
+          "fallback_concerns": [
+            "This is the official USD project symbol from openusd.org, not the separate Alliance for OpenUSD (AOUSD) logo.",
+            "No raster or fabricated geometry is needed."
+          ]
+        }
+      ],
+      "validation": {
+        "mujoco": {
+          "original_geometry_preserved": true,
+          "self_contained_paths_only": true,
+          "path_data_sha256": "c4bc36073a3c79e273d9b94b0275feef773c05ff6b3971b0f6ec8ad68f63cfd3"
+        },
+        "openusd": {
+          "original_geometry_preserved": true,
+          "self_contained_paths_only": true,
+          "path_data_sha256": "6cf5385b8a29afaed66b6e0d13abfd0b634e51fc89e1f9ab5ea1dbb799aaadb2"
+        },
+        "newton": {
+          "source_png_bytes_preserved": true,
+          "self_contained_data_uri": true,
+          "geometry_traced": false,
+          "bitmap_pixels_recolored": false
+        }
+      }
+    },
+    "ros": {
+      "checked_on": "2026-10-09",
+      "owner": "Open Robotics / ROS project",
+      "artwork_repository": "https://github.com/openrobotics/artwork",
+      "source_revision": "4024191d62211c4d4fa024e9974dd372d92aa23a",
+      "license": {
+        "spdx": "CC-BY-NC-4.0",
+        "url": "https://creativecommons.org/licenses/by-nc/4.0/",
+        "source_url": "https://raw.githubusercontent.com/openrobotics/artwork/4024191d62211c4d4fa024e9974dd372d92aa23a/LICENSE",
+        "local_file": "assets/brands/originals/ros-artwork-LICENSE.txt",
+        "note": "Artwork repository states this license and separately references the ROS trademark policy. The repository code license does not erase trademark conditions."
+      },
+      "guidance": {
+        "repository_readme": "https://raw.githubusercontent.com/openrobotics/artwork/4024191d62211c4d4fa024e9974dd372d92aa23a/README.md",
+        "trademark_policy": "https://www.ros.org/blog/media/",
+        "style_guide": "https://raw.githubusercontent.com/openrobotics/artwork/4024191d62211c4d4fa024e9974dd372d92aa23a/ros_logo_style_guide_12_18_2012.svg",
+        "newer_brand_guide": "https://www.ros.org/imgs/ROSBrandGuide.pdf",
+        "checked_guidance": "Archived official style guide specifies navy #22314E and white #FFFFFF alternatives; prohibits changing element geometry, typefaces and colors. Official white is used, not lavender. Current website/PDF access was denied by the upstream anti-bot gateway; no claim of new trademark approval is made.",
+        "ros2_identity_guidance": "https://discourse.ros.org/t/is-there-any-official-guidelines-for-ros2-logo/9845",
+        "ros2_identity_note": "ROS maintainer explains that ROS 2 uses the ROS logo, with the version number separated in text. A separate invented ROS 2 symbol is unnecessary."
+      },
+      "icons": {
+        "ros2": {
+          "file": "assets/brands/icons/ros2.svg",
+          "source": "https://raw.githubusercontent.com/openrobotics/artwork/4024191d62211c4d4fa024e9974dd372d92aa23a/orgunits/ros.svg",
+          "original": "assets/brands/originals/ros-nine-dots-original.svg",
+          "choice": "Official standalone ROS nine-dot mark, accurately labeled ROS 2 by plaque text.",
+          "geometry": "All nine original circles copied unchanged, original 1024×1024 coordinate system; only fill set to official white."
+        },
+        "ros-perception": {
+          "file": "assets/brands/icons/ros-perception.svg",
+          "source": "https://raw.githubusercontent.com/openrobotics/artwork/4024191d62211c4d4fa024e9974dd372d92aa23a/orgunits/ros_logos.graffle",
+          "reference_png": "https://raw.githubusercontent.com/openrobotics/artwork/4024191d62211c4d4fa024e9974dd372d92aa23a/orgunits/ros-perception.png",
+          "original": "assets/brands/originals/ros-organizations-original.graffle",
+          "choice": "Distinct official ROS Perception organization mark, not a custom point-cloud illustration.",
+          "geometry": "Named perception layer, 234 original Rectangle objects emitted losslessly as 234 straight subpaths in one compact filled path. Bounds copied to 9 decimal places (sub-nanounit rounding); no repositioning or tracing. Viewport trims source canvas; fill set to official white.",
+          "normalization_script": "scripts/art/extract_ros_brand_icons.py"
+        },
+        "rviz": {
+          "file": "assets/brands/icons/rviz.svg",
+          "source": "https://raw.githubusercontent.com/ros2/rviz/0d5c197fabebb0fe25ad4ca1076e28a7be967b5c/rviz_common/images/splash.png",
+          "choice": "Actual official RViz project splash/logo embedded unchanged as a self-contained PNG data URI.",
+          "reason": "A wider top icon slot preserves the real RViz artwork; no substitute symbol is needed. The SVG is a lossless wrapper around the exact original 400×260 PNG.",
+          "official_rviz_raster": "https://raw.githubusercontent.com/ros2/rviz/0d5c197fabebb0fe25ad4ca1076e28a7be967b5c/rviz_common/images/splash.png",
+          "official_rviz_readme": "https://raw.githubusercontent.com/ros2/rviz/0d5c197fabebb0fe25ad4ca1076e28a7be967b5c/README.md",
+          "rviz_art_license_note": "The package README dedicates these icons and graphics to the public domain. ROS artwork CC BY-NC license applies only to the separate ROS/ROS Perception vectors.",
+          "inspection": "Reviewed recursive ros2/rviz tree at 0d5c197fabebb0fe25ad4ca1076e28a7be967b5c and original README/splash; ROS1 README also labels the corresponding image rviz logo. Generic ROS fallback was considered, then rejected in favor of original image embedding.",
+          "original": "assets/brands/originals/rviz-splash-original.png",
+          "geometry": "Original PNG bytes retained; aspect ratio preserved; SVG luminance paint filter maps it to the existing cool monochrome palette.",
+          "license": "Public Domain dedication for all package icons/graphics in the pinned ros2/rviz README.",
+          "recommended_display": "43.08×28px in a 28px-high top slot; retain aspect ratio. A 52×33.8px preview is also supplied."
+        }
+      },
+      "files": {
+        "assets/brands/originals/ros-artwork-LICENSE.txt": {
+          "sha256": "9ba5360d4c96b3ad659cda305615bcd115c2a4381edfdbd80b4fa50e8ec75669",
+          "bytes": 19214
+        },
+        "assets/brands/originals/ros-artwork-README.md": {
+          "sha256": "4859b53c4b7897f9e0eb8f13b648f4257ccac8fa7344671cca3d7e680626cd52",
+          "bytes": 521
+        },
+        "assets/brands/originals/ros-logo-original.svg": {
+          "sha256": "8b649e9d544a0a02753ecc52d013232e171584fff7a27313f46795fd854cee7e",
+          "bytes": 5154
+        },
+        "assets/brands/originals/ros-nine-dots-original.svg": {
+          "sha256": "a4c574fcd1fd3dfc831d127a8d35399d96d8a8846d1a37f6db2e50300a049d2b",
+          "bytes": 736
+        },
+        "assets/brands/originals/ros-organizations-original.graffle": {
+          "sha256": "cecb2877cb3aac28ea4d99c40dcb3819144f6f5c82299a09abb90db18db98285",
+          "bytes": 269220
+        },
+        "assets/brands/originals/ros-perception-original.png": {
+          "sha256": "fe9a82f7230e69c405b3313ffa64adc7708aeb366066f356461a1bad830c037f",
+          "bytes": 17523
+        },
+        "assets/brands/originals/ros-style-guide-2012-original.svg": {
+          "sha256": "568ee1becdf41b4969844ac6fac7af56fc7db77bcc249a61bdfb0f06e0aed08d",
+          "bytes": 223436
+        },
+        "assets/brands/originals/rviz-splash-original.png": {
+          "sha256": "3384f996461570572ee7b3ace1cd66fe0008733c4cfff7f4e4d632e03fe909f9",
+          "bytes": 50915
+        },
+        "assets/brands/originals/rviz-README-original.md": {
+          "sha256": "58529ff8fad07d550e13bb28090cf60f7ae6c0b6146cc39068ae679afcfee7c8",
+          "bytes": 2794
+        },
+        "assets/brands/icons/ros2.svg": {
+          "sha256": "5ffc8af4a8985097dc30c25ad2130b4f50aa69a2101521f6b1aadc1de27317f7",
+          "bytes": 821
+        },
+        "assets/brands/icons/rviz.svg": {
+          "sha256": "aac1d9d36254e4acc1a29e59884100858950ff8fef99315dc791d6bfdbb84393",
+          "bytes": 68360
+        },
+        "assets/brands/icons/ros-perception.svg": {
+          "sha256": "a80ae0cfb31465f767936e1b5b0bd3c27922ee17f3d0a3fc31784fdcbe44053f",
+          "bytes": 15337
+        }
+      }
+    },
+    "contact": {
+      "schema_version": 1,
+      "retrieved_on": "2026-10-09",
+      "scope": "Official source geometry for existing contact buttons only; no changes to button destinations, text, layout or data.",
+      "normalization": "No paths traced or redrawn. All icons preserve exact source path data, aspect ratio and relevant fill rules. Pure-white variants support the existing dark theme; arbitrary violet/brass fills are excluded.",
+      "icons": [
+        {
+          "key": "linkedin",
+          "name": "LinkedIn",
+          "source_url": "https://brand.linkedin.com/in-logo",
+          "download_url": "https://content.linkedin.com/content/dam/me/business/en-us/amp/xbu/linkedin-revised-brand-guidelines/logos/in-logo.zip",
+          "source_assets": [
+            "assets/brands/originals/linkedin-inbug-blue-21.svg",
+            "assets/brands/originals/linkedin-InBug-White.png",
+            "assets/brands/originals/linkedin-in-logo.zip"
+          ],
+          "geometry_source": "Native SVG symbol inbug-blue-21 embedded by LinkedIn in the official brand page; original path d is byte-for-byte preserved.",
+          "license": "LinkedIn trademark / Brand and User Agreements. No open-source license is claimed for the mark.",
+          "guidance_urls": [
+            "https://brand.linkedin.com/in-logo",
+            "https://brand.linkedin.com/downloads"
+          ],
+          "color_restrictions": "Only the official blue, black and white variants. Arbitrary violet, brass or gradient recoloring is not permitted by the published guidance.",
+          "recolor_detail": "Official 21px vector geometry rendered #ffffff, matching the approved white [in] variant supplied as InBug-White.png in the official ZIP. The current ZIP supplies raster originals, not an SVG.",
+          "usage": "Linked profile social icon. Preserve proportions and clear space; do not imply LinkedIn endorsement.",
+          "icon_path": "assets/brands/icons/linkedin.svg",
+          "sha256": {
+            "assets/brands/originals/linkedin-inbug-blue-21.svg": "d64ede501d529b91cfd34acbf4163d840f52a9927cf4187c9fd6acd45301ed3a",
+            "assets/brands/originals/linkedin-InBug-White.png": "ed22a5ab46c171e3449708ff34923de7298da00ac204c7f85444db05bf888791",
+            "assets/brands/originals/linkedin-in-logo.zip": "32c4b7bbf902c1d957881e2eca16bc765891dc86da8ce4d416a849f161222a87",
+            "assets/brands/icons/linkedin.svg": "fa49b558845b3f0e40bc205022e008d533e007c7bd75a2df770883a5858329a5"
+          },
+          "self_contained": true
+        },
+        {
+          "key": "orcid",
+          "name": "ORCID iD",
+          "source_url": "https://info.orcid.org/brand-guidelines/",
+          "download_url": "https://orcid.filecamp.com/s/o/n8FpP1ADWmZDCUP2",
+          "file_download_url": "https://orcid.filecamp.com/api/serve/ai35akEJKX2BxJsB",
+          "source_assets": [
+            "assets/brands/originals/orcid-reversed-vector.svg"
+          ],
+          "geometry_source": "ORCID Brand Library → Icons for Publications → Authenticated iD Icons → Reverse → ORCID-iD_icon_reversed_vector.svg. Original compound path, fill-rule, clip-rule and white fill retained.",
+          "license": "ORCID marks are trademarks of ORCID, Inc.; governed by ORCID Brand Guidelines. Most library material is CC0, but that does not remove mark restrictions.",
+          "guidance_urls": [
+            "https://info.orcid.org/brand-guidelines/",
+            "https://info.orcid.org/documentation/integration-guide/orcid-id-display-guidelines/"
+          ],
+          "color_restrictions": "Use icons as supplied. Green, high-contrast black/white, or reversed-out white on dark backgrounds; no other colorway.",
+          "recolor_detail": "None. Kept supplied #fff. Added explicit viewBox matching original 32×32 canvas; removed formatting whitespace only.",
+          "usage": "Link to the ORCID record, maintain accessible text. This is the conventional supplied iD icon; icon use must not be described as an independently authenticated identity.",
+          "icon_path": "assets/brands/icons/orcid.svg",
+          "sha256": {
+            "assets/brands/originals/orcid-reversed-vector.svg": "bdfaced845fc8040c3da9ef9fcc9aff458cf3d9f039b14d088342db754234416",
+            "assets/brands/icons/orcid.svg": "94fb1d3ab2460945d117336e1c977e04d85c5ea66106ce1b0b06cc779eb17cca"
+          },
+          "self_contained": true
+        },
+        {
+          "key": "youtube",
+          "name": "YouTube",
+          "source_url": "https://about.youtube/",
+          "download_url": "https://www.gstatic.com/marketing-cms/assets/images/e4/33/e62cf23942a6ae66cf3169a1bd2d/youtube-dark-logo.svg",
+          "source_assets": [
+            "assets/brands/originals/youtube-monochrome-logo.svg",
+            "assets/brands/originals/youtube-official-logo.svg"
+          ],
+          "geometry_source": "The last compound path of Google’s own monochrome YouTube SVG, including the original rounded rectangle and triangle knockout; exact d preserved.",
+          "license": "YouTube / Google trademark; branding guidelines govern use. No blanket open-source license is claimed for the mark.",
+          "guidance_urls": [
+            "https://brand.youtube/",
+            "https://developers.google.com/youtube/terms/branding-guidelines"
+          ],
+          "color_restrictions": "Published Google guidance prohibits modifying the branding colors or proportions. Use official color or monochrome treatments; do not tint violet or add effects.",
+          "recolor_detail": "Exact official monochrome icon geometry rendered #ffffff as the inverse monochrome treatment. Rectangular canvas mask removed because it clips no visible geometry; inherited evenodd fill rule made explicit. This is normalized from a black official SVG, not claimed to be a downloaded white SVG.",
+          "limitation": "The current brand.youtube portal failed local TLS hostname verification and no browser surface was available. Its old white download links redirected to about.youtube. The official site’s native monochrome path was used at the parent’s direction; current downloadable-white-asset provenance was not established.",
+          "usage": "Social icon links to the YouTube channel. Retain triangle knockout and rounded container, sufficient contrast and clear space.",
+          "icon_path": "assets/brands/icons/youtube.svg",
+          "sha256": {
+            "assets/brands/originals/youtube-monochrome-logo.svg": "563464ec8a0d0a72d8e5163d68f31f6cb20389c997dec2b08a2184d569b088ce",
+            "assets/brands/originals/youtube-official-logo.svg": "8e3bfc8b39e69be46b67d96bb2dab3705f5dfbbb92f541f22d84ed78023b0420",
+            "assets/brands/icons/youtube.svg": "6f0a12a3c9ef245c820aef518a17262284862cf51a173fc5a610446c887362a2"
+          },
+          "self_contained": true
+        },
+        {
+          "key": "steam",
+          "name": "Steam",
+          "source_url": "https://store.steampowered.com/",
+          "download_url": "https://store.akamai.steamstatic.com/public/shared/images/header/logo_steam.svg?t=962016",
+          "source_assets": [
+            "assets/brands/originals/steam-header-logo.svg"
+          ],
+          "geometry_source": "First three paths of Valve’s official Steam header SVG form its independent circle/crank symbol. Exact d values preserved; wordmark paths excluded for the small icon.",
+          "license": "Valve trademark / Steam brand guidance. No open-source license is claimed for the mark.",
+          "guidance_urls": [
+            "https://partner.steamgames.com/doc/marketing/branding",
+            "https://shared.akamai.steamstatic.com/community_assets/images/steamworks_docs/english/steam_brandGuidelines.pdf"
+          ],
+          "color_restrictions": "Official artwork, no physical alteration or merging with another logo. Current guidance illustrates black positive and pure-white inverse treatment.",
+          "recolor_detail": "Official symbol paths originally #C5C3C0 on the store site rendered #ffffff, matching the inverse treatment illustrated on page 7 of Valve’s December-2024 guidance. Proportions and all path coordinates retained.",
+          "limitation": "The guide’s 50px minimum concerns the full wordmark lockup used for game marketing. No separate published minimum for a profile-link symbol was established; the standalone-symbol use is an extraction, not a separately downloaded 22px approved package.",
+          "usage": "Secondary Steam profile link, separated from nearby text; no endorsement implied. Steam and the Steam logo are trademarks and/or registered trademarks of Valve Corporation in the U.S. and/or other countries.",
+          "icon_path": "assets/brands/icons/steam.svg",
+          "sha256": {
+            "assets/brands/originals/steam-header-logo.svg": "3a4d08139646d567a612f75b8179641c570d490f8013478d131266ed21f3d453",
+            "assets/brands/icons/steam.svg": "bb5121b81a9ece5b97622482c5b60ff50b996affb67fa21f33ad6bf718c37424"
+          },
+          "self_contained": true
+        },
+        {
+          "key": "zenodo",
+          "name": "Zenodo",
+          "source_url": "https://about.zenodo.org/",
+          "download_url": "https://about.zenodo.org/static/img/icons/zenodo-icon-white.svg",
+          "source_assets": [
+            "assets/brands/originals/zenodo-icon-white.svg"
+          ],
+          "geometry_source": "Official About page → Icon → White → SVG. Original path d and translate transform retained.",
+          "license": "Zenodo and its logo are CERN trademarks. The source repository explicitly excludes the logo from its GPL license. The About page does not state a separate license for this standard icon; do not apply the anniversary logo’s CC-BY-SA label to it.",
+          "guidance_urls": [
+            "https://about.zenodo.org/",
+            "https://github.com/zenodo/zenodo#zenodo-r"
+          ],
+          "color_restrictions": "Official white icon chosen; no additional recoloring. Source offers blue, black and white variants.",
+          "recolor_detail": "None. Flattened redundant outer SVG wrappers and removed empty defs, IDs and unused class; retained authored #ffffff, path and transform.",
+          "usage": "Research archive button links to the owner’s Zenodo results/records. No CERN endorsement implied.",
+          "icon_path": "assets/brands/icons/zenodo.svg",
+          "sha256": {
+            "assets/brands/originals/zenodo-icon-white.svg": "088af61a4aaa86b48a12b1358069c4b6d637f13fab4bc00911d0fcf00aa58291",
+            "assets/brands/icons/zenodo.svg": "3d45981080740395296566619b82c79c1d26bcbd1d4e8e2da2ff65266cae1672"
+          },
+          "self_contained": true
+        }
+      ]
+    },
+    "mail": {
+      "email": {
+        "name": "Material Icons mail_outline",
+        "source_url": "https://raw.githubusercontent.com/google/material-design-icons/49d4db35df873165d6bd6ba09b063c7dafbac2f4/src/communication/mail_outline/materialicons/24px.svg",
+        "guidance_url": "https://developers.google.com/fonts/docs/material_icons",
+        "license": "Apache-2.0",
+        "license_file": "assets/brands/licenses/material-icons-APACHE-2.0.txt",
+        "original": "assets/brands/originals/material-mail-outline.svg",
+        "icon": "assets/brands/icons/email.svg",
+        "sha256": "78517ba88b607ab546591b07f79bb37e95a1ba4345b2d83cce684eb9c7a1d407",
+        "adaptation": "Original mail_outline geometry; fill changed to #b1bdd7. Generic email symbol, not a Gmail brand claim."
+      }
+    }
+  },
+  "final_icons": {
+    "email": {
+      "file": "assets/brands/icons/email.svg",
+      "sha256": "9608694d586f063b3ea0b94c3689cec9d75065daab6225d57f79ff934cf75a50",
+      "bytes": 278
+    },
+    "linkedin": {
+      "file": "assets/brands/icons/linkedin.svg",
+      "sha256": "fa49b558845b3f0e40bc205022e008d533e007c7bd75a2df770883a5858329a5",
+      "bytes": 469
+    },
+    "mujoco": {
+      "file": "assets/brands/icons/mujoco.svg",
+      "sha256": "41dde932d67ee6c2e687d1c77dd3c7ad41d64772368975b0a1a8fe2e27b6c82a",
+      "bytes": 3077
+    },
+    "newton": {
+      "file": "assets/brands/icons/newton.svg",
+      "sha256": "87d414b66255157de59b5cce93da2678326f9687b14389e3529165d26d44b3b3",
+      "bytes": 10553
+    },
+    "openusd": {
+      "file": "assets/brands/icons/openusd.svg",
+      "sha256": "b83c7d9067ed5c1d42a08706fc96ebb63ca705ba1d330264e3cf5b97bb5a2043",
+      "bytes": 751
+    },
+    "orcid": {
+      "file": "assets/brands/icons/orcid.svg",
+      "sha256": "94fb1d3ab2460945d117336e1c977e04d85c5ea66106ce1b0b06cc779eb17cca",
+      "bytes": 717
+    },
+    "ros-perception": {
+      "file": "assets/brands/icons/ros-perception.svg",
+      "sha256": "a80ae0cfb31465f767936e1b5b0bd3c27922ee17f3d0a3fc31784fdcbe44053f",
+      "bytes": 15337
+    },
+    "ros2": {
+      "file": "assets/brands/icons/ros2.svg",
+      "sha256": "5ffc8af4a8985097dc30c25ad2130b4f50aa69a2101521f6b1aadc1de27317f7",
+      "bytes": 821
+    },
+    "rviz": {
+      "file": "assets/brands/icons/rviz.svg",
+      "sha256": "aac1d9d36254e4acc1a29e59884100858950ff8fef99315dc791d6bfdbb84393",
+      "bytes": 68360
+    },
+    "steam": {
+      "file": "assets/brands/icons/steam.svg",
+      "sha256": "bb5121b81a9ece5b97622482c5b60ff50b996affb67fa21f33ad6bf718c37424",
+      "bytes": 1361
+    },
+    "youtube": {
+      "file": "assets/brands/icons/youtube.svg",
+      "sha256": "6f0a12a3c9ef245c820aef518a17262284862cf51a173fc5a610446c887362a2",
+      "bytes": 504
+    },
+    "zenodo": {
+      "file": "assets/brands/icons/zenodo.svg",
+      "sha256": "3d45981080740395296566619b82c79c1d26bcbd1d4e8e2da2ff65266cae1672",
+      "bytes": 2002
+    }
+  }
+}

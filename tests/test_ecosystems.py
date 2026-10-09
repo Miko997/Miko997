@@ -1,5 +1,6 @@
 """Plaques share the showcase's verified contribution gate and remain simple images."""
 import copy
+import base64
 import re
 import sys
 import unittest
@@ -75,9 +76,18 @@ class EcosystemTests(unittest.TestCase):
                 self.assertEqual((int(root.attrib["width"]), int(root.attrib["height"])), (WIDTH, HEIGHT))
                 self.assertTrue(root.find("{http://www.w3.org/2000/svg}title").text)
                 self.assertTrue(root.find("{http://www.w3.org/2000/svg}desc").text)
-                for banned in ("<script", "<image", "<animate", "@keyframes", "foreignObject", "href=", "onload="):
+                for banned in ("<script", "<animate", "@keyframes", "foreignObject", "onload="):
                     self.assertNotIn(banned, content)
-                self.assertLess(len(content.encode()), 4000)
+                # Newton and RViz publish raster marks. Their original PNGs are
+                # vendored inline; no network references may enter an SVG image.
+                for node in root.iter():
+                    for attr, value in node.attrib.items():
+                        if attr.rsplit("}", 1)[-1] == "href":
+                            self.assertEqual(node.tag, "{http://www.w3.org/2000/svg}image")
+                            self.assertTrue(value.startswith("data:image/png;base64,"))
+                            pixels = base64.b64decode(value.split(",", 1)[1], validate=True)
+                            self.assertTrue(pixels.startswith(b"\x89PNG\r\n\x1a\n"))
+                self.assertLess(len(content.encode()), 128 * 1024)
 
     def test_display_tiles_allow_two_columns_in_real_mobile_readme(self):
         self.assertLessEqual(2 * 126 + 5, 293)

@@ -6,22 +6,22 @@
 </picture>
 
 <picture>
-  <source media="(prefers-reduced-motion: reduce) and (max-width: 600px)" srcset="./assets/generated/contribution-core-mobile-static--5a9191e0095a.svg" />
-  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/generated/contribution-core-static--5a9191e0095a.svg" />
-  <source media="(max-width: 600px)" srcset="./assets/generated/contribution-core-mobile--5a9191e0095a.svg" />
-  <img src="./assets/generated/contribution-core--5a9191e0095a.svg" width="100%" alt="1,584 GitHub contributions from 2025-10-10 to 2026-10-09; current contribution streak 6 days" />
+  <source media="(prefers-reduced-motion: reduce) and (max-width: 600px)" srcset="./assets/generated/contribution-core-mobile-static--eb24d449a1a7.svg" />
+  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/generated/contribution-core-static--eb24d449a1a7.svg" />
+  <source media="(max-width: 600px)" srcset="./assets/generated/contribution-core-mobile--eb24d449a1a7.svg" />
+  <img src="./assets/generated/contribution-core--eb24d449a1a7.svg" width="100%" alt="1,584 GitHub contributions from 2025-10-10 to 2026-10-09; current contribution streak 6 days" />
 </picture>
 
 ## Open source
 
 <!-- IMPACT:START -->
 <p>
-<a href="https://github.com/newton-physics/newton/pull/4205"><img src="./assets/generated/ecosystem-newton--5a9191e0095a.svg" width="126" height="58" alt="Newton Physics — GPU benchmarks for full and partial simulation resets" title="GPU benchmarks for full and partial simulation resets" /></a>
-<a href="https://github.com/google-deepmind/mujoco/commit/76e31d377ed4718366431b947720aea837d94ea5"><img src="./assets/generated/ecosystem-mujoco--5a9191e0095a.svg" width="126" height="58" alt="MuJoCo — URDF inertia regression coverage across recompilation and XML round trips" title="URDF inertia regression coverage across recompilation and XML round trips" /></a>
-<a href="https://github.com/PixarAnimationStudios/OpenUSD/commit/581fa24e8c887346f14e7edb5f3e88fb1fe33372"><img src="./assets/generated/ecosystem-openusd--5a9191e0095a.svg" width="126" height="58" alt="OpenUSD — Hydra scene-index prefixing for absolute and membership path expressions" title="Hydra scene-index prefixing for absolute and membership path expressions" /></a>
-<a href="https://github.com/ros2/rclcpp/pull/3294"><img src="./assets/generated/ecosystem-ros2--5a9191e0095a.svg" width="126" height="58" alt="ROS 2 — Wait-set ownership on failed removal" title="Wait-set ownership on failed removal" /></a>
-<a href="https://github.com/ros2/rviz/pull/1891"><img src="./assets/generated/ecosystem-rviz--5a9191e0095a.svg" width="126" height="58" alt="RViz — Keyboard event routing after native render-window interaction" title="Keyboard event routing after native render-window interaction" /></a>
-<a href="https://github.com/ros-perception/point_cloud_transport/pull/198"><img src="./assets/generated/ecosystem-ros-perception--5a9191e0095a.svg" width="126" height="58" alt="ROS Perception — Caller transport defaults and existing parameter declarations" title="Caller transport defaults and existing parameter declarations" /></a>
+<a href="https://github.com/newton-physics/newton/pull/4205"><img src="./assets/generated/ecosystem-newton--eb24d449a1a7.svg" width="126" height="58" alt="Newton Physics — GPU benchmarks for full and partial simulation resets" title="GPU benchmarks for full and partial simulation resets" /></a>
+<a href="https://github.com/google-deepmind/mujoco/commit/76e31d377ed4718366431b947720aea837d94ea5"><img src="./assets/generated/ecosystem-mujoco--eb24d449a1a7.svg" width="126" height="58" alt="MuJoCo — URDF inertia regression coverage across recompilation and XML round trips" title="URDF inertia regression coverage across recompilation and XML round trips" /></a>
+<a href="https://github.com/PixarAnimationStudios/OpenUSD/commit/581fa24e8c887346f14e7edb5f3e88fb1fe33372"><img src="./assets/generated/ecosystem-openusd--eb24d449a1a7.svg" width="126" height="58" alt="OpenUSD — Hydra scene-index prefixing for absolute and membership path expressions" title="Hydra scene-index prefixing for absolute and membership path expressions" /></a>
+<a href="https://github.com/ros2/rclcpp/pull/3294"><img src="./assets/generated/ecosystem-ros2--eb24d449a1a7.svg" width="126" height="58" alt="ROS 2 — Wait-set ownership on failed removal" title="Wait-set ownership on failed removal" /></a>
+<a href="https://github.com/ros2/rviz/pull/1891"><img src="./assets/generated/ecosystem-rviz--eb24d449a1a7.svg" width="126" height="58" alt="RViz — Keyboard event routing after native render-window interaction" title="Keyboard event routing after native render-window interaction" /></a>
+<a href="https://github.com/ros-perception/point_cloud_transport/pull/198"><img src="./assets/generated/ecosystem-ros-perception--eb24d449a1a7.svg" width="126" height="58" alt="ROS Perception — Caller transport defaults and existing parameter declarations" title="Caller transport defaults and existing parameter declarations" /></a>
 </p>
 <!-- IMPACT:END -->
 
@@ -53,11 +53,11 @@ The trailer appeared at IGN Live 2024, and the game joined indie.io’s Gamescom
 
 <!-- CONTACTS:START -->
 <p>
-<a href="https://www.linkedin.com/in/miko-parkkinen-96650822a/"><picture><source media="(prefers-reduced-motion: reduce)" srcset="./assets/links/linkedin-static--b60a4e68a96f.svg" /><img src="./assets/links/linkedin--b615730e84f5.svg" width="144" height="44" alt="LinkedIn" /></picture></a>
-<a href="https://orcid.org/0009-0008-5214-0984"><picture><source media="(prefers-reduced-motion: reduce)" srcset="./assets/links/orcid-static--1dddd37fe5eb.svg" /><img src="./assets/links/orcid--449cd4b3fc37.svg" width="144" height="44" alt="ORCID" /></picture></a>
-<a href="https://www.youtube.com/@MikoParkkinen/videos"><picture><source media="(prefers-reduced-motion: reduce)" srcset="./assets/links/youtube-static--f785a4234cc8.svg" /><img src="./assets/links/youtube--c38a490f2ca7.svg" width="144" height="44" alt="YouTube" /></picture></a>
-<a href="https://store.steampowered.com/app/2713550/Cursed_Dawn/"><picture><source media="(prefers-reduced-motion: reduce)" srcset="./assets/links/steam-static--b31ecaa66308.svg" /><img src="./assets/links/steam--1b4bb1bb4930.svg" width="144" height="44" alt="Steam" /></picture></a>
-<a href="mailto:Miko.Parkkinen99@gmail.com"><picture><source media="(prefers-reduced-motion: reduce)" srcset="./assets/links/email-static--6eafe1ce36c1.svg" /><img src="./assets/links/email--26465f2c9bbd.svg" width="144" height="44" alt="Email" /></picture></a>
-<a href="https://doi.org/10.5281/zenodo.20736619"><picture><source media="(prefers-reduced-motion: reduce)" srcset="./assets/links/research-static--21e7285a54dc.svg" /><img src="./assets/links/research--00d0f5f2b501.svg" width="144" height="44" alt="Research archive" /></picture></a>
+<a href="https://www.linkedin.com/in/miko-parkkinen-96650822a/"><picture><source media="(prefers-reduced-motion: reduce)" srcset="./assets/links/linkedin-static--a8aca02e3cf0.svg" /><img src="./assets/links/linkedin--925e4f5ccd56.svg" width="144" height="44" alt="LinkedIn" /></picture></a>
+<a href="https://orcid.org/0009-0008-5214-0984"><picture><source media="(prefers-reduced-motion: reduce)" srcset="./assets/links/orcid-static--cc0cf019bb2e.svg" /><img src="./assets/links/orcid--259987b737e0.svg" width="144" height="44" alt="ORCID" /></picture></a>
+<a href="https://www.youtube.com/@MikoParkkinen/videos"><picture><source media="(prefers-reduced-motion: reduce)" srcset="./assets/links/youtube-static--8b995103e7ec.svg" /><img src="./assets/links/youtube--2f285d47dff1.svg" width="144" height="44" alt="YouTube" /></picture></a>
+<a href="https://store.steampowered.com/app/2713550/Cursed_Dawn/"><picture><source media="(prefers-reduced-motion: reduce)" srcset="./assets/links/steam-static--027701f821ca.svg" /><img src="./assets/links/steam--27e49f55e4fd.svg" width="144" height="44" alt="Steam" /></picture></a>
+<a href="mailto:Miko.Parkkinen99@gmail.com"><picture><source media="(prefers-reduced-motion: reduce)" srcset="./assets/links/email-static--75f080a233b6.svg" /><img src="./assets/links/email--ec21ec85c711.svg" width="144" height="44" alt="Email" /></picture></a>
+<a href="https://doi.org/10.5281/zenodo.20736619"><picture><source media="(prefers-reduced-motion: reduce)" srcset="./assets/links/research-static--6a8835153735.svg" /><img src="./assets/links/research--5c513c5f564a.svg" width="144" height="44" alt="Research archive" /></picture></a>
 </p>
 <!-- CONTACTS:END -->

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+<title>ROS nine-dot mark — ROS 2</title>
+<!-- Source: https://raw.githubusercontent.com/openrobotics/artwork/4024191d62211c4d4fa024e9974dd372d92aa23a/orgunits/ros.svg ; Open Robotics. CC BY-NC 4.0; trademark guidance also applies. Original geometry, official white color alternative. -->
+<circle cx="120" cy="120" r="116" fill="#ffffff"/>
+<circle cx="512" cy="120" r="116" fill="#ffffff"/>
+<circle cx="904" cy="120" r="116" fill="#ffffff"/>
+<circle cx="120" cy="512" r="116" fill="#ffffff"/>
+<circle cx="512" cy="512" r="116" fill="#ffffff"/>
+<circle cx="904" cy="512" r="116" fill="#ffffff"/>
+<circle cx="120" cy="904" r="116" fill="#ffffff"/>
+<circle cx="512" cy="904" r="116" fill="#ffffff"/>
+<circle cx="904" cy="904" r="116" fill="#ffffff"/>
+</svg>

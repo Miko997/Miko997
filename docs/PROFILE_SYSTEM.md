@@ -81,8 +81,9 @@ imply employment, project membership or maintainer status. Ownership
 or maintainership of the user's own project must be described separately.
 
 `scripts/render_ecosystems.py` turns that same verified selection into compact
-static plaques under `assets/generated/ecosystem-*.svg`. Their geometric motifs
-are original editorial artwork, not official project logos. Every plaque links
+static plaques under `assets/generated/ecosystem-*.svg`. Their project symbols
+come from the official artwork recorded in `BRAND_ASSETS.md`; the plaque frames
+remain original artwork. Every plaque links
 to its selected upstream evidence. Missing, open, draft or unverified evidence produces
 neither a plaque output nor a README link. Their native canvas is 148 × 68;
 the README displays them at 126 × 58 so all six fit inside a 782-pixel
