@@ -1,0 +1,1136 @@
+{
+  "schema_version": 1,
+  "audited_at_utc": "2026-10-09T16:37:41.454562+00:00",
+  "subject": "Miko997",
+  "purpose": "Select relevant, demonstrably accepted upstream work for a simulation, robotics and research-software profile.",
+  "selection_method": "Rank verified substantive work by professional relevance and demonstrated scope; stars and raw line counts are not ranking criteria. Six tiles cover four project families, with ROS 2 core, RViz and ROS Perception deliberately identified as related projects.",
+  "privacy": "Read-only authenticated public GitHub searches and direct reads of identified public repositories. No private enumeration, credentials, author email addresses, raw issue bodies or source patches retained in this report.",
+  "coverage": [
+    {
+      "endpoint": "GET /search/issues",
+      "query": "is:pr is:public author:Miko997 -user:Miko997 is:merged draft:false",
+      "per_page": 100,
+      "pages": 1,
+      "total_count": 15,
+      "incomplete_results": false,
+      "verification": "All 15 PR detail and files endpoints checked: repository public, author Miko997, merged true, draft false; file pagination matched changed_files."
+    },
+    {
+      "endpoint": "GET /search/issues",
+      "query": "author:Miko997 is:issue is:public",
+      "per_page": 100,
+      "pages": 1,
+      "total_count": 13,
+      "incomplete_results": false,
+      "reviewed": "All 13 issue bodies; all comments of 5 BlenDaViz issues and timeline of weitsicht #8."
+    },
+    {
+      "endpoint": "GET /search/issues",
+      "query": "reviewed-by:Miko997 is:pr is:public -author:Miko997",
+      "per_page": 100,
+      "pages": 1,
+      "total_count": 4,
+      "incomplete_results": false,
+      "reviewed": "All four PR review endpoints, paginated at 100; all inline comments of Newton #3898."
+    },
+    {
+      "endpoint": "GET /search/issues",
+      "query": "commenter:Miko997 is:pr is:public -author:Miko997",
+      "per_page": 100,
+      "pages": 1,
+      "total_count": 10,
+      "incomplete_results": false,
+      "reviewed": "Eight technical PRs and two own-package feedstock release PRs; all substantive Miko997 comments on the six PRs beyond formal-review search were read."
+    },
+    {
+      "endpoint": "GET /search/issues",
+      "query": "commenter:Miko997 is:issue is:public -author:Miko997",
+      "per_page": 100,
+      "pages": 1,
+      "total_count": 13,
+      "incomplete_results": false,
+      "reviewed": "Detailed comments read for 10 selected review/technical issues; two JOSS pre-review threads and OpenUSD issue #4220 not exhaustively read."
+    },
+    {
+      "endpoint": "GET /search/commits",
+      "query": "author:Miko997 is:public -user:Miko997",
+      "per_page": 100,
+      "pages": 1,
+      "total_count": 29,
+      "incomplete_results": false,
+      "reviewed": "21 canonical commit rows, 8 identical-SHA mirror duplicates excluded; each canonical commit queried via GET /repos/{owner}/{repo}/commits/{sha}/pulls with per_page=100, all responses under 100."
+    }
+  ],
+  "selected_showcase": [
+    {
+      "project": "Newton Physics",
+      "repository": "newton-physics/newton",
+      "evidence_type": "authored_merged_pr",
+      "url": "https://github.com/newton-physics/newton/pull/4205",
+      "contribution": "GPU benchmarks for full and partial simulation resets",
+      "selection_reason": "Strongest breadth in the audit: physics-format correctness, USD collision integration, robust asset acquisition and reproducible GPU simulation benchmarking. The representative benchmark is a substantive simulation/research-software contribution."
+    },
+    {
+      "project": "MuJoCo",
+      "repository": "google-deepmind/mujoco",
+      "evidence_type": "authored_commit_accepted_upstream",
+      "url": "https://github.com/google-deepmind/mujoco/commit/76e31d377ed4718366431b947720aea837d94ea5",
+      "contribution": "URDF inertia regression coverage across recompilation and XML round trips",
+      "selection_reason": "Verified authored C++ regression work directly checks physical inertia semantics across recompilation and XML round trips. Its exact code is accepted upstream even though another person authored the containing PR."
+    },
+    {
+      "project": "OpenUSD",
+      "repository": "PixarAnimationStudios/OpenUSD",
+      "evidence_type": "authored_commit_accepted_upstream",
+      "url": "https://github.com/PixarAnimationStudios/OpenUSD/commit/581fa24e8c887346f14e7edb5f3e88fb1fe33372",
+      "contribution": "Hydra scene-index prefixing for absolute and membership path expressions",
+      "selection_reason": "Verified authored Hydra scene-index implementation and tests are relevant to scene composition and digital-twin tooling. Upstream bot integration supplies accepted-code evidence despite the original PR being closed without GitHub merge."
+    },
+    {
+      "project": "ROS 2",
+      "repository": "ros2/rclcpp",
+      "evidence_type": "authored_merged_pr",
+      "url": "https://github.com/ros2/rclcpp/pull/3294",
+      "contribution": "Wait-set ownership on failed removal",
+      "selection_reason": "Wait-set ownership and executor lifecycle fixes demonstrate systems-level robotics integration. Other merged ROS 2 client, code-generation and CLI work is grouped under this core project identity."
+    },
+    {
+      "project": "RViz",
+      "repository": "ros2/rviz",
+      "evidence_type": "authored_merged_pr",
+      "url": "https://github.com/ros2/rviz/pull/1891",
+      "contribution": "Keyboard event routing after native render-window interaction",
+      "selection_reason": "A recognizable robotics visualization project with an actual native-window/Qt event-routing fix and regression tests. It is explicitly a ROS-family project, not an additional independent foundation."
+    },
+    {
+      "project": "ROS Perception",
+      "repository": "ros-perception/point_cloud_transport",
+      "evidence_type": "authored_merged_pr",
+      "url": "https://github.com/ros-perception/point_cloud_transport/pull/198",
+      "contribution": "Caller transport defaults and existing parameter declarations",
+      "selection_reason": "Point-cloud transport defaults and parameter lifecycle behavior are directly relevant to robotics perception pipelines. This is the ros-perception project family, not a claim of ownership or maintainership."
+    }
+  ],
+  "authored_merged_prs": {
+    "count": 15,
+    "repository_count": 11,
+    "repositories": [
+      {
+        "repository": "conda-forge/staged-recipes",
+        "count": 1,
+        "pull_requests": [
+          {
+            "number": 34480,
+            "url": "https://github.com/conda-forge/staged-recipes/pull/34480",
+            "title": "Add metriplane",
+            "merged_at": "2026-08-10T14:40:37Z",
+            "additions": 79,
+            "deletions": 0,
+            "commits": 3,
+            "changed_files": 2,
+            "author": "Miko997",
+            "state": "merged",
+            "contribution": "Added the Metriplane package recipe and OpenCV metadata compatibility patch.",
+            "files": [
+              "recipes/metriplane/recipe.yaml",
+              "recipes/metriplane/use-conda-opencv-metadata.patch"
+            ]
+          }
+        ]
+      },
+      {
+        "repository": "microsoft/typespec",
+        "count": 1,
+        "pull_requests": [
+          {
+            "number": 12042,
+            "url": "https://github.com/microsoft/typespec/pull/12042",
+            "title": "fix(openapi3): emit valid deprecated parameter directives",
+            "merged_at": "2026-09-23T18:40:06Z",
+            "additions": 32,
+            "deletions": 20,
+            "commits": 1,
+            "changed_files": 3,
+            "author": "Miko997",
+            "state": "merged",
+            "contribution": "Corrected OpenAPI conversion of deprecated parameter directives, with regression coverage.",
+            "files": [
+              ".chronus/changes/fix-openapi3-deprecated-parameter-directive-2026-8-23-19-13-13.md",
+              "packages/openapi3/src/cli/actions/convert/generators/generate-operation.ts",
+              "packages/openapi3/test/tsp-openapi3/ref-sibling-keywords.test.ts"
+            ]
+          }
+        ]
+      },
+      {
+        "repository": "mikedh/trimesh",
+        "count": 1,
+        "pull_requests": [
+          {
+            "number": 2599,
+            "url": "https://github.com/mikedh/trimesh/pull/2599",
+            "title": "Close discretized circles exactly",
+            "merged_at": "2026-09-27T15:49:50Z",
+            "additions": 36,
+            "deletions": 0,
+            "commits": 3,
+            "changed_files": 2,
+            "author": "Miko997",
+            "state": "merged",
+            "contribution": "Added regression tests for exact discretized arc endpoints and valid circular extrusion; the final PR diff contains tests only.",
+            "files": [
+              "tests/test_arc.py",
+              "tests/test_extrude.py"
+            ]
+          }
+        ]
+      },
+      {
+        "repository": "newton-physics/newton",
+        "count": 4,
+        "pull_requests": [
+          {
+            "number": 3899,
+            "url": "https://github.com/newton-physics/newton/pull/3899",
+            "title": "Retry transient asset download errors",
+            "merged_at": "2026-09-09T09:19:23Z",
+            "additions": 181,
+            "deletions": 28,
+            "commits": 1,
+            "changed_files": 3,
+            "author": "Miko997",
+            "state": "merged",
+            "contribution": "Added bounded retry behavior for transient asset-download failures, while excluding permanent failures; covered cleanup and retry cases.",
+            "files": [
+              "changelog/3774.fixed.md",
+              "newton/_src/utils/download_assets.py",
+              "newton/tests/test_download_assets.py"
+            ]
+          },
+          {
+            "number": 3900,
+            "url": "https://github.com/newton-physics/newton/pull/3900",
+            "title": "Avoid USD filters for non-colliding shapes",
+            "merged_at": "2026-09-23T17:58:41Z",
+            "additions": 126,
+            "deletions": 12,
+            "commits": 6,
+            "changed_files": 5,
+            "author": "Miko997",
+            "state": "merged",
+            "contribution": "Avoided redundant collision-filter pairs for disabled USD colliders and preserved collision flags; added import regressions.",
+            "files": [
+              "changelog/3579.fixed.md",
+              "newton/_src/usd/_collision_filters.py",
+              "newton/_src/utils/import_usd.py",
+              "newton/tests/test_import_usd.py",
+              "newton/tests/test_import_usd_collision_groups.py"
+            ]
+          },
+          {
+            "number": 4189,
+            "url": "https://github.com/newton-physics/newton/pull/4189",
+            "title": "Match MuJoCo zaxis orientation during MJCF import",
+            "merged_at": "2026-10-07T13:01:45Z",
+            "additions": 32,
+            "deletions": 5,
+            "commits": 3,
+            "changed_files": 3,
+            "author": "Miko997",
+            "state": "merged",
+            "contribution": "Matched MuJoCo zaxis quaternion conventions during MJCF import, including near-axis degeneracies; added parity regression coverage.",
+            "files": [
+              "changelog/3674.fixed.md",
+              "newton/_src/utils/import_mjcf.py",
+              "newton/tests/test_import_mjcf.py"
+            ]
+          },
+          {
+            "number": 4205,
+            "url": "https://github.com/newton-physics/newton/pull/4205",
+            "title": "Benchmark full and partial environment resets",
+            "merged_at": "2026-10-08T11:45:21Z",
+            "additions": 302,
+            "deletions": 0,
+            "commits": 5,
+            "changed_files": 2,
+            "author": "Miko997",
+            "state": "merged",
+            "contribution": "Added CUDA benchmarks for full/partial environment resets and the following simulation step, with independent state verification outside timed regions.",
+            "files": [
+              "asv/benchmarks/simulation/bench_reset.py",
+              "asv/tests/test_benchmark_simulation.py"
+            ]
+          }
+        ]
+      },
+      {
+        "repository": "ros-perception/point_cloud_transport",
+        "count": 1,
+        "pull_requests": [
+          {
+            "number": 198,
+            "url": "https://github.com/ros-perception/point_cloud_transport/pull/198",
+            "title": "Honor the caller default in TransportHints",
+            "merged_at": "2026-10-05T22:19:27Z",
+            "additions": 116,
+            "deletions": 1,
+            "commits": 3,
+            "changed_files": 3,
+            "author": "Miko997",
+            "state": "merged",
+            "contribution": "Respected caller-supplied transport defaults and existing parameter declarations; added TransportHints regression coverage.",
+            "files": [
+              "point_cloud_transport/CMakeLists.txt",
+              "point_cloud_transport/include/point_cloud_transport/transport_hints.hpp",
+              "point_cloud_transport/test/test_transport_hints.cpp"
+            ]
+          }
+        ]
+      },
+      {
+        "repository": "ros/rosdistro",
+        "count": 1,
+        "pull_requests": [
+          {
+            "number": 53151,
+            "url": "https://github.com/ros/rosdistro/pull/53151",
+            "title": "Add metriplane to Jazzy",
+            "merged_at": "2026-08-13T16:31:12Z",
+            "additions": 5,
+            "deletions": 0,
+            "commits": 2,
+            "changed_files": 1,
+            "author": "Miko997",
+            "state": "merged",
+            "contribution": "Registered Metriplane documentation-source metadata in the Jazzy distribution; not a claim of a new core ROS feature.",
+            "files": [
+              "jazzy/distribution.yaml"
+            ]
+          }
+        ]
+      },
+      {
+        "repository": "ros2/rclcpp",
+        "count": 1,
+        "pull_requests": [
+          {
+            "number": 3294,
+            "url": "https://github.com/ros2/rclcpp/pull/3294",
+            "title": "Preserve wait-set ownership when removal fails",
+            "merged_at": "2026-10-05T11:14:02Z",
+            "additions": 128,
+            "deletions": 13,
+            "commits": 1,
+            "changed_files": 2,
+            "author": "Miko997",
+            "state": "merged",
+            "contribution": "Kept wait-set ownership intact when removal throws, across subscriptions and other waitable entities; added ownership regressions.",
+            "files": [
+              "rclcpp/include/rclcpp/wait_set_template.hpp",
+              "rclcpp/test/rclcpp/test_wait_set.cpp"
+            ]
+          }
+        ]
+      },
+      {
+        "repository": "ros2/rclpy",
+        "count": 1,
+        "pull_requests": [
+          {
+            "number": 1735,
+            "url": "https://github.com/ros2/rclpy/pull/1735",
+            "title": "Preserve worker pool after shutdown timeout",
+            "merged_at": "2026-09-27T12:50:17Z",
+            "additions": 84,
+            "deletions": 0,
+            "commits": 1,
+            "changed_files": 2,
+            "author": "Miko997",
+            "state": "merged",
+            "contribution": "Preserved the executor worker pool after a shutdown timeout; added lifecycle regression coverage.",
+            "files": [
+              "rclpy/rclpy/executors.py",
+              "rclpy/test/test_executor.py"
+            ]
+          }
+        ]
+      },
+      {
+        "repository": "ros2/ros2cli",
+        "count": 2,
+        "pull_requests": [
+          {
+            "number": 1266,
+            "url": "https://github.com/ros2/ros2cli/pull/1266",
+            "title": "Test ros2 lifecycle output streams",
+            "merged_at": "2026-08-26T12:49:29Z",
+            "additions": 8,
+            "deletions": 4,
+            "commits": 1,
+            "changed_files": 1,
+            "author": "Miko997",
+            "state": "merged",
+            "contribution": "Adjusted lifecycle CLI tests for the intended stdout/stderr streams.",
+            "files": [
+              "ros2lifecycle/test/test_cli.py"
+            ]
+          },
+          {
+            "number": 1267,
+            "url": "https://github.com/ros2/ros2cli/pull/1267",
+            "title": "Add multicast options to ros2 doctor hello",
+            "merged_at": "2026-08-26T17:24:25Z",
+            "additions": 82,
+            "deletions": 4,
+            "commits": 2,
+            "changed_files": 2,
+            "author": "Miko997",
+            "state": "merged",
+            "contribution": "Added multicast options to ros2 doctor hello and CLI regression coverage.",
+            "files": [
+              "ros2doctor/ros2doctor/verb/hello.py",
+              "ros2doctor/test/test_cli.py"
+            ]
+          }
+        ]
+      },
+      {
+        "repository": "ros2/rosidl",
+        "count": 1,
+        "pull_requests": [
+          {
+            "number": 995,
+            "url": "https://github.com/ros2/rosidl/pull/995",
+            "title": "Handle comment delimiters in generated C headers",
+            "merged_at": "2026-09-30T19:24:45Z",
+            "additions": 37,
+            "deletions": 2,
+            "commits": 1,
+            "changed_files": 4,
+            "author": "Miko997",
+            "state": "merged",
+            "contribution": "Handled comment delimiters in generated C message headers and tested C compilation of affected messages.",
+            "files": [
+              "rosidl_generator_c/resource/msg__struct.h.em",
+              "rosidl_generator_tests/CMakeLists.txt",
+              "rosidl_generator_tests/msg/Comments.msg",
+              "rosidl_generator_tests/test/rosidl_generator_c/test_compilation.c"
+            ]
+          }
+        ]
+      },
+      {
+        "repository": "ros2/rviz",
+        "count": 1,
+        "pull_requests": [
+          {
+            "number": 1891,
+            "url": "https://github.com/ros2/rviz/pull/1891",
+            "title": "Restore keyboard shortcuts after camera interaction",
+            "merged_at": "2026-10-07T15:04:31Z",
+            "additions": 219,
+            "deletions": 0,
+            "commits": 2,
+            "changed_files": 4,
+            "author": "Miko997",
+            "state": "merged",
+            "contribution": "Routed keyboard events from the native rendering window back through Qt widget handling after camera interaction; added event-routing regressions.",
+            "files": [
+              "rviz_common/CMakeLists.txt",
+              "rviz_common/include/rviz_common/render_panel.hpp",
+              "rviz_common/src/rviz_common/render_panel.cpp",
+              "rviz_common/test/render_panel_test.cpp"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "accepted_authored_commits_outside_authored_merged_prs": [
+    {
+      "repository": "PixarAnimationStudios/OpenUSD",
+      "repository_public": true,
+      "default_branch": "dev",
+      "default_head_snapshot": "5bc38c9d8799d16ce20ade219a464beaeae548cc",
+      "landed_sha": "581fa24e8c887346f14e7edb5f3e88fb1fe33372",
+      "landed_url": "https://github.com/PixarAnimationStudios/OpenUSD/commit/581fa24e8c887346f14e7edb5f3e88fb1fe33372",
+      "author_login": "Miko997",
+      "committer_login": "pixar-oss",
+      "source_sha": "9fa81ebf2bde2f80eaf06bd010c901801df4767d",
+      "source_pr": "https://github.com/PixarAnimationStudios/OpenUSD/pull/4240",
+      "source_pr_author": "Miko997",
+      "source_pr_state": "closed",
+      "source_pr_merged": false,
+      "source_pr_merged_at": null,
+      "source_pr_closed_at": "2026-09-30T21:06:45Z",
+      "lineage": "Source PR commit and landed commit have identical per-file patches, filenames, addition and deletion counts. Landed message says Closes #4240. PR timeline closed event actor pixar-oss references exactly the landed SHA. REST commit/pulls returns later sync PR #4259, not the source PR.",
+      "file_patch_comparison_sha256": "bb594c3271c91ef647c2899fc2ef0c8653c7a61661c7c41888d2873185cafb0b",
+      "ancestry": {
+        "status": "ahead",
+        "ahead_by": 33,
+        "behind_by": 0,
+        "merge_base_sha": "581fa24e8c887346f14e7edb5f3e88fb1fe33372"
+      },
+      "summary": "Fixes Hydra SdfPathExpression prefixing and adds nested absolute/relative/composite expression regression coverage; 102 additions and 1 deletion in implementation and tests.",
+      "classification": "Miko-authored code integrated by upstream maintainer into default branch; originating GitHub PR closed unmerged. Eligible for landed upstream contribution wording, not authored merged-PR count.",
+      "verification_api_paths": [
+        "GET /repos/PixarAnimationStudios/OpenUSD",
+        "GET /repos/PixarAnimationStudios/OpenUSD/git/ref/heads/dev",
+        "GET /repos/PixarAnimationStudios/OpenUSD/commits/581fa24e8c887346f14e7edb5f3e88fb1fe33372",
+        "GET /repos/PixarAnimationStudios/OpenUSD/commits/9fa81ebf2bde2f80eaf06bd010c901801df4767d",
+        "GET /repos/PixarAnimationStudios/OpenUSD/pulls/4240",
+        "GET /repos/PixarAnimationStudios/OpenUSD/pulls/4240/commits?per_page=100",
+        "GET /repos/PixarAnimationStudios/OpenUSD/issues/4240/timeline?per_page=100",
+        "GET /repos/PixarAnimationStudios/OpenUSD/compare/581fa24e8c887346f14e7edb5f3e88fb1fe33372...5bc38c9d8799d16ce20ade219a464beaeae548cc?per_page=1"
+      ]
+    },
+    {
+      "repository": "google-deepmind/mujoco",
+      "repository_public": true,
+      "default_branch": "main",
+      "default_head_snapshot": "108275e4fce8c47b14ecda366fc52cfd11e4ef6e",
+      "landed_sha": "76e31d377ed4718366431b947720aea837d94ea5",
+      "landed_url": "https://github.com/google-deepmind/mujoco/commit/76e31d377ed4718366431b947720aea837d94ea5",
+      "author_login": "Miko997",
+      "committer_login": "devansh0703",
+      "source_repository": "Miko997/mujoco",
+      "source_repository_public": true,
+      "source_sha": "e7031da8abaef25da42c1b0473d2cfe706d926af",
+      "offer_comment": "https://github.com/google-deepmind/mujoco/pull/3560#issuecomment-5603362521",
+      "containing_pr": "https://github.com/google-deepmind/mujoco/pull/3560",
+      "containing_pr_author": "devansh0703",
+      "containing_pr_state": "closed",
+      "containing_pr_merged": true,
+      "containing_pr_merged_at": "2026-09-13T17:24:40Z",
+      "merge_commit_sha": "ff2e458c36563ebea7b1bb11196b20ba77fad36f",
+      "lineage": "Public source fork commit offered in PR comment has identical per-file patch to upstream landed commit. PR3560 commit list contains the landed SHA as one of two commits.",
+      "file_patch_comparison_sha256": "62b772de339abae97117989a3181d12048016ad229d6c64937eebe28c9b2f2c0",
+      "ancestry": {
+        "status": "ahead",
+        "ahead_by": 504,
+        "behind_by": 0,
+        "merge_base_sha": "76e31d377ed4718366431b947720aea837d94ea5"
+      },
+      "summary": "Adds 67-line C++ regression coverage for oblique off-diagonal URDF inertia through three repeated compilations and full-precision XML round trips under both alignfree settings. Tests physical world tensors against analytic values.",
+      "classification": "Miko-authored test code incorporated through another contributor’s merged PR into default branch. Eligible for landed upstream contribution wording; not a Miko-authored PR or direct-to-branch independent commit.",
+      "verification_api_paths": [
+        "GET /repos/google-deepmind/mujoco",
+        "GET /repos/google-deepmind/mujoco/git/ref/heads/main",
+        "GET /repos/google-deepmind/mujoco/commits/76e31d377ed4718366431b947720aea837d94ea5",
+        "GET /repos/Miko997/mujoco",
+        "GET /repos/Miko997/mujoco/commits/e7031da8abaef25da42c1b0473d2cfe706d926af",
+        "GET /repos/google-deepmind/mujoco/pulls/3560",
+        "GET /repos/google-deepmind/mujoco/pulls/3560/commits?per_page=100",
+        "GET /repos/google-deepmind/mujoco/issues/3560/comments?per_page=100",
+        "GET /repos/google-deepmind/mujoco/compare/76e31d377ed4718366431b947720aea837d94ea5...108275e4fce8c47b14ecda366fc52cfd11e4ef6e?per_page=1"
+      ]
+    }
+  ],
+  "not_selected_for_front_page": [
+    {
+      "project": "Microsoft TypeSpec",
+      "url": "https://github.com/microsoft/typespec/pull/12042",
+      "reason": "Real production code-generation fix, but less closely aligned with simulation and robotics than the selected accepted-code examples."
+    },
+    {
+      "project": "trimesh",
+      "url": "https://github.com/mikedh/trimesh/pull/2599",
+      "reason": "Legitimate geometry regression coverage. The final merged diff changes only tests, so the old description could imply more runtime-fix ownership than the diff supports. Retained in the full audit."
+    },
+    {
+      "project": "conda-forge",
+      "url": "https://github.com/conda-forge/staged-recipes/pull/34480",
+      "reason": "Useful reproducible packaging for the author’s own Metriplane project. Separate own-package maintenance from independent upstream systems work."
+    },
+    {
+      "project": "ROS distribution metadata",
+      "url": "https://github.com/ros/rosdistro/pull/53151",
+      "reason": "Own-project documentation registration; keep within the full ROS contribution record rather than allocating another tile."
+    }
+  ],
+  "other_public_activity": {
+    "authored_issues": {
+      "counts": {
+        "public_total": 13,
+        "own_Metriplane_repository": 5,
+        "own_package_conda_forge_release_requests": 2,
+        "external_technical_reports": 6
+      },
+      "external_technical_reports": [
+        {
+          "url": "https://github.com/SimonCan/BlenDaViz/issues/1",
+          "topic": "Official Blender Snap installation/user-site import",
+          "outcome": "Maintainer documentation fix; author retested installation and import.",
+          "evidence": "https://github.com/SimonCan/BlenDaViz/issues/1#issuecomment-5552866136"
+        },
+        {
+          "url": "https://github.com/SimonCan/BlenDaViz/issues/2",
+          "topic": "Failing unittest results did not fail CI",
+          "outcome": "Maintainer fix; author verified success exit 0 and deliberate failure exit 1.",
+          "evidence": "https://github.com/SimonCan/BlenDaViz/issues/2#issuecomment-5552862919"
+        },
+        {
+          "url": "https://github.com/SimonCan/BlenDaViz/issues/3",
+          "topic": "Default contour tuple color fails with AttributeError",
+          "outcome": "Maintainer confirmed and fixed by converting tuples to NumPy arrays.",
+          "evidence": "https://github.com/SimonCan/BlenDaViz/issues/3#issuecomment-5573803013"
+        },
+        {
+          "url": "https://github.com/SimonCan/BlenDaViz/issues/4",
+          "topic": "Washed-out Matplotlib embedding",
+          "outcome": "Closed without a confirmed fix; maintainer could not reproduce; author acknowledged environment uncertainty. Do not count as a confirmed defect fixed.",
+          "evidence": "https://github.com/SimonCan/BlenDaViz/issues/4#issuecomment-5589656225"
+        },
+        {
+          "url": "https://github.com/SimonCan/BlenDaViz/issues/5",
+          "topic": "Frame updates, streamline docs and paper corrections",
+          "outcome": "Maintainer confirmed/fixed frame handler and documentation; author retested six original tests.",
+          "evidence": "https://github.com/SimonCan/BlenDaViz/issues/5#issuecomment-5589415446"
+        },
+        {
+          "url": "https://github.com/MartinW-S2M/weitsicht/issues/8",
+          "topic": "Nonzero fill_z silently replaced by zero",
+          "outcome": "Closed by maintainer commit e5dfd80f04504196b3e865fea2f22ad30c32678d; author later verified across Python 3.10–3.13.",
+          "evidence": "https://github.com/pyOpenSci/software-submission/issues/284#issuecomment-5835940940"
+        }
+      ],
+      "professional_relevance": "Reproducible defect reports, regression-sensitive CI testing, scientific visualization and image/world coordinate tooling; distinguish own-package administration from independent upstream work."
+    },
+    "formal_pr_reviews": [
+      {
+        "url": "https://github.com/newton-physics/newton/pull/3898#pullrequestreview-4925234773",
+        "state": "COMMENTED",
+        "submitted_at": "2026-08-13T08:59:43Z",
+        "finding": "Reproduced constant MJCF heightfield normalization mismatch versus MuJoCo and strict-warning failures caused by duplicate free joints.",
+        "maintainer_response": "Author confirmed mismatch and fixed it with requested constant-data/non-unit-size_z regression; removed duplicate joint calls.",
+        "evidence": [
+          "https://github.com/newton-physics/newton/pull/3898#discussion_r3773898457",
+          "https://github.com/newton-physics/newton/pull/3898#discussion_r3778108052",
+          "https://github.com/newton-physics/newton/pull/3898#discussion_r3778108206"
+        ],
+        "merged_at": "2026-08-18T02:07:47Z",
+        "professional_relevance": "Strong evidence of physics-format parity reasoning and actionable review that changed code/tests."
+      },
+      {
+        "url": "https://github.com/newton-physics/newton/pull/3908#pullrequestreview-4929659935",
+        "state": "COMMENTED",
+        "submitted_at": "2026-08-13T17:08:33Z",
+        "finding": "Checked pinned MuJoCo Warp behavior and nv=500 block-dimension threshold; assessed regression coverage.",
+        "merged_at": "2026-08-14T17:19:10Z",
+        "professional_relevance": "Dependency-aware performance configuration review."
+      },
+      {
+        "url": "https://github.com/conda-forge/metriplane-feedstock/pull/2#pullrequestreview-4898885997",
+        "state": "APPROVED",
+        "submitted_at": "2026-08-10T16:29:13Z",
+        "finding": "Empty-body approval of bot-authored own-package release update; maintenance, not independent technical review."
+      },
+      {
+        "url": "https://github.com/conda-forge/metriplane-feedstock/pull/3#pullrequestreview-5153375733",
+        "state": "APPROVED",
+        "submitted_at": "2026-09-09T11:02:42Z",
+        "finding": "Empty-body approval of bot-authored own-package release update; maintenance, not independent technical review."
+      }
+    ],
+    "additional_public_pr_validation": [
+      {
+        "url": "https://github.com/newton-physics/newton/pull/4469#issuecomment-5983552196",
+        "pr_state": "merged",
+        "summary": "Reported independent CPU/CUDA baseline-fail/head-pass validation of indexed ArticulationView device dispatch, eight real-execution cases and 69-case selection suite per ambient device; explicitly excluded backward propagation and multi-GPU coverage."
+      },
+      {
+        "url": "https://github.com/newton-physics/newton/pull/4250#issuecomment-5983545754",
+        "pr_state": "open",
+        "summary": "Reported CPU/CUDA transforms, forward kinematics, state preservation and particle runtime comparison against independent reference."
+      },
+      {
+        "url": "https://github.com/newton-physics/newton/pull/3752#issuecomment-5983540448",
+        "pr_state": "open",
+        "summary": "Reported CUDA muscle actuator comparison to native MuJoCo for a bounded 40-step case; explicitly scoped to tested head."
+      },
+      {
+        "url": "https://github.com/ros2/message_filters/pull/341#issuecomment-5983739517",
+        "pr_state": "open",
+        "summary": "Reported downstream C++20 consumer and timestamp-trait regressions with baseline controls and explicit test limitations."
+      },
+      {
+        "url": "https://github.com/ros2/rclpy/pull/1666#issuecomment-5802149895",
+        "pr_state": "open",
+        "summary": "Reported timeout-before-submit executor shutdown regression and offered focused guard/test commit, later opened PR #1735; not a merged contribution."
+      }
+    ],
+    "software_peer_reviews": [
+      {
+        "project": "BlenDaViz",
+        "venue": "JOSS",
+        "url": "https://github.com/openjournals/joss-reviews/issues/11181",
+        "review_complete_comment": "https://github.com/openjournals/joss-reviews/issues/11181#issuecomment-5603367623",
+        "completed_by_reviewer_at": "2026-09-09T14:16:58Z",
+        "evidence": "Issue body lists Miko997 as reviewer; completed checklist and conclusion plus confirmed technical issue follow-up.",
+        "limitation": "Submission review thread remains open; do not claim journal publication/acceptance solely from the reviewer completion."
+      },
+      {
+        "project": "VERNIER",
+        "venue": "JOSS",
+        "url": "https://github.com/openjournals/joss-reviews/issues/11292",
+        "review_complete_comment": "https://github.com/openjournals/joss-reviews/issues/11292#issuecomment-5974625223",
+        "completed_by_reviewer_at": "2026-10-03T23:32:30Z",
+        "evidence": "Issue lists Miko997 as reviewer; reports 21 CTest tests and seven examples; documentation reproduction and claims/version clarification; reviewer recommends acceptance.",
+        "limitation": "Submission review thread remains open; do not claim journal acceptance/publication."
+      },
+      {
+        "project": "weitsicht",
+        "venue": "pyOpenSci",
+        "url": "https://github.com/pyOpenSci/software-submission/issues/284",
+        "review_complete_comment": "https://github.com/pyOpenSci/software-submission/issues/284#issuecomment-5997835804",
+        "completed_by_reviewer_at": "2026-10-05T15:41:12Z",
+        "evidence": "Public review checklist and final recommendation; Python 3.10–3.13 retests of Affine, fill_z and APK rotation fixes; coordinate-height semantics and citation metadata follow-up.",
+        "limitation": "Reviewer approval recommendation, not evidence the package has completed the entire editorial acceptance process."
+      }
+    ],
+    "additional_issue_discussion": [
+      {
+        "url": "https://github.com/NVIDIA/warp/issues/1666#issuecomment-5604712951",
+        "summary": "Public real-CUDA deterministic record-bound reproducer with allocation measurement boundaries and command/graph lifetime tests. No merged API change evidenced."
+      },
+      {
+        "url": "https://github.com/ros2/rosbag2/issues/2506#issuecomment-5918794228",
+        "summary": "Keyed DDS transient-local retention reproduction and interface design question; open issue, not merged work."
+      },
+      {
+        "url": "https://github.com/ros2/rosidl/issues/1002#issuecomment-5918278091",
+        "summary": "C-only/exception-free consumer regression reproduction with 194 gtests and separate minimal consumer; open issue, not merged work."
+      },
+      {
+        "url": "https://github.com/newton-physics/newton/issues/4561#issuecomment-6079578340",
+        "summary": "Reported local opt-in hydroelastic work with CPU/CUDA checks and limits; preparatory work, not merged or reviewed upstream code."
+      }
+    ]
+  },
+  "public_commit_search": {
+    "query": "author:Miko997 is:public -user:Miko997",
+    "search_total": 29,
+    "search_incomplete_results": false,
+    "search_pages": 1,
+    "unique_canonical_rows": 21,
+    "deduplicated_mirror_rows": 8,
+    "public_repositories": [
+      {
+        "full_name": "PixarAnimationStudios/OpenUSD",
+        "private": false,
+        "fork": false
+      },
+      {
+        "full_name": "conda-forge/metriplane-feedstock",
+        "private": false,
+        "fork": false
+      },
+      {
+        "full_name": "conda-forge/staged-recipes",
+        "private": false,
+        "fork": false
+      },
+      {
+        "full_name": "google-deepmind/mujoco",
+        "private": false,
+        "fork": false
+      },
+      {
+        "full_name": "microsoft/typespec",
+        "private": false,
+        "fork": false
+      },
+      {
+        "full_name": "mikedh/trimesh",
+        "private": false,
+        "fork": false
+      },
+      {
+        "full_name": "newton-physics/newton",
+        "private": false,
+        "fork": false
+      },
+      {
+        "full_name": "ros-perception/point_cloud_transport",
+        "private": false,
+        "fork": false
+      },
+      {
+        "full_name": "ros/rosdistro",
+        "private": false,
+        "fork": false
+      },
+      {
+        "full_name": "ros2/rclcpp",
+        "private": false,
+        "fork": false
+      },
+      {
+        "full_name": "ros2/ros2cli",
+        "private": false,
+        "fork": false
+      },
+      {
+        "full_name": "ros2/rosidl",
+        "private": false,
+        "fork": false
+      },
+      {
+        "full_name": "ros2/rviz",
+        "private": false,
+        "fork": false
+      }
+    ],
+    "commits": [
+      {
+        "repository": "PixarAnimationStudios/OpenUSD",
+        "sha": "581fa24e8c887346f14e7edb5f3e88fb1fe33372",
+        "url": "https://github.com/PixarAnimationStudios/OpenUSD/commit/581fa24e8c887346f14e7edb5f3e88fb1fe33372",
+        "title": "[hd] HdPrefixingSceneIndex now also prefixes SdfPathExpression",
+        "associated_prs": [
+          {
+            "number": 4259,
+            "title": "Update build-ig to latest dev (ff8c59e)",
+            "url": "https://github.com/PixarAnimationStudios/OpenUSD/pull/4259",
+            "author": "pmolodo",
+            "merged_at": "2026-10-01T17:10:47Z",
+            "state": "closed"
+          }
+        ]
+      },
+      {
+        "repository": "conda-forge/staged-recipes",
+        "sha": "79af5ebb6966f33a099722d06eeb0424dd927340",
+        "url": "https://github.com/conda-forge/staged-recipes/commit/79af5ebb6966f33a099722d06eeb0424dd927340",
+        "title": "Address conda-forge recipe review",
+        "associated_prs": [
+          {
+            "number": 34480,
+            "title": "Add metriplane",
+            "url": "https://github.com/conda-forge/staged-recipes/pull/34480",
+            "author": "Miko997",
+            "merged_at": "2026-08-10T14:40:37Z",
+            "state": "closed"
+          }
+        ]
+      },
+      {
+        "repository": "conda-forge/staged-recipes",
+        "sha": "653b125b057e3e13d3910707d164c0350f8e74db",
+        "url": "https://github.com/conda-forge/staged-recipes/commit/653b125b057e3e13d3910707d164c0350f8e74db",
+        "title": "Add OpenCV metadata mapping for pip check",
+        "associated_prs": [
+          {
+            "number": 34480,
+            "title": "Add metriplane",
+            "url": "https://github.com/conda-forge/staged-recipes/pull/34480",
+            "author": "Miko997",
+            "merged_at": "2026-08-10T14:40:37Z",
+            "state": "closed"
+          }
+        ]
+      },
+      {
+        "repository": "conda-forge/staged-recipes",
+        "sha": "3466352b7ffaf23a21451c65a730c31f03951a40",
+        "url": "https://github.com/conda-forge/staged-recipes/commit/3466352b7ffaf23a21451c65a730c31f03951a40",
+        "title": "Add metriplane",
+        "associated_prs": [
+          {
+            "number": 34480,
+            "title": "Add metriplane",
+            "url": "https://github.com/conda-forge/staged-recipes/pull/34480",
+            "author": "Miko997",
+            "merged_at": "2026-08-10T14:40:37Z",
+            "state": "closed"
+          }
+        ]
+      },
+      {
+        "repository": "mikedh/trimesh",
+        "sha": "9c3cd660fd6ad53287dd782046372c2a917a9e44",
+        "url": "https://github.com/mikedh/trimesh/commit/9c3cd660fd6ad53287dd782046372c2a917a9e44",
+        "title": "Avoid collinear cap vertices in circle extrusion regression",
+        "associated_prs": [
+          {
+            "number": 2599,
+            "title": "Close discretized circles exactly",
+            "url": "https://github.com/mikedh/trimesh/pull/2599",
+            "author": "Miko997",
+            "merged_at": "2026-09-27T15:49:50Z",
+            "state": "closed"
+          }
+        ]
+      },
+      {
+        "repository": "mikedh/trimesh",
+        "sha": "8b637384792970a2d9613d5813a04b58a8a8bd9e",
+        "url": "https://github.com/mikedh/trimesh/commit/8b637384792970a2d9613d5813a04b58a8a8bd9e",
+        "title": "Close discretized circles exactly",
+        "associated_prs": [
+          {
+            "number": 2599,
+            "title": "Close discretized circles exactly",
+            "url": "https://github.com/mikedh/trimesh/pull/2599",
+            "author": "Miko997",
+            "merged_at": "2026-09-27T15:49:50Z",
+            "state": "closed"
+          }
+        ]
+      },
+      {
+        "repository": "ros-perception/point_cloud_transport",
+        "sha": "247b0adad3eb1d552e381b6b2d279c0ad4638282",
+        "url": "https://github.com/ros-perception/point_cloud_transport/commit/247b0adad3eb1d552e381b6b2d279c0ad4638282",
+        "title": "Honor the caller default in TransportHints (#198)",
+        "associated_prs": [
+          {
+            "number": 198,
+            "title": "Honor the caller default in TransportHints",
+            "url": "https://github.com/ros-perception/point_cloud_transport/pull/198",
+            "author": "Miko997",
+            "merged_at": "2026-10-05T22:19:27Z",
+            "state": "closed"
+          }
+        ]
+      },
+      {
+        "repository": "ros/rosdistro",
+        "sha": "b4eb276e2d8495cdf19e7f477a4618bc2a6e3aae",
+        "url": "https://github.com/ros/rosdistro/commit/b4eb276e2d8495cdf19e7f477a4618bc2a6e3aae",
+        "title": "Add metriplane documentation source (#53151)",
+        "associated_prs": [
+          {
+            "number": 53151,
+            "title": "Add metriplane to Jazzy",
+            "url": "https://github.com/ros/rosdistro/pull/53151",
+            "author": "Miko997",
+            "merged_at": "2026-08-13T16:31:12Z",
+            "state": "closed"
+          }
+        ]
+      },
+      {
+        "repository": "ros2/rviz",
+        "sha": "e01d5e92fbfcb947c0f4f049d8fc65e8af3b5118",
+        "url": "https://github.com/ros2/rviz/commit/e01d5e92fbfcb947c0f4f049d8fc65e8af3b5118",
+        "title": "Restore keyboard shortcuts after camera interaction (#1891)",
+        "associated_prs": [
+          {
+            "number": 1891,
+            "title": "Restore keyboard shortcuts after camera interaction",
+            "url": "https://github.com/ros2/rviz/pull/1891",
+            "author": "Miko997",
+            "merged_at": "2026-10-07T15:04:31Z",
+            "state": "closed"
+          }
+        ]
+      },
+      {
+        "repository": "newton-physics/newton",
+        "sha": "90c56c3be73e35a34ccb37ab593a529e8a3d18dd",
+        "url": "https://github.com/newton-physics/newton/commit/90c56c3be73e35a34ccb37ab593a529e8a3d18dd",
+        "title": "Retry transient asset download errors (#3899)",
+        "associated_prs": [
+          {
+            "number": 3899,
+            "title": "Retry transient asset download errors",
+            "url": "https://github.com/newton-physics/newton/pull/3899",
+            "author": "Miko997",
+            "merged_at": "2026-09-09T09:19:23Z",
+            "state": "closed"
+          }
+        ]
+      },
+      {
+        "repository": "newton-physics/newton",
+        "sha": "b273297e1eec2491a220c82570771f74e973c0f3",
+        "url": "https://github.com/newton-physics/newton/commit/b273297e1eec2491a220c82570771f74e973c0f3",
+        "title": "Avoid USD filters for non-colliding shapes (#3900)",
+        "associated_prs": [
+          {
+            "number": 3900,
+            "title": "Avoid USD filters for non-colliding shapes",
+            "url": "https://github.com/newton-physics/newton/pull/3900",
+            "author": "Miko997",
+            "merged_at": "2026-09-23T17:58:41Z",
+            "state": "closed"
+          }
+        ]
+      },
+      {
+        "repository": "newton-physics/newton",
+        "sha": "95488d90009b7db0a76614aa580ea55b4f9918f6",
+        "url": "https://github.com/newton-physics/newton/commit/95488d90009b7db0a76614aa580ea55b4f9918f6",
+        "title": "Benchmark full and partial environment resets (#4205)",
+        "associated_prs": [
+          {
+            "number": 4205,
+            "title": "Benchmark full and partial environment resets",
+            "url": "https://github.com/newton-physics/newton/pull/4205",
+            "author": "Miko997",
+            "merged_at": "2026-10-08T11:45:21Z",
+            "state": "closed"
+          }
+        ]
+      },
+      {
+        "repository": "newton-physics/newton",
+        "sha": "2a57a3c0c23c2a8242b03e150eb4231f43372f65",
+        "url": "https://github.com/newton-physics/newton/commit/2a57a3c0c23c2a8242b03e150eb4231f43372f65",
+        "title": "Match MuJoCo zaxis orientation during MJCF import (#4189)",
+        "associated_prs": [
+          {
+            "number": 4189,
+            "title": "Match MuJoCo zaxis orientation during MJCF import",
+            "url": "https://github.com/newton-physics/newton/pull/4189",
+            "author": "Miko997",
+            "merged_at": "2026-10-07T13:01:45Z",
+            "state": "closed"
+          }
+        ]
+      },
+      {
+        "repository": "ros2/ros2cli",
+        "sha": "7b47206ab04c27d4597c692240a68ac1f7059790",
+        "url": "https://github.com/ros2/ros2cli/commit/7b47206ab04c27d4597c692240a68ac1f7059790",
+        "title": "Add multicast options to ros2 doctor hello (#1267)",
+        "associated_prs": [
+          {
+            "number": 1267,
+            "title": "Add multicast options to ros2 doctor hello",
+            "url": "https://github.com/ros2/ros2cli/pull/1267",
+            "author": "Miko997",
+            "merged_at": "2026-08-26T17:24:25Z",
+            "state": "closed"
+          }
+        ]
+      },
+      {
+        "repository": "ros2/ros2cli",
+        "sha": "701d856596fc5a0bc522aa71a7a45d1fa8f87949",
+        "url": "https://github.com/ros2/ros2cli/commit/701d856596fc5a0bc522aa71a7a45d1fa8f87949",
+        "title": "Test ros2 lifecycle output streams (#1266)",
+        "associated_prs": [
+          {
+            "number": 1266,
+            "title": "Test ros2 lifecycle output streams",
+            "url": "https://github.com/ros2/ros2cli/pull/1266",
+            "author": "Miko997",
+            "merged_at": "2026-08-26T12:49:29Z",
+            "state": "closed"
+          }
+        ]
+      },
+      {
+        "repository": "google-deepmind/mujoco",
+        "sha": "76e31d377ed4718366431b947720aea837d94ea5",
+        "url": "https://github.com/google-deepmind/mujoco/commit/76e31d377ed4718366431b947720aea837d94ea5",
+        "title": "Test oblique URDF inertia across recompilation and XML round-trip",
+        "associated_prs": [
+          {
+            "number": 3560,
+            "title": "Fix lost URDF inertial origin rotation during compilation",
+            "url": "https://github.com/google-deepmind/mujoco/pull/3560",
+            "author": "devansh0703",
+            "merged_at": "2026-09-13T17:24:40Z",
+            "state": "closed"
+          }
+        ]
+      },
+      {
+        "repository": "ros2/rclcpp",
+        "sha": "ebf57e354fea68d56ed8121e430f50873f876ca7",
+        "url": "https://github.com/ros2/rclcpp/commit/ebf57e354fea68d56ed8121e430f50873f876ca7",
+        "title": "Preserve wait-set ownership when removal fails (#3294)",
+        "associated_prs": [
+          {
+            "number": 3294,
+            "title": "Preserve wait-set ownership when removal fails",
+            "url": "https://github.com/ros2/rclcpp/pull/3294",
+            "author": "Miko997",
+            "merged_at": "2026-10-05T11:14:02Z",
+            "state": "closed"
+          }
+        ]
+      },
+      {
+        "repository": "conda-forge/metriplane-feedstock",
+        "sha": "246af2f27f0de531dcee046bd62c1fde8f8f502f",
+        "url": "https://github.com/conda-forge/metriplane-feedstock/commit/246af2f27f0de531dcee046bd62c1fde8f8f502f",
+        "title": "Merge pull request #2 from conda-forge-admin/conda_forge_admin_1",
+        "associated_prs": [
+          {
+            "number": 2,
+            "title": "chore: update package version to 0.3.0",
+            "url": "https://github.com/conda-forge/metriplane-feedstock/pull/2",
+            "author": "conda-forge-admin",
+            "merged_at": "2026-08-10T16:30:35Z",
+            "state": "closed"
+          }
+        ]
+      },
+      {
+        "repository": "conda-forge/metriplane-feedstock",
+        "sha": "d3f908eddf4f82372fea01b8d09ca600faa001fc",
+        "url": "https://github.com/conda-forge/metriplane-feedstock/commit/d3f908eddf4f82372fea01b8d09ca600faa001fc",
+        "title": "Merge pull request #5 from conda-forge-admin/conda_forge_admin_4",
+        "associated_prs": [
+          {
+            "number": 5,
+            "title": "chore: update package version to 0.4.1",
+            "url": "https://github.com/conda-forge/metriplane-feedstock/pull/5",
+            "author": "conda-forge-admin",
+            "merged_at": "2026-09-12T11:16:06Z",
+            "state": "closed"
+          }
+        ]
+      },
+      {
+        "repository": "microsoft/typespec",
+        "sha": "6da5df721d0885af1460c5a9d0b8c046c0c7b89f",
+        "url": "https://github.com/microsoft/typespec/commit/6da5df721d0885af1460c5a9d0b8c046c0c7b89f",
+        "title": "fix(openapi3): emit valid deprecated parameter directives (#12042)",
+        "associated_prs": [
+          {
+            "number": 12042,
+            "title": "fix(openapi3): emit valid deprecated parameter directives",
+            "url": "https://github.com/microsoft/typespec/pull/12042",
+            "author": "Miko997",
+            "merged_at": "2026-09-23T18:40:06Z",
+            "state": "closed"
+          }
+        ]
+      },
+      {
+        "repository": "ros2/rosidl",
+        "sha": "4537874f320ef8b350c3df7f5b6b487b409fa22f",
+        "url": "https://github.com/ros2/rosidl/commit/4537874f320ef8b350c3df7f5b6b487b409fa22f",
+        "title": "Handle comment delimiters in generated C headers (#995)",
+        "associated_prs": [
+          {
+            "number": 995,
+            "title": "Handle comment delimiters in generated C headers",
+            "url": "https://github.com/ros2/rosidl/pull/995",
+            "author": "Miko997",
+            "merged_at": "2026-09-30T19:24:45Z",
+            "state": "closed"
+          }
+        ]
+      }
+    ]
+  },
+  "limits": [
+    "Search completeness means all items returned by these exact queries were obtained (one page below 100 and incomplete_results=false), not all historical public activity or all commits ever authored.",
+    "Search indexing, linked GitHub author identity, branch reachability, and mirror duplication constrain commit coverage. Public repositories owned by Miko997 are intentionally excluded from the upstream commit search.",
+    "The reviewed-by search covers formal PR review records; informal review comments required a separate commenter query. Neither query alone supports an exhaustive historical-review claim.",
+    "All 21 unique canonical commit search hits have a PR association; no additional independent direct-to-default-branch contribution was established. OpenUSD is separately verified as maintainer integration of a closed-unmerged source PR.",
+    "The two ancestry checks prove the exact landed commits are ancestors of the captured default branch tips; they do not prove release availability or that every line remains unchanged at current tip.",
+    "Review test results are the author’s publicly reported validation and maintainer replies, not tests rerun during this audit.",
+    "Merged-PR search returns all 15 items from this exact public upstream query at the audit date; complete API pagination does not guarantee perfect GitHub historical indexing.",
+    "The two accepted commits are additional evidence types, not two additional authored merged PRs. Contribution totals and streaks continue to come solely from the GitHub calendar.",
+    "Open or draft submissions, unverified affiliations and code merely present in a personal fork do not qualify for the showcase.",
+    "No source or test changes were executed in upstream projects during this audit. PR/commit diffs and public review records are evidence of contribution scope, not independent performance benchmarking."
+  ]
+}

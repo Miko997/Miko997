@@ -14,10 +14,11 @@ WIDTH, HEIGHT = 148, 68
 # Repository identity is stable; display copy and geometry are intentionally small.
 PLAQUES = {
     "newton-physics/newton": ("newton", "Newton Physics", "newton"),
+    "google-deepmind/mujoco": ("mujoco", "MuJoCo", "multibody"),
+    "PixarAnimationStudios/OpenUSD": ("openusd", "OpenUSD", "scene"),
     "ros2/rclcpp": ("ros2", "ROS 2", "ros2"),
-    "microsoft/typespec": ("typespec", "TypeSpec", "typespec"),
-    "conda-forge/staged-recipes": ("conda-forge", "conda-forge", "conda"),
-    "mikedh/trimesh": ("trimesh", "trimesh", "mesh"),
+    "ros2/rviz": ("rviz", "RViz", "viewport"),
+    "ros-perception/point_cloud_transport": ("ros-perception", "ROS Perception", "points"),
 }
 
 
@@ -27,7 +28,7 @@ def ecosystem_filename(item: dict) -> str:
 
 
 def motif(kind: str) -> str:
-    """Original geometry: forces, articulated joints, types, packages and mesh."""
+    """Original geometry for forces, joints, scene graphs and perception."""
     shapes = {
         "newton": ('<path d="M-12 3L-5-1 2 3V11L-5 15-12 11Z"/>'
                    '<path d="M-12 3L-5 7 2 3M-5 7V15M-5-1V-6H9M5-10L9-6 5-2"/>'
@@ -36,12 +37,17 @@ def motif(kind: str) -> str:
                  '<circle cx="-8" cy="5" r="2.5" fill="#182237"/>'
                  '<circle cx="-1" cy="-2" r="2.5" fill="#182237"/>'
                  '<circle cx="8" cy="2" r="2.5" fill="#182237" stroke="#ceb88a"/>'),
-        "typespec": ('<path d="M-9-6L-14 1-9 8M9-6L14 1 9 8M-2 9L3-7"/>'
-                     '<path d="M-5 12H5" stroke="#ceb88a"/>'),
-        "conda": ('<path d="M-11-3L-4-7 3-3V5L-4 9-11 5ZM-11-3L-4 1 3-3M-4 1V9"/>'
-                  '<path d="M3 0L10-4 17 0V8L10 12 3 8M3 0L10 4 17 0M10 4V12" stroke="#ceb88a"/>'),
-        "mesh": ('<path d="M-13 7L-7-7 6-9 14 3 6 13-13 7ZM-13 7L0 1 6 13M-7-7L0 1 6-9M0 1L14 3"/>'
-                 '<path d="M0 1L6-9M0 1L6 13" stroke="#ceb88a"/>'),
+        "multibody": ('<path d="M-12 10L-3 1 8 7M-3 1L3-9"/>'
+                      '<circle cx="-12" cy="10" r="3"/><circle cx="-3" cy="1" r="3"/>'
+                      '<circle cx="8" cy="7" r="4" stroke="#ceb88a"/><path d="M-1-10L7-8"/>'),
+        "scene": ('<path d="M-10-5L0-10 10-5V6L0 11-10 6ZM-10-5L0 0 10-5M0 0V11"/>'
+                  '<path d="M-14 0V10L-4 15M14 0V10L4 15" stroke="#ceb88a"/>'),
+        "viewport": ('<path d="M-14-9H14V11H-14ZM-14-4H14M-5 6L2-1 9 6M2-1V8"/>'
+                     '<path d="M-6 15H6M0 11V15" stroke="#ceb88a"/>'),
+        "points": ('<path d="M-14 10L0-9 14 10M-10 13H10" stroke-opacity=".45"/>'
+                   '<circle cx="0" cy="-7" r="1.5"/><circle cx="-5" cy="1" r="1.4"/>'
+                   '<circle cx="5" cy="3" r="1.4"/><circle cx="-9" cy="8" r="1.4"/>'
+                   '<circle cx="0" cy="9" r="1.7" stroke="#ceb88a"/><circle cx="10" cy="10" r="1.4"/>'),
     }
     return ('<g transform="translate(28 20)" fill="none" stroke="#ad9ce0" '
             'stroke-width="1.25" stroke-linejoin="round" stroke-linecap="round">'
@@ -53,8 +59,8 @@ def plaque(item: dict) -> str:
     # The muted brass seam and clipped corners refer to machined instrument labels.
     # This narrow frame remains subordinate to the activity and original project art.
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{WIDTH}" height="{HEIGHT}" viewBox="0 0 {WIDTH} {HEIGHT}" role="img" aria-labelledby="title desc">
-<title id="title">{escape(item['name'])}</title>
-<desc id="desc">Original technical motif accompanying a selected contribution to {escape(item['name'])}.</desc>
+<title id="title">{escape(item['name'])} — {escape(item['description'])}</title>
+<desc id="desc">Original technical plaque linked to publicly verified upstream work.</desc>
 <defs>
  <linearGradient id="plate" x2=".9" y2="1"><stop stop-color="#171b2b"/><stop offset="1" stop-color="#0b101a"/></linearGradient>
  <linearGradient id="seam"><stop stop-color="#9b8054" stop-opacity=".65"/><stop offset=".45" stop-color="#605579" stop-opacity=".6"/><stop offset="1" stop-color="#364158" stop-opacity=".3"/></linearGradient>

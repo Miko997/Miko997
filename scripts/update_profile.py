@@ -135,7 +135,7 @@ def main():
     print(f"Verified {snapshot['login']}: {stats['last_365']} contributions / 365d; "
           f"current streak {stats['streak']['current']} days.")
     print(f"Aggregate calendar: {snapshot['visibility']['aggregate_calendar']}.")
-    print("Only published daily aggregates and merged public PR evidence were retained.")
+    print("Only published daily aggregates and verified public upstream evidence were retained.")
 
 
 if __name__ == "__main__":

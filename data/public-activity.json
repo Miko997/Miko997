@@ -1,5 +1,5 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "login": "Miko997",
   "as_of": "2026-10-09",
   "account_created": "2023-08-05",
@@ -1618,6 +1618,24 @@
         "state": "merged",
         "draft": false,
         "merged_at": "2026-08-10T14:40:37Z"
+      }
+    ],
+    "landed_commits": [
+      {
+        "repo": "google-deepmind/mujoco",
+        "sha": "76e31d377ed4718366431b947720aea837d94ea5",
+        "url": "https://github.com/google-deepmind/mujoco/commit/76e31d377ed4718366431b947720aea837d94ea5",
+        "author": "Miko997",
+        "default_branch": "main",
+        "default_branch_verified": true
+      },
+      {
+        "repo": "PixarAnimationStudios/OpenUSD",
+        "sha": "581fa24e8c887346f14e7edb5f3e88fb1fe33372",
+        "url": "https://github.com/PixarAnimationStudios/OpenUSD/commit/581fa24e8c887346f14e7edb5f3e88fb1fe33372",
+        "author": "Miko997",
+        "default_branch": "dev",
+        "default_branch_verified": true
       }
     ]
   },

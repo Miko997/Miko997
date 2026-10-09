@@ -7,9 +7,11 @@ or modifying the header, Metriplane image, or Cursed Dawn image.
 
 ## Data and definitions
 
-`data/public-activity.json` is the dated public snapshot. Schema 2 contains daily
-aggregate counts, calculated statistics, source/visibility evidence, and merged
-public pull-request evidence. It contains no open or draft PR records.
+`data/public-activity.json` is the dated public snapshot. Schema 3 contains daily
+aggregate counts, calculated statistics, source/visibility evidence, authored
+merged public PRs, and separately verified authored commits accepted upstream.
+It contains no open or draft PR records. Accepted commits are never counted as
+additional authored merged PRs or added to GitHub's daily contribution totals.
 
 | Value | Definition |
 | --- | --- |
@@ -59,19 +61,33 @@ have a valid `merged_at` timestamp. The collector retains only repository, numbe
 public title and URL, state, draft flag and merge date. Bodies, patches and branches
 are discarded. Open work is neither requested nor showcased.
 
-The `ECOSYSTEMS` configuration in `scripts/profile_data.py` selects a small set of
-specific merged contributions. Each ecosystem name links directly to that merged
-PR as evidence; names are omitted if evidence is unavailable. These links do not
+Some projects integrate patches without marking their original PR as merged.
+The explicit `LANDED_COMMITS` selection verifies those accepted contributions
+separately: the repository must be public, the exact upstream commit must identify
+Miko997 as its author, and a comparison must prove it is an ancestor of the current
+public default branch. Only repository, SHA, public URL, author and branch-verification
+fields are retained; source code, commit messages and comparison patches are discarded.
+Every refresh repeats this verification. An API failure or failed proof retains
+the previous presentation instead of publishing an unverified contribution.
+
+The `ECOSYSTEMS` and `LANDED_COMMITS` configuration in `scripts/profile_data.py`
+selects six relevant projects. Each plaque links directly to a verified merged PR
+or accepted authored commit. OpenUSD's source PR remains correctly described as
+closed without merge; its bot-integrated upstream commit supplies the evidence.
+MuJoCo's accepted authored test commit arrived through another person's merged PR.
+The complete public audit and selection reasons are in `docs/upstream-audit.json`.
+These links do not
 imply employment, project membership or maintainer status. Ownership
 or maintainership of the user's own project must be described separately.
 
 `scripts/render_ecosystems.py` turns that same verified selection into compact
 static plaques under `assets/generated/ecosystem-*.svg`. Their geometric motifs
 are original editorial artwork, not official project logos. Every plaque links
-to its selected merged PR. Missing, open, draft or unverified evidence produces
+to its selected upstream evidence. Missing, open, draft or unverified evidence produces
 neither a plaque output nor a README link. Their native canvas is 148 × 68;
-the README displays them at 144 × 66 so two fit inside GitHub's actual
-293-pixel mobile content area at a 375-pixel viewport.
+the README displays them at 126 × 58 so all six fit inside a 782-pixel
+desktop content area, while two fit inside GitHub's actual 293-pixel
+mobile content area at a 375-pixel viewport.
 
 ## Refresh and failure behavior
 

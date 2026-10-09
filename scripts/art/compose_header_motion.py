@@ -11,10 +11,11 @@ from pathlib import Path
 import argparse, json, math
 import numpy as np
 from PIL import Image,ImageDraw,ImageFilter
-from compose_header import compose,font,ROOT,BACKGROUND
+from compose_header import compose,font,ROOT,BACKGROUND,name_layout,lab_lights
 from remux_webp_holds import split_holds
 p=argparse.ArgumentParser();p.add_argument('--preview',action='store_true');p.add_argument('--quality',type=int,default=86);p.add_argument('--desktop-width',type=int,default=1400);p.add_argument('--mobile-width',type=int,default=650);p.add_argument('--only',choices=['desktop','mobile','both'],default='both');a=p.parse_args()
-WORK=ROOT/'work/header-v2';WORK.mkdir(exist_ok=True,parents=True)
+WORK=ROOT/'work/header-v3';WORK.mkdir(exist_ok=True,parents=True)
+POSE_WORK=ROOT/'work/header-v2'
 
 def smooth(t):
  t=np.clip(t,0,1);return t*t*t*(t*(t*6-15)+10)
@@ -24,8 +25,7 @@ def activation(t):return float(smooth((t-6.8)/.4) if t<16.8 else 1-smooth((t-16.
 def name_effect(im,t,mobile=False):
  q=activation(t)
  if q<=0:return im
- x,y=(52,51) if mobile else (75,194)
- size=65 if mobile else 77
+ x,y,size=name_layout(mobile)
  f=font(size,610);w=round(f.getlength('Miko Parkkinen'))+8;h=round(size*1.25)
  pad=22
  mask=Image.new('L',(w+pad*2,h+pad*2),0);ImageDraw.Draw(mask).text((pad,pad),'Miko Parkkinen',font=f,fill=255)
@@ -50,7 +50,9 @@ def name_effect(im,t,mobile=False):
  im.paste(color,(x-pad,y-pad),mask)
  return im
 
-manifest=json.loads((WORK/('preview-manifest.json' if a.preview else 'motion-manifest.json')).read_text())
+manifest_path=POSE_WORK/'motion-manifest.json'
+if a.preview and not manifest_path.exists():manifest_path=POSE_WORK/'preview-manifest.json'
+manifest=json.loads(manifest_path.read_text())
 rows=manifest['times']
 render_cache={}
 
@@ -62,13 +64,13 @@ def render_at(t,mobile=False):
  else:filename=min(rows,key=lambda r:abs(r['time']-t))['file']
  key=(filename,mobile)
  if key not in render_cache:
-  render_cache[key]=compose(WORK/'frames'/filename,750,830,True) if mobile else compose(WORK/'frames'/filename)
+  render_cache[key]=compose(POSE_WORK/'frames'/filename,750,830,True,False) if mobile else compose(POSE_WORK/'frames'/filename,with_lights=False)
  im=render_cache[key]
  if 16.8<t<17.8:
   quietkey=(rows[0]['file'],mobile)
-  if quietkey not in render_cache:render_cache[quietkey]=compose(WORK/'frames'/rows[0]['file'],750,830,True) if mobile else compose(WORK/'frames'/rows[0]['file'])
+  if quietkey not in render_cache:render_cache[quietkey]=compose(POSE_WORK/'frames'/rows[0]['file'],750,830,True,False) if mobile else compose(POSE_WORK/'frames'/rows[0]['file'],with_lights=False)
   im=Image.blend(im,render_cache[quietkey],float(smooth(t-16.8)))
- return name_effect(im,t,mobile)
+ return name_effect(lab_lights(im,activation(t),mobile),t,mobile)
 
 # Still evidence is always emitted at meaningful physical and visual moments.
 boardtimes=[0,6.35,6.85,7.3,12,17.8]
@@ -79,7 +81,7 @@ for i,t in enumerate(boardtimes):
  small=snapshot.resize((800,300),Image.Resampling.LANCZOS)
  board.paste(small,((i%2)*800,(i//2)*650))
  # Mobile companion under each desktop view exposes real responsive layout.
- mob=render_at(t,True);mob.resize((250,277),Image.Resampling.LANCZOS).save(WORK/f'mobile-story-{t:05.2f}.png')
+ mob=render_at(t,True);mob.save(WORK/f'mobile-full-story-{t:05.2f}.png');mob.resize((250,277),Image.Resampling.LANCZOS).save(WORK/f'mobile-story-{t:05.2f}.png')
  board.paste(mob.resize((250,277),Image.Resampling.LANCZOS),((i%2)*800+275,(i//2)*650+320))
  ImageDraw.Draw(board).text(((i%2)*800+28,(i//2)*650+602),f'{t:.2f}s',font=font(23,500),fill='#aab6ce')
 board.save(WORK/'motion-storyboard.jpg',quality=95)
@@ -103,13 +105,14 @@ for mobile,width,filename in [(False,a.desktop_width,'signature-header-animated.
  frames[0].save(temporary,save_all=True,append_images=frames[1:],duration=durations,loop=0,quality=a.quality,method=6,minimize_size=True,allow_mixed=True)
  temporary.write_bytes(split_holds(temporary.read_bytes()))
  temporary.replace(out)
- print(out,out.stat().st_size,frames[0].size,len(frames),flush=True)
+ with Image.open(out) as encoded:encoded_count=encoded.n_frames
+ print(out,out.stat().st_size,frames[0].size,'authored_frames',len(frames),'encoded_frames',encoded_count,flush=True)
  # Static files use precisely the same composition and geometry as time zero.
  static=render_at(0,mobile);static.save(ROOT/'assets'/('signature-header-mobile.webp' if mobile else 'signature-header.webp'),quality=95,method=6)
  frames.clear();render_cache.clear()
 # Keep compact reusable source stills; physical frame caches remain local.
 for state,row in [('quiet',rows[0]),('active',rows[-1])]:
- Image.open(WORK/'frames'/row['file']).save(ROOT/'assets/source'/f'switch-scene-{state}.webp',quality=98,method=6)
+ Image.open(POSE_WORK/'frames'/row['file']).save(ROOT/'assets/source'/f'switch-scene-{state}.webp',quality=98,method=6)
 metadata={'duration_ms':20000,'quiet_until':5,'press_starts':6.65,'activation_start':6.8,'return_complete':8.8,'activation_end':16.8,'fade_end':17.8,'frame_times':times,'durations_ms':durations,'motion_render_fps':20,'name_fps':12.5}
 (WORK/'composition-timing.json').write_text(json.dumps(metadata,indent=2)+'\n')
 print('Timing:',WORK/'composition-timing.json')

@@ -7,7 +7,7 @@ import time
 from datetime import date, datetime, timedelta
 from html.parser import HTMLParser
 from urllib.error import HTTPError, URLError
-from urllib.parse import urlencode, urlsplit
+from urllib.parse import quote, urlencode, urlsplit
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 
 
@@ -265,10 +265,11 @@ def collect(client: Client, login: str, today: date) -> dict:
     stats = summarize(days, today)
     stats["visible_commits_365"] = visible_commit_count(client, login, today)
     merged = public_prs(client, login, "merged")
-    return {"schema_version": 2, "login": login, "as_of": today.isoformat(),
+    landed = public_landed_commits(client, login)
+    return {"schema_version": 3, "login": login, "as_of": today.isoformat(),
             "account_created": created, "source": "github-public-contribution-calendar",
             "privacy": "Published daily aggregates only. No private repository details requested.",
-            "stats": stats, "upstream": {"merged": merged}}
+            "stats": stats, "upstream": {"merged": merged, "landed_commits": landed}}
 
 
 def markdown_text(value: str) -> str:
@@ -279,12 +280,51 @@ def markdown_text(value: str) -> str:
 # Selected engineering examples. A configured ecosystem appears only while its
 # linked contribution is present in the current, verified merged-public search.
 ECOSYSTEMS = (
-    ("Newton Physics", "newton-physics/newton", 4189, "MJCF orientation during import"),
+    ("Newton Physics", "newton-physics/newton", 4205, "GPU benchmarks for full and partial simulation resets"),
     ("ROS 2", "ros2/rclcpp", 3294, "Wait-set ownership on failed removal"),
-    ("Microsoft TypeSpec", "microsoft/typespec", 12042, "Valid deprecated OpenAPI parameter directives"),
-    ("conda-forge", "conda-forge/staged-recipes", 34480, "Metriplane package recipe"),
-    ("trimesh", "mikedh/trimesh", 2599, "Exact closure of discretized circles"),
+    ("RViz", "ros2/rviz", 1891, "Keyboard event routing after native render-window interaction"),
+    ("ROS Perception", "ros-perception/point_cloud_transport", 198, "Caller transport defaults and existing parameter declarations"),
 )
+
+# Accepted patches sometimes land through a maintainer's PR or an upstream bot.
+# Keep those authored commits separate from the count of authored merged PRs.
+LANDED_COMMITS = (
+    ("MuJoCo", "google-deepmind/mujoco", "76e31d377ed4718366431b947720aea837d94ea5",
+     "URDF inertia regression coverage across recompilation and XML round trips"),
+    ("OpenUSD", "PixarAnimationStudios/OpenUSD", "581fa24e8c887346f14e7edb5f3e88fb1fe33372",
+     "Hydra scene-index prefixing for absolute and membership path expressions"),
+)
+SHOWCASE_ORDER = ("Newton Physics", "MuJoCo", "OpenUSD", "ROS 2", "RViz", "ROS Perception")
+
+
+def public_landed_commits(client: Client, login: str) -> list[dict]:
+    """Verify specific public authored commits are ancestors of the default branch.
+
+    No source code, commit messages, file lists or private repository discovery
+    are retained. Closed source PRs never become fabricated merged-PR records.
+    """
+    out = []
+    for _, repo, sha, _ in LANDED_COMMITS:
+        base = f"https://api.github.com/repos/{repo}"
+        metadata = client.request(base)
+        if metadata.get("private") is not False or metadata.get("full_name", "").lower() != repo.lower():
+            raise DataError("Landed contribution repository is not verified public")
+        branch = metadata.get("default_branch")
+        if not isinstance(branch, str) or not branch:
+            raise DataError("Public contribution default branch is unavailable")
+        commit = client.request(f"{base}/commits/{sha}")
+        url = f"https://github.com/{repo}/commit/{sha}"
+        if (commit.get("sha") != sha or commit.get("html_url") != url or
+                (commit.get("author") or {}).get("login", "").lower() != login.lower()):
+            raise DataError("Landed contribution authorship or commit identity is unverified")
+        comparison = client.request(f"{base}/compare/{sha}...{quote(branch, safe='')}?per_page=1")
+        if (comparison.get("status") not in {"ahead", "identical"} or
+                count(comparison.get("behind_by")) != 0 or
+                comparison.get("merge_base_commit", {}).get("sha") != sha):
+            raise DataError("Authored contribution is not verified on the public default branch")
+        out.append({"repo": repo, "sha": sha, "url": url, "author": login,
+                    "default_branch": branch, "default_branch_verified": True})
+    return out
 
 
 def curated_upstream(snapshot: dict) -> list[dict]:
@@ -301,7 +341,16 @@ def curated_upstream(snapshot: dict) -> list[dict]:
         if item:
             selected.append({"name": name, "repo": repo, "description": description,
                              "url": item["url"]})
-    return selected
+    landed = {(item.get("repo", "").lower(), item.get("sha")): item
+              for item in snapshot["upstream"].get("landed_commits", [])
+              if item.get("default_branch_verified") is True and item.get("default_branch")
+              and item.get("author", "").lower() == snapshot.get("login", "").lower()}
+    for name, repo, sha, description in LANDED_COMMITS:
+        item = landed.get((repo.lower(), sha))
+        if item and item.get("url") == f"https://github.com/{repo}/commit/{sha}":
+            selected.append({"name": name, "repo": repo, "description": description,
+                             "url": item["url"]})
+    return sorted(selected, key=lambda item: SHOWCASE_ORDER.index(item["name"]))
 
 
 def impact_markdown(snapshot: dict) -> str:
@@ -312,8 +361,9 @@ def impact_markdown(snapshot: dict) -> str:
     if not selected:
         return ""  # Missing evidence never becomes a fabricated affiliation.
     tiles = [f'<a href="{escape(item["url"], quote=True)}"><img '
-             f'src="./{ecosystem_filename(item)}" width="144" height="66" '
-             f'alt="{escape(item["name"], quote=True)}" /></a>'
+             f'src="./{ecosystem_filename(item)}" width="126" height="58" '
+             f'alt="{escape(item["name"] + " — " + item["description"], quote=True)}" '
+             f'title="{escape(item["description"], quote=True)}" /></a>'
              for item in selected if item["repo"] in PLAQUES]
     return "<p>\n" + "\n".join(tiles) + "\n</p>" if tiles else ""
 

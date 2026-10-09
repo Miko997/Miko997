@@ -214,7 +214,8 @@ class PrivacyTests(unittest.TestCase):
             if "/search/issues?" in url:
                 return {"total_count": 0, "incomplete_results": False, "items": []}
             raise AssertionError("Unexpected API request")
-        out = collect(FakeClient(respond), "Miko997", date(2026, 1, 3))
+        with patch("profile_data.public_landed_commits", return_value=[]):
+            out = collect(FakeClient(respond), "Miko997", date(2026, 1, 3))
         self.assertEqual(out["stats"]["all_time"], 3)
         self.assertEqual(out["stats"]["streak"]["current"], 1)
         self.assertNotIn("private_repositories", json.dumps(out))
@@ -276,8 +277,8 @@ class RenderingTests(unittest.TestCase):
 
     def test_impact_excludes_open_drafts_and_unverified_ecosystems(self):
         s = fixture_snapshot()
-        item = {"repo": "newton-physics/newton", "number": 4189, "title": "Fix",
-                "url": "https://github.com/newton-physics/newton/pull/4189", "state": "open",
+        item = {"repo": "newton-physics/newton", "number": 4205, "title": "Fix",
+                "url": "https://github.com/newton-physics/newton/pull/4205", "state": "open",
                 "draft": False, "merged_at": "2026-01-01T12:00:00Z"}
         for state, draft, merged_at in (("open", False, item["merged_at"]), ("merged", True, item["merged_at"]), ("merged", False, None)):
             s["upstream"]["merged"] = [dict(item, state=state, draft=draft, merged_at=merged_at)]

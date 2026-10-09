@@ -1,0 +1,27 @@
+{
+  "checked_on": "2026-10-09",
+  "metriplane": {
+    "journal_doi": "https://doi.org/10.1016/j.softx.2026.103104",
+    "metadata": "https://api.crossref.org/works/10.1016/j.softx.2026.103104",
+    "author": "https://www.metriplane.com/author/",
+    "note": "Crossref identifies Miko Parkkinen and matching ORCID, SoftwareX volume36 article103104. Issue date December2026; DOI registered October5. No online publication date asserted. Project softwarex page still describes submission/minor revision and may be stale.",
+    "software_archive": "https://doi.org/10.5281/zenodo.20736619"
+  },
+  "cursed_dawn": {
+    "milestones": "https://curseddawn.com/milestones",
+    "wishlist_source": "https://curseddawn.com/press",
+    "wishlist_qualifier": "9,900+ from a dated Steamworks snapshot on16August2026; not sales, players, a historical peak or prelaunch total.",
+    "publisher_release": "https://www.indie.io/post/cursed-dawn-announces-release-date-to-launch-on-april-7-2025",
+    "ign_live": "https://www.ign.com/videos/cursed-dawn-official-trailer-ign-live-2024",
+    "gamescom": "https://www.gamedeveloper.com/press-release/indie-io-hits-gamescom",
+    "gamescom_qualifier": "Unedited indie.io press release dated8August2024, syndicated by Game Developer with Games Press. Explicitly lists Cursed Dawn in its Gamescom lineup. Public readable mirror selected because Games Press requires login.",
+    "publishing_qualifier": "indie.io agreement2024–May2026. Studio states title retired May2026; Steam product record retained as history.",
+    "gamescom_original": "https://www.gamespress.com/indieio-Hits-Gamescom"
+  },
+  "identity": {
+    "github": "https://github.com/Miko997",
+    "orcid": "https://orcid.org/0009-0008-5214-0984",
+    "youtube_verification": "https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=DGbQN8-sdLY&format=json",
+    "google_scholar": "Awaiting exact user profile URL; no unverified destination published."
+  }
+}

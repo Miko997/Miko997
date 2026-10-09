@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="148" height="68" viewBox="0 0 148 68" role="img" aria-labelledby="title desc">
-<title id="title">ROS 2 — Wait-set ownership on failed removal</title>
+<title id="title">OpenUSD — Hydra scene-index prefixing for absolute and membership path expressions</title>
 <desc id="desc">Original technical plaque linked to publicly verified upstream work.</desc>
 <defs>
  <linearGradient id="plate" x2=".9" y2="1"><stop stop-color="#171b2b"/><stop offset="1" stop-color="#0b101a"/></linearGradient>
@@ -9,6 +9,6 @@
 <path d="M1 1H134L147 14M147 67H12L1 56" fill="none" stroke="url(#seam)"/>
 <path d="M53 22H129" stroke="#343749" stroke-width=".7"/>
 <path d="M120 20L127 20" stroke="#9b8054" stroke-width=".8" opacity=".65"/>
-<g transform="translate(28 20)" fill="none" stroke="#ad9ce0" stroke-width="1.25" stroke-linejoin="round" stroke-linecap="round"><path d="M-12 13H2M-8 13V5L-1-2 8 2 13-4M9-7L15-3 12 1"/><circle cx="-8" cy="5" r="2.5" fill="#182237"/><circle cx="-1" cy="-2" r="2.5" fill="#182237"/><circle cx="8" cy="2" r="2.5" fill="#182237" stroke="#ceb88a"/></g>
-<text x="14" y="53" fill="#e8e7f5" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="14" font-weight="600">ROS 2</text>
+<g transform="translate(28 20)" fill="none" stroke="#ad9ce0" stroke-width="1.25" stroke-linejoin="round" stroke-linecap="round"><path d="M-10-5L0-10 10-5V6L0 11-10 6ZM-10-5L0 0 10-5M0 0V11"/><path d="M-14 0V10L-4 15M14 0V10L4 15" stroke="#ceb88a"/></g>
+<text x="14" y="53" fill="#e8e7f5" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="14" font-weight="600">OpenUSD</text>
 </svg>

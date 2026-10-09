@@ -55,7 +55,7 @@ jobs:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           ref: main
-      - name: Fetch published counts and merged public evidence
+      - name: Fetch published counts and verified public evidence
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: python3 scripts/update_profile.py

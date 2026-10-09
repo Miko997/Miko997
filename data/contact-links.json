@@ -1,0 +1,8 @@
+[
+  {"slug":"linkedin", "label":"LinkedIn", "icon":"linkedin", "url":"https://www.linkedin.com/in/miko-parkkinen-96650822a/"},
+  {"slug":"orcid", "label":"ORCID", "icon":"orcid", "url":"https://orcid.org/0009-0008-5214-0984"},
+  {"slug":"youtube", "label":"YouTube", "icon":"youtube", "url":"https://www.youtube.com/@MikoParkkinen/videos"},
+  {"slug":"steam", "label":"Steam", "icon":"steam", "url":"https://store.steampowered.com/app/2713550/Cursed_Dawn/"},
+  {"slug":"email", "label":"Email", "icon":"email", "url":"mailto:Miko.Parkkinen99@gmail.com"},
+  {"slug":"research", "label":"Research archive", "icon":"archive", "url":"https://doi.org/10.5281/zenodo.20736619"}
+]

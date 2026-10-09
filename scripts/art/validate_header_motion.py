@@ -6,13 +6,14 @@ import argparse,json
 from pathlib import Path
 import numpy as np
 from PIL import Image
+from compose_header import name_bounds,fixture_layer
 ROOT=Path(__file__).resolve().parents[2]
 p=argparse.ArgumentParser();p.add_argument('--manifest',type=Path);a=p.parse_args()
 results=[]
 for mobile,name in [(False,'signature-header-animated.webp'),(True,'signature-header-mobile-animated.webp')]:
  path=ROOT/'assets'/name;im=Image.open(path)
  assert im.info.get('loop')==0, 'Animation must repeat'
- elapsed=0;first=None;active=None;last=None;durations=[]
+ elapsed=0;first=None;active=None;before_press=None;last=None;durations=[]
  opening_hold=0;closing_hold=0;opening=True;previous=None
  for index in range(im.n_frames):
   im.seek(index);im.load();pixels=np.asarray(im.convert('RGB')).copy()
@@ -23,6 +24,7 @@ for mobile,name in [(False,'signature-header-animated.webp'),(True,'signature-he
   closing_hold=closing_hold+duration if previous is not None and np.array_equal(pixels,previous) else duration
   previous=pixels
   if elapsed<=12000<elapsed+duration:active=pixels
+  if elapsed<=6600<elapsed+duration:before_press=pixels
   last=pixels;elapsed+=duration
  assert elapsed==20000, f'{name}: timeline drift: {elapsed}'
  assert opening_hold>=5000, f'{name}: quiet hold too short'
@@ -32,7 +34,7 @@ for mobile,name in [(False,'signature-header-animated.webp'),(True,'signature-he
  assert seam<2, f'{name}: visible loop discontinuity: {seam}'
  assert active is not None
  basew=750 if mobile else 1600;scale=im.width/basew
- roi=(52,63,511,131) if mobile else (75,209,610,272)
+ roi=name_bounds(mobile)
  x1,y1,x2,y2=[round(n*scale) for n in roi]
  quiet=first[y1:y2,x1:x2];energized=active[y1:y2,x1:x2]
  interior=(quiet[:,:,0]>228)&(quiet[:,:,1]>228)&(quiet[:,:,2]>238)
@@ -43,7 +45,17 @@ for mobile,name in [(False,'signature-header-animated.webp'),(True,'signature-he
  linear=np.where(c<=.04045,c/12.92,((c+.055)/1.055)**2.4)
  luma=linear@np.array([.2126,.7152,.0722]);contrast=(luma+.05)/(.0034+.05)
  assert float(np.percentile(contrast,5))>=4.5, f'{name}: active name contrast too low'
- results.append({'file':name,'size':list(im.size),'bytes':path.stat().st_size,'frames':im.n_frames,'duration_ms':elapsed,'opening_hold_ms':opening_hold,'closing_hold_ms':closing_hold,'first_frame_ms':durations[0],'max_frame_ms':max(durations),'loop_mean_pixel_error':round(seam,4),'active_text_p05_contrast':round(float(np.percentile(contrast,5)),2)})
+ quiet_fixture=np.array(fixture_layer(mobile,False),dtype=float)
+ active_fixture=np.array(fixture_layer(mobile,True),dtype=float)
+ lens=((active_fixture[:,:,:3]-quiet_fixture[:,:,:3]).max(axis=2)>70)&(quiet_fixture[:,:,3]>240)
+ lens=np.array(Image.fromarray((lens*255).astype('uint8')).resize(im.size,Image.Resampling.NEAREST))>240
+ assert lens.sum()>200, f'{name}: fixture lenses missing'
+ light_delta=float(np.mean(active[lens].astype(float)-first[lens].astype(float)))
+ early_delta=float(np.mean(np.abs(before_press[lens].astype(float)-first[lens].astype(float))))
+ reset_delta=float(np.mean(np.abs(last[lens].astype(float)-first[lens].astype(float))))
+ assert light_delta>40, f'{name}: fixtures do not visibly activate'
+ assert early_delta<3 and reset_delta<3, f'{name}: fixtures violate switch timing or reset'
+ results.append({'file':name,'size':list(im.size),'bytes':path.stat().st_size,'frames':im.n_frames,'duration_ms':elapsed,'opening_hold_ms':opening_hold,'closing_hold_ms':closing_hold,'first_frame_ms':durations[0],'max_frame_ms':max(durations),'loop_mean_pixel_error':round(seam,4),'active_text_p05_contrast':round(float(np.percentile(contrast,5)),2),'fixture_activation_delta':round(light_delta,2),'fixture_pre_press_delta':round(early_delta,2),'fixture_reset_delta':round(reset_delta,2)})
 assert sum(r['bytes'] for r in results)<4*1024*1024,'Header animation exceeds4MiB combined budget'
 if a.manifest:
  rows=json.loads(a.manifest.read_text())['times']

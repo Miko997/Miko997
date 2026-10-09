@@ -36,6 +36,22 @@ def readme():
 
 
 class RefreshTests(unittest.TestCase):
+    def test_landed_commit_verification_failure_preserves_previous_outputs(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            for name, content in prepare_outputs(snapshot(), readme()).items():
+                path = root / name
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text(content)
+            before = {path: path.read_bytes() for path in root.rglob("*") if path.is_file()}
+            client = Client()
+            with patch("profile_data.fetch_calendar", return_value=(dict(snapshot()["stats"]["days"]), "2026-01-01")), patch(
+                    "profile_data.public_prs", return_value=[]), patch.object(
+                    client, "request", side_effect=DataError("Landed commit verification unavailable")):
+                with self.assertRaises(DataError):
+                    refresh(root, client, date(2026, 1, 3))
+            self.assertEqual(before, {path: path.read_bytes() for path in root.rglob("*") if path.is_file()})
+
     def test_fetch_failure_preserves_every_file(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
