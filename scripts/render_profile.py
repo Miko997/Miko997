@@ -30,6 +30,9 @@ def start(width, height, title, description, animated=True):
  <linearGradient id="filament" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#bcb0ff" stop-opacity=".1"/><stop offset=".45" stop-color="#bdbaff"/><stop offset="1" stop-color="#e4fbff"/></linearGradient>
  <radialGradient id="ignition"><stop stop-color="#e2f6ff" stop-opacity=".92"/><stop offset=".38" stop-color="#98dbff" stop-opacity=".65"/><stop offset=".7" stop-color="#77a3ff" stop-opacity=".26"/><stop offset="1" stop-color="#688bff" stop-opacity="0"/></radialGradient>
  <radialGradient id="aura"><stop stop-color="#7964e3" stop-opacity=".25"/><stop offset=".58" stop-color="#484dc3" stop-opacity=".12"/><stop offset="1" stop-color="#343b82" stop-opacity="0"/></radialGradient>
+ <linearGradient id="alloy" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#a18b61" stop-opacity=".65"/><stop offset=".42" stop-color="#534735" stop-opacity=".5"/><stop offset="1" stop-color="#927853" stop-opacity=".72"/></linearGradient>
+ <linearGradient id="rail" x1="0" x2="1"><stop stop-color="#6c54b5" stop-opacity=".1"/><stop offset=".23" stop-color="#927cde" stop-opacity=".65"/><stop offset=".54" stop-color="#7fcefb" stop-opacity=".8"/><stop offset=".80" stop-color="#9881e5" stop-opacity=".55"/><stop offset="1" stop-color="#735a9b" stop-opacity=".1"/></linearGradient>
+ <filter id="rail-soft" x="-2%" y="-200%" width="104%" height="500%" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="1.35"/></filter>
  <linearGradient id="face" x2=".2" y2="1"><stop stop-color="#d9e5ff" stop-opacity=".24"/><stop offset=".5" stop-color="#c4c8ff" stop-opacity=".01"/><stop offset="1" stop-color="#071426" stop-opacity=".3"/></linearGradient>
  <filter id="bloom" x="-60%" y="-30%" width="220%" height="170%" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="5"/></filter>
  <filter id="soft" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="1.6"/></filter>
@@ -77,14 +80,15 @@ CONTOURS = [
 
 def motion_css():
     rules = [
-        '.plasma-still{display:none}',
+        '.plasma-still,.rail-still{display:none}',
         '@keyframes current{to{stroke-dashoffset:-1200}}',
         '@keyframes charge{0%,18%,65%,100%{opacity:0}35%{opacity:.55}48%{opacity:.12}}',
         '@keyframes rise{0%{transform:translate(0,0);opacity:0}22%{opacity:.7}75%{opacity:.2}100%{transform:translate(8px,-44px);opacity:0}}',
         '.current{animation:current 12s linear infinite}',
+        '.rail-current{animation:current 20s linear infinite}',
         '.charge{opacity:0;animation:charge 12s ease-in-out infinite}',
         '.spark{opacity:0;animation:rise 6s linear infinite}',
-        '@media(prefers-reduced-motion:reduce){.current,.charge,.spark{animation:none!important;display:none}.plasma-motion{display:none}.plasma-still{display:inline}}',
+        '@media(prefers-reduced-motion:reduce){.current,.charge,.spark,.rail-current{animation:none!important;display:none}.plasma-motion,.rail-motion{display:none}.plasma-still,.rail-still{display:inline}}',
     ]
     return ''.join(rules)
 
@@ -179,6 +183,57 @@ def calendar(days, x, y, pitch, cell, maximum, animated=True, part=0, label_size
     return ''.join(out)
 
 
+def streak_panel(current, compact, animated):
+    """One bounded readout explicitly associates the existing flame and number."""
+    x,y,w,h = (286,16,322,142) if compact else (776,16,376,164)
+    cut = 12
+    frame = f'M{x+cut} {y}H{x+w-cut}L{x+w} {y+cut}V{y+h-cut}L{x+w-cut} {y+h}H{x+cut}L{x} {y+h-cut}V{y+cut}Z'
+    nx,ny = (432,95) if compact else (952,99)
+    fx,fy,scale = (292,12,.82) if compact else (800,4,.97)
+    return (f'<g id="streak-readout" aria-label="Current contribution streak: {current} days">'
+            f'<path d="{frame}" fill="#0e111b" stroke="url(#alloy)" stroke-width="1.1"/>'
+            f'<path d="M{x+12} {y+17}v-5h26M{x+w-12} {y+h-17}v5h-26" fill="none" stroke="#a99162" stroke-width="1" opacity=".7"/>'
+            + flame(fx,fy,scale,current>0,animated)
+            + text(nx,ny,current,60 if compact else 66,weight=600,extra='id="streak-number"')
+            + text(nx+1,128 if compact else 133,'Current streak',23 if compact else 22,MUTED)
+            + '</g>')
+
+
+def rail_path(x1, x2, y, phase, band):
+    # Low-amplitude standing and travelling waves form a thin plasma seam.
+    # Its fixed endpoints never touch the dated calendar below.
+    coords=[]
+    for i in range(49):
+        t=i/48
+        envelope=math.sin(math.pi*t)**.6
+        wave=math.sin(t*math.tau*3-phase+band*.7)
+        detail=math.sin(t*math.tau*7+phase*2+band)*.23
+        coords.append((x1+(x2-x1)*t,y+(wave+detail)*envelope*(1.8+band*.65)))
+    return 'M'+'L'.join(f'{x:.2f} {yy:.2f}' for x,yy in coords)
+
+
+def energy_rail(x1, x2, y=192, animated=True):
+    """A decorative separator outside the data grid; never a contribution mark."""
+    out=[f'<g id="energy-separator" aria-hidden="true"><path d="M{x1} {y}H{x2}" stroke="#433d36" stroke-width=".75"/>']
+    for variant in (('motion','still') if animated else ('still',)):
+        klass=f' class="rail-{variant}"' if animated else ''
+        out.append(f'<g{klass} fill="none">')
+        for band in range(3):
+            paths=[rail_path(x1,x2,y,j*math.tau/8,band) for j in range(8)]
+            effect=' filter="url(#rail-soft)"' if band==2 else ''
+            out.append(f'<path d="{paths[0]}" stroke="url(#rail)" stroke-width="{2.4 if band==2 else .8}" opacity="{.28 if band==2 else .57}"{effect}>')
+            if variant=='motion':
+                out.append(f'<animate attributeName="d" values="{";".join(paths+[paths[0]])}" dur="16s" repeatCount="indefinite"/>')
+            out.append('</path>')
+        if variant=='motion':
+            out.append(f'<path class="rail-current" d="M{x1} {y}H{x2}" pathLength="1200" stroke="#c3dfff" stroke-width=".9" stroke-dasharray="18 1182" opacity=".55"/>')
+        out.append('</g>')
+    for x in (x1,x2):
+        out.append(f'<path d="M{x-3} {y}l3-3 3 3-3 3Z" fill="#65563d"/>')
+    out.append('</g>')
+    return ''.join(out)
+
+
 def dashboard(snapshot, animated=True, compact=False):
     stats = snapshot['stats']
     days, st = stats['days'], stats['streak']
@@ -189,20 +244,14 @@ def dashboard(snapshot, animated=True, compact=False):
             "Includes anonymous private contributions only when published by GitHub.")
     parts = [start(width, height, 'Miko997 — Contributions', desc, animated)]
     num_size = 62 if compact else 66
-    parts += [text(32 if compact else 46, 96, f"{stats['last_365']:,}", num_size, weight=600),
+    parts += [text(32 if compact else 46, 96, f"{stats['last_365']:,}", num_size, weight=600, extra='id="contribution-number"'),
               text(34 if compact else 48, 128, 'Contributions', 24 if compact else 21, MUTED)]
-    if compact:
-        parts += [flame(272, 4, .90, st['current'] > 0, animated),
-                  text(470, 96, st['current'], 60, weight=600),
-                  text(466, 128, 'Day streak', 24, MUTED)]
-    else:
-        parts += [flame(788, 9, 1.0, st['current'] > 0, animated),
-                  text(991, 95, st['current'], 66, weight=600),
-                  text(993, 127, 'Current streak', 21, MUTED)]
+    parts.append(streak_panel(st['current'],compact,animated))
     start_day, end_day = (date.fromisoformat(days[i][0]) for i in (0, -1))
     period = f'{start_day:%d %b %Y} — {end_day:%d %b %Y}'
-    parts += [text(34 if compact else 48, 168, period, 22, MUTED),
-              f'<path d="M{32 if compact else 48} 192H{width-32 if compact else width-48}" stroke="#222a3d"/>']
+    parts += [text(34 if compact else 48, 180 if compact else 168, period, 22, MUTED),
+              energy_rail(32 if compact else 48,width-32 if compact else width-48,
+                          y=202 if compact else 192,animated=animated)]
     maximum = max(n for _, n in days) or 1
     if compact:
         # Split at a Sunday so both panels use identical Sunday-first weeks.

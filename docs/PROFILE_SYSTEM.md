@@ -1,6 +1,6 @@
 # Profile system
 
-The signature header is original rendered artwork. The activity images are
+The signature header is an original rendered 3D animation with a matching still. The activity images are
 self-contained SVGs generated from GitHub's published daily counts. Art rendering
 and activity refresh are separate: a new contribution never requires rendering
 or modifying the header, Metriplane image, or Cursed Dawn image.
@@ -65,6 +65,13 @@ PR as evidence; names are omitted if evidence is unavailable. These links do not
 imply employment, project membership or maintainer status. Ownership
 or maintainership of the user's own project must be described separately.
 
+`scripts/render_ecosystems.py` turns that same verified selection into compact
+static plaques under `assets/generated/ecosystem-*.svg`. Their geometric motifs
+are original editorial artwork, not official project logos. Every plaque links
+to its selected merged PR. Missing, open, draft or unverified evidence produces
+neither a plaque output nor a README link. At their native 148 × 68 size, normal
+HTML wrapping fits two plaques across a 309-pixel mobile content area.
+
 ## Refresh and failure behavior
 
 `.github/workflows/profile.yml` runs at minutes 17 and 47 each hour (UTC), on
@@ -86,16 +93,21 @@ is replaced atomically. Identical contents are not rewritten, and the workflow
 makes no commit when the generated files are unchanged. GitHub branch protection
 can block publication; the workflow fails rather than bypassing it.
 
-The image URL fingerprint hashes all four rendered activity variants, so both
-new activity and design changes invalidate the README URLs. Alternative text is
-regenerated with the same total, date range and streak. The workflow writes only
-README, the JSON snapshot and generated activity SVGs; header and project artwork
-are outside its output list.
+The image URL fingerprint hashes all four rendered activity variants and the
+verified ecosystem plaques, so both new activity and design changes invalidate
+the README URLs. Plaques and their evidence links are regenerated automatically
+on the same refresh. Alternative activity text is regenerated with the same total,
+date range and streak. The workflow writes only README, the JSON snapshot and
+generated activity and ecosystem SVGs; header and project artwork are outside its
+output list. All plaque rendering completes before any refresh output is written,
+so a plaque-rendering error also preserves the previous presentation.
 
 ## Rendering and accessibility
 
-- `assets/signature-header.webp` and `assets/signature-header-mobile.webp`: rendered
-  signature artwork; editable procedural source is under `scripts/art/`.
+- `assets/signature-header-animated.webp` and `assets/signature-header-mobile-animated.webp`: a synchronized robot press and name-lighting loop.
+- `assets/signature-header.webp` and `assets/signature-header-mobile.webp`: matching
+  still artwork; selected first for reduced motion. Editable procedural source
+  and rendering instructions are under `scripts/art/` and `docs/HEADER_ARTWORK.md`.
 - `assets/generated/contribution-core.svg`: desktop animation.
 - `assets/generated/contribution-core-mobile.svg`: mobile layout with two calendar
   panels, keeping all 365 dates and their chronological positions.
@@ -110,9 +122,15 @@ hides the SMIL flame group, shows separate still contours, and disables the
 calendar and particle CSS animation. A static link also allows direct viewing.
 
 Cell fill intensity is derived from each actual count. Animation accents only
-active dates; it never changes cell counts or makes a zero date active. The plasma
-flame and its text are separate. At zero streak the live flame is extinguished.
+active dates; it never changes cell counts or makes a zero date active. A restrained instrument frame explicitly groups the plasma and current-streak
+number. The plasma flame and its text remain separate. At zero streak the live flame is extinguished.
 The number remains ordinary generated text for any valid streak length.
+A thin animated plasma seam separates metrics from the calendar; it is purely
+decorative, stays outside the dated cells, and has its own static contours.
+The header animation is pre-rendered into WebP, with the physical press and
+name effect in one file so they remain synchronized. Reduced-motion picture
+sources choose the still header; embedded WebP motion does not rely on CSS.
+The README cannot set GitHub's prose font; the artwork controls its own typography.
 
 GitHub renders README images in an image context. The flame uses declarative
 SVG SMIL path morphing; it does not depend on the CSS `d` property, which Safari

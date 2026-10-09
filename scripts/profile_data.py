@@ -305,10 +305,17 @@ def curated_upstream(snapshot: dict) -> list[dict]:
 
 
 def impact_markdown(snapshot: dict) -> str:
+    from html import escape
+    from render_ecosystems import HEIGHT, PLAQUES, WIDTH, ecosystem_filename
+
     selected = curated_upstream(snapshot)
     if not selected:
         return ""  # Missing evidence never becomes a fabricated affiliation.
-    return " · ".join(f"**[{markdown_text(item['name'])}]({item['url']})**" for item in selected)
+    tiles = [f'<a href="{escape(item["url"], quote=True)}"><img '
+             f'src="./{ecosystem_filename(item)}" width="{WIDTH}" height="{HEIGHT}" '
+             f'alt="{escape(item["name"], quote=True)}" /></a>'
+             for item in selected if item["repo"] in PLAQUES]
+    return "<p>\n" + "\n".join(tiles) + "\n</p>" if tiles else ""
 
 
 def replace_section(text: str, name: str, replacement: str) -> str:

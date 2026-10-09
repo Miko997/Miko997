@@ -63,7 +63,7 @@ jobs:
         run: python3 -m unittest discover -s tests -v
       - name: Publish only changed profile data
         run: |
-          git add README.md data/public-activity.json assets/generated/contribution-core*.svg
+          git add README.md data/public-activity.json assets/generated/
           if git diff --cached --quiet; then
             echo 'No contribution or profile-data changes.'
             exit 0

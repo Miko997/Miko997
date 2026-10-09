@@ -2,7 +2,7 @@
 
 Review date: 2026-10-09. Local validation must not be confused with a published GitHub rendering. Nothing may be pushed, opened as a pull request, or published before Miko approves the completed visual result.
 
-## Baseline and scope
+## Original profile baseline and scope
 
 The baseline is the clean checkout captured before edits in `work/review/baseline` outside the repository. Screenshots include the actual public profile and browser renders of repository assets in a GitHub-style shell. The shell is an approximation of GitHub typography, content width and spacing; it does not reproduce GitHub sanitization, caching or every profile breakpoint.
 
@@ -30,13 +30,13 @@ Chrome 155.0.8059.39, Linux, local HTTP `<img>` context:
 
 [Blender Studio lighting/rendering comparisons](https://studio.blender.org/training/blender-fundamentals-45-lts/blender_4-5_lts_lighting-rendering-theory-cycles/) demonstrate the importance of grounded illumination, reflected light and physical surface response. [NVIDIA Newton](https://developer.nvidia.com/newton-physics) provides a field-specific reference for simulated mechanisms and spatial information. These are technique/subject references, not copied artwork. The signature object should read as an inspectable mechanism or spatial model, not as an unexplained fantasy ornament.
 
-## Concept review
+## First iteration — concept review
 
 Three real Cycles-rendered prototypes were inspected side-by-side. **A, Hexcore laboratory** has credible specular materials but its central orb reads as a decorative energy trophy. **B, Simulation field** makes the connection to robotics immediately visible: an articulated mechanism, physical workpiece, sampled path and spatial representation. **C, Electromechanical optics** has strong diagonal depth but an ambiguous purpose that weakens professional specificity. B is the strongest direction on subject relevance, legibility and quiet space for the name.
 
 Initial concept criticism: all three share the same type-left/object-right composition, so the first board explores motifs more than full visual directions. Broader composition changes were requested for A and C. In B, smooth joints and an unconnected trajectory read as a toy model rather than inspected engineering; mechanical seams, wrist detail and a connected toolpath were requested. A visible rectangular floor cut needs a clean fade.
 
-## Four substantive implementation/refinement cycles
+## First iteration — four substantive refinement cycles
 
 Concept exploration is separate. Each cycle was rendered before further changes; root captures are retained in the task's `work/review/cycle-1` through `cycle-4` directories. Additional independent frame captures are in `activity-v1`, `activity-v2`, `composition-v1` and `composition-v3`.
 
@@ -63,7 +63,7 @@ The initial implementation used CSS `d` morphing. [MDN marks that property as li
 
 Final local captures and a 12-second motion preview are retained in the task's `work/review/final`; pixel results are in `work/review/final-verification-smil`. The Chrome pixel checks can be reproduced from the repository with `scripts/verify_rendering.py` using an isolated environment containing Playwright and Pillow. There is no browser dependency in scheduled data refreshes.
 
-### Critical assessment
+### First-iteration critical assessment
 
 | Category | Directional score | Evidence and remaining criticism |
 | --- | ---: | --- |
@@ -87,6 +87,48 @@ These scores do **not** establish a 9/10 average. They are critical design judgm
 - **Engineering/data:** The independently found degraded-calendar fallback was fixed and regression-tested. A fresh successful retrieval still reported 1,574 contributions and a 6-day current streak on 2026-10-09.
 - **Privacy/security:** The GraphQL query requests aggregate date/count fields, no private repository objects. Public PR metadata is explicitly allowlisted. No secret-bearing output is required for the artwork or local previews.
 - **Portfolio/copy:** Open/draft PRs, administrative counts, decorative footer and repetitive prose are removed. The inherited research DOI returned HTTP 403 to an automated check, so availability could not be verified; this does not prove the DOI is broken.
+
+## Second iteration — current Hextech result
+
+This is the current review candidate. The first-iteration counts, captures and scores above are historical. The accepted v1 deliverables were preserved in the task's `work/review/v2-baseline` before editing. A fresh public-data refresh for v2 reported **1,576 contributions across the same 365 dates and a 6-day current streak**; the earlier 1,574 total is retained only as a record of v1.
+
+### Visual changes and independent criticism
+
+- **Mechanical interaction:** the robot now has a physical switch, restrained brass seams, a faceted base and blue-violet lighting. Fixed link lengths and aligned finger/cap contact make the press readable. An initially ambiguous power glyph was corrected before the final encoding. The name remains complete and readable throughout its color treatment.
+- **Connected activity hierarchy:** one subdued frame groups the plasma with the current-streak numeral. The contribution total remains the primary left-hand metric. A narrow moving rail occupies the existing divider position, without adding a tall decorative section. Review caught the compact date crossing the frame's lower-left chamfer; the compact date and rail were moved down while preserving the calendar geometry.
+- **Compact evidence links:** five static 148×68 plaques use original geometric motifs, muted brass seams and 14px titles. They form one desktop row and a readable 2+2+1 arrangement at 309px content width. Their links still target verified merged pull requests. The plaques add theme without another moving layer.
+- **Restrained composition:** the finished desktop and mobile views remain orderly in both GitHub themes. The art deliberately keeps its dark background in light mode. The small workcell still reads as a stylized maquette; the flame remains visibly procedural. These are current aesthetic limitations, not technical impossibility claims.
+
+### Timing and delivery behavior
+
+The encoded hero loop is exactly 20 seconds: quiet white name through 5 seconds, physical approach and contact around 6.65 seconds, name activation around 6.8 seconds, arm return by 8.8 seconds, active name through 16.8 seconds, and a fade to the quiet state by 17.8 seconds. The remaining interval provides a calm reset. The desktop and mobile compositions have separate animated WebPs and separate quiet static WebPs. The final animated files are 1,089,362 bytes at 1400×525 and 994,876 bytes at 650×719. Each has 366 encoded frames; transparent no-op hold segments preserve the quiet artwork without increasing the rendered motion cadence.
+
+The beginning and end use the same rendered composition. Lossy encoding introduces mean decoded endpoint differences of 0.445 and 0.608 RGB levels out of 255, so the result is described as **visually seamless**, not pixel-identical. All strokes remain visible during the name effect; the header validator measured the active letter-stroke fifth-percentile contrast above 7.4:1.
+
+### Current validation evidence
+
+The final GitHub REST Markdown transform and local browser shell are retained in `work/review/v2-final` outside the repository. All nine viewport/theme/preference configurations loaded every image and stayed within the viewport. Actual `currentSrc` values confirm mobile artwork below 600px and both static header and static activity for reduced motion. The explicit static preview also selects both quiet assets. The hosted GitHub/Camo check remains pending approval to publish.
+
+The activity pixel verifier now locates numeric regions by semantic SVG IDs and derives the divider position from its path geometry. Ten checks cover animation, static and browser-level reduced motion, including two synthetic zero-streak cases: an extinguished flame stays unchanged while the separate rail moves. Inactive day interiors and both displayed numbers stay unchanged. After the final compact spacing correction, all five affected Chrome cases and all four affected Firefox cases passed again. Synthetic streaks 0, 1, 10, 100 and 365 were also inspected for fit.
+
+The animated header was independently decoded into timing contact sheets in `work/review/v2-header-timing`. Chrome and Firefox each passed four desktop/mobile normal/reduced-motion checks: the quiet interval stays unchanged, the active interval changes, and static selections stay unchanged. The local WebKit engine was checked separately from physical Safari/iOS. Its initial encoding played the first loop early despite resource loads completing within milliseconds. A controlled side-by-side probe isolated this from navigation or screenshot timing. Splitting only the long quiet holds into 40ms transparent no-op frames fixed the observed behavior without changing any decoded image at the corresponding encoded time; the extra container overhead is 8,142 bytes per asset. Final desktop/mobile WebKit candidates stayed pixel-identical through 4.4 seconds, showed the active state at 8.1 seconds, and returned to quiet after the loop. Nearest-frame matching aligned measured 5.000, 6.650, 6.850 and 8.100-second captures with those exact encoded timestamps. Evidence is in `work/review/v2-webkit-final-candidate`. This is validation of the local WebKit engine, **not** a physical Safari/iOS test. Chrome and Firefox were verified before the container-only hold split; the final split preserves every decoded pixel at the same nominal time.
+
+### Current critical assessment
+
+| Category | Directional score | Current evidence or limitation |
+| --- | ---: | --- |
+| Visual identity | 9 | Coherent brass, dark metal and violet-blue interaction; original mechanism and plaques. |
+| Composition | 9 | Shared streak frame and compact evidence tiles strengthen grouping without multiplying moving panels. |
+| Typography | 8.5 | White/colored name stays readable; dedicated mobile typesetting; small calendar labels still require close reading. |
+| Motion design | 8.5 | Physical cause-and-effect, slow name treatment and stable real metrics; plasma remains procedural. |
+| Engineering relevance | 9 | Articulated mechanism, consistent link geometry and physical switch travel. |
+| Information clarity | 9 | Exact dates and counts survive every static/reduced variant; verified evidence remains one click away. |
+| GitHub compatibility | 8 | Official Markdown transform and local image tests pass; hosted proxy behavior and physical Safari remain unverified. |
+| Technical robustness | 9 | Refreshed real data, retained outputs on failure, zero-state behavior and targeted regressions. |
+| Performance | 8 | Roughly 1MB animated hero per selected viewport; no low-end device decoding/battery profile. |
+| Professional credibility | 8.5 | Focused engineering evidence and restrained theme; the expressive plasma remains an aesthetic choice. |
+
+This remains a critical local review candidate, not an unqualified 9/10-average claim. No blocking layout or data defect remains in the inspected final compositions. Browser-specific timing evidence and publication limitations must accompany any compatibility claim.
 
 ## Release limitation
 

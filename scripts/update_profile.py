@@ -14,6 +14,7 @@ from pathlib import Path
 from profile_data import Client, DataError, collect, impact_markdown, replace_section
 from calendar_visibility import verify_visibility
 from render_profile import dashboard
+from render_ecosystems import ecosystem_assets
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -36,10 +37,11 @@ def prepare_outputs(snapshot: dict, readme: str) -> dict[str, str]:
             suffix = ("-mobile" if compact else "") + ("" if animated else "-static")
             outputs[f"assets/generated/contribution-core{suffix}.svg"] = dashboard(
                 snapshot, animated=animated, compact=compact)
+    outputs.update(ecosystem_assets(snapshot))
     # Include artwork in the fingerprint: a design-only edit also invalidates caches.
     fingerprint = hashlib.sha256("\n".join(outputs.values()).encode()).hexdigest()[:12]
     readme = replace_section(readme, "IMPACT", impact_markdown(snapshot))
-    readme = re.sub(r"(assets/generated/contribution-core(?:-mobile)?(?:-static)?\.svg)(?:\?v=[0-9a-f]+)?",
+    readme = re.sub(r"(assets/generated/(?:contribution-core(?:-mobile)?(?:-static)?|ecosystem-[a-z0-9-]+)\.svg)(?:\?v=[0-9a-f]+)?",
                     lambda m: m[1] + "?v=" + fingerprint, readme)
     stats = snapshot["stats"]
     alt = (f"{stats['last_365']:,} GitHub contributions from {stats['days'][0][0]} to "

@@ -240,7 +240,8 @@ class RenderingTests(unittest.TestCase):
         snapshot = fixture_snapshot()
         moving = ET.fromstring(dashboard(snapshot))
         ns = {"s": "http://www.w3.org/2000/svg"}
-        animations = moving.findall(".//s:animate", ns)
+        flame_group = moving.find(".//s:g[@id='streak-readout']", ns)
+        animations = flame_group.findall(".//s:animate", ns)
         self.assertEqual(len(animations), 16)
         self.assertTrue(all(node.get("attributeName") == "d" for node in animations))
         self.assertTrue(all(node.get("values").split(";")[0] == node.get("values").split(";")[-1]
@@ -250,7 +251,23 @@ class RenderingTests(unittest.TestCase):
         for suffix in ("motion", "still"):
             self.assertIsNotNone(moving.find(f".//s:g[@class='plasma-{suffix}']", ns))
         snapshot["stats"]["streak"]["current"] = 0
-        self.assertNotIn("<animate", dashboard(snapshot))
+        zero = ET.fromstring(dashboard(snapshot)).find(".//s:g[@id='streak-readout']", ns)
+        self.assertEqual(zero.findall(".//s:animate", ns), [])
+
+    def test_separator_is_outside_calendar_and_has_static_fallback(self):
+        ns = {"s": "http://www.w3.org/2000/svg"}
+        for compact in (False, True):
+            moving = ET.fromstring(dashboard(fixture_snapshot(), compact=compact))
+            rail = moving.find(".//s:g[@id='energy-separator']", ns)
+            self.assertIsNotNone(rail)
+            self.assertEqual(rail.findall(".//*[@data-date]"), [])
+            self.assertIsNotNone(rail.find(".//s:g[@class='rail-still']", ns))
+            self.assertIsNotNone(rail.find(".//s:g[@class='rail-motion']", ns))
+            for motion in rail.findall(".//s:animate", ns):
+                phases = motion.attrib["values"].split(";")
+                self.assertEqual(phases[0], phases[-1])
+            still = ET.fromstring(dashboard(fixture_snapshot(), False, compact))
+            self.assertEqual(still.findall(".//s:animate", ns), [])
 
     def test_365_calendar_titles(self):
         content = dashboard(fixture_snapshot())

@@ -7,11 +7,12 @@ from pathlib import Path
 import bpy
 from mathutils import Vector
 args = argparse.ArgumentParser()
-args.add_argument('--concept', choices=['laboratory','simulation','electromechanical'],default='laboratory')
+args.add_argument('--concept', choices=['laboratory','simulation','electromechanical','none'],default='laboratory')
 args.add_argument('--output',default='work/header/laboratory.png')
 args.add_argument('--size',type=int,default=1000)
 args.add_argument('--samples',type=int,default=96)
 args.add_argument('--save-scene',default='')
+args.add_argument('--no-render',action='store_true')
 opt=args.parse_args(sys.argv[sys.argv.index('--')+1:] if '--' in sys.argv else [])
 random.seed(997)
 bpy.ops.object.select_all(action='SELECT'); bpy.ops.object.delete(use_global=False)
@@ -184,7 +185,7 @@ def electromechanical():
   for y in [-.60,.60]:bolt((x,y,.47))
  path('Service umbilical',[(-.67,.5,.4),(-1.0,.7,.44),(-1.18,.52,.7),(-1.12,.16,1.17),(-.54,.18,1.31)],.043,dark)
 
-{'laboratory':laboratory,'simulation':simulation,'electromechanical':electromechanical}[opt.concept]()
+{'laboratory':laboratory,'simulation':simulation,'electromechanical':electromechanical,'none':lambda:None}[opt.concept]()
 # Grounded shadow and near-black horizon; no environment textures.
 ground=box('Studio shadow catcher',(0,0,-.105),(200,200,.10),floor,0)
 ground.is_shadow_catcher=True
@@ -217,4 +218,4 @@ scene.view_settings.view_transform='AgX';scene.view_settings.look='AgX - Medium 
 # Actual Cycles output remains uncluttered; glow is restrained in final composite.
 scene.render.filepath=str(Path(opt.output).resolve());Path(opt.output).parent.mkdir(parents=True,exist_ok=True)
 if opt.save_scene:bpy.ops.wm.save_as_mainfile(filepath=str(Path(opt.save_scene).resolve()))
-bpy.ops.render.render(write_still=True)
+if not opt.no_render:bpy.ops.render.render(write_still=True)

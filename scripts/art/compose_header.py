@@ -35,7 +35,7 @@ def compose(scene,width=1600,height=600,mobile=False):
  return im
 
 def main():
- p=argparse.ArgumentParser();p.add_argument('--scene',type=Path,default=ROOT/'assets/source/simulation-scene.webp');p.add_argument('--out',type=Path,default=ROOT/'assets/signature-header.webp');p.add_argument('--mobile-out',type=Path,default=ROOT/'assets/signature-header-mobile.webp');p.add_argument('--concept-sheet',action='store_true');p.add_argument('--save-source',action='store_true');a=p.parse_args()
+ p=argparse.ArgumentParser();p.add_argument('--scene',type=Path,default=ROOT/'assets/source/switch-scene-quiet.webp');p.add_argument('--out',type=Path,default=ROOT/'assets/signature-header.webp');p.add_argument('--mobile-out',type=Path,default=ROOT/'assets/signature-header-mobile.webp');p.add_argument('--concept-sheet',action='store_true');p.add_argument('--save-source',action='store_true');a=p.parse_args()
  a.out.parent.mkdir(exist_ok=True,parents=True)
  if a.save_source:
   source=ROOT/'assets/source/simulation-scene.webp'

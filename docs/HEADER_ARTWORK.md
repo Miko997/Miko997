@@ -1,54 +1,90 @@
 # Signature artwork
 
-An original procedural robot workcell with a physical fixture, optical workpiece outline and sampled approach path. It is illustrative artwork, not a claimed simulation result or an image of a commercial robot. All geometry, lights and materials are authored in `scripts/art/render_header_scene.py`; no stock meshes, textures, Arcane imagery or generated bitmap imagery are used.
+The header is an original procedural robot workcell. Its warm machined-bronze edges, sapphire switch and violet optical channels carry the palette; the robot physically operates the switch. All geometry, lighting and materials are authored in the Blender source scripts. No stock meshes, textures, Arcane imagery or externally generated bitmap imagery are used.
 
-The final composition uses physically rendered titanium, dark anodized housings, recessed fasteners, a service cable and an articulated two-finger gripper. Violet and blue appear in reflected light, thin encoder edges and the optical workpiece. The header stays static so that the activity visual carries the page's motion hierarchy.
+The motion is contained entirely in animated WebP images and synchronized with the name treatment. GitHub needs no JavaScript, embedded video, external font loading or multiple independently timed layers.
 
-## Files
+## Timeline
 
-- `assets/signature-header.webp` — 1600 × 600 desktop composition.
-- `assets/signature-header-mobile.webp` — 750 × 830 mobile composition; selected with a `<picture>` source at 600px.
-- `assets/source/simulation-scene.webp` — 1400 × 1400 editable-composition source, with actual Cycles shadow-catcher transparency.
-- `scripts/art/render_header_scene.py` — builds the full editable Blender scene. Supports `laboratory`, `simulation` and `electromechanical` concepts and optional `.blend` saving.
-- `scripts/art/compose_header.py` — typesets both compositions from the source with no network access.
+| Time | Action |
+| --- | --- |
+| 0–5.0s | Quiet pose; name remains white and readable. |
+| 5.0–6.65s | Shoulder and elbow articulate; the vertical gripper approaches and contacts the cap. |
+| 6.65–6.85s | The cap physically depresses by 0.074 model units. Optical channels activate at 6.8s. |
+| 6.8–16.8s | The name receives a blue/violet fill and a fine flowing energy ribbon inside its unchanged letterforms. |
+| 7.05–8.8s | The cap releases, the tool clears it, and the arm returns to its resting pose. |
+| 16.8–17.8s | The name and device lighting fade smoothly to their quiet state. |
+| 17.8–20.0s | Quiet hold. The last composition is identical to the first. |
+
+A momentary switch triggers the ten-second name effect. The arm therefore withdraws after the press instead of remaining unnaturally frozen on the cap throughout the effect. Active letter strokes remain solid and legible; no flashing, disappearing text or decorative particle shower is used.
+
+## Published files
+
+- `assets/signature-header-animated.webp` — 1400 × 525 desktop motion sequence; 1,089,362 bytes.
+- `assets/signature-header-mobile-animated.webp` — 650 × 719 mobile motion sequence; 994,876 bytes.
+- `assets/signature-header.webp` — quiet desktop image, also the reduced-motion fallback.
+- `assets/signature-header-mobile.webp` — quiet mobile image, also the reduced-motion fallback.
+- `assets/source/switch-scene-quiet.webp` and `switch-scene-active.webp` — compact rendered still sources with actual Cycles shadow-catcher transparency.
 - `assets/source/fonts/InterVariable.ttf` and `Inter-LICENSE.txt` — Inter 4.1 and its SIL Open Font License.
 
-## Reproduce
+The README selects static files for `prefers-reduced-motion: reduce`, with mobile sources before desktop sources. Animated WebP itself cannot evaluate a reduced-motion media query. The static files use exactly the same composition, geometry and type positioning as the animation's first frame.
 
-Requires Blender 5.0.1 (Cycles), Python 3, Pillow and NumPy. The production render used an NVIDIA RTX 5070 Ti with OptiX; the script falls back to CPU when OptiX is unavailable. No runtime or Blender dependency is added to the scheduled GitHub data refresh.
+## Editable sources and reproduction
 
-From the repository root:
+Requires Blender 5.0.1 (Cycles), Python 3, Pillow and NumPy. Rendering was verified with an NVIDIA RTX 5070 Ti through OptiX; the scene setup supports CPU fallback. These art tools are not dependencies of the scheduled GitHub activity refresh.
 
 ```sh
-blender -b --python scripts/art/render_header_scene.py -- --concept simulation --output work/header/simulation.png --size 1400 --samples 160 --save-scene work/header/simulation.blend
-python3 scripts/art/compose_header.py --scene work/header/simulation.png --save-source
+blender -b --python-exit-code 1 --python scripts/art/render_header_motion.py -- --size 1000 --samples 96 --save-scene
+python3 scripts/art/compose_header_motion.py
 ```
 
-To rebuild the typesetting alone from the checked-in scene:
+For quick art review with nine physically rendered poses:
+
+```sh
+blender -b --python-exit-code 1 --python scripts/art/render_header_motion.py -- --preview --size 900 --samples 72
+python3 scripts/art/compose_header_motion.py --preview
+```
+
+To regenerate only quiet typesetting from the checked-in source:
 
 ```sh
 python3 scripts/art/compose_header.py
 ```
 
-The scene is original editable geometry; the Python generator is the authoritative art source. A `.blend` file is optional and generated on request with `--save-scene`. Large working renders and alternate concepts are kept out of published assets.
+`render_header_motion.py` builds the precision housing, joints, switch, lighting and physical motion. The two arm links use analytic planar inverse kinematics with fixed lengths of 1.29 and 1.19 model units. A vertical tool constraint keeps the pads aligned with the cap. During contact, cap displacement and fingertip height are derived from the same value; the robot never scales, slides as a whole, or changes link length to imitate movement.
 
-## Visual decisions and iterations
+`compose_header_motion.py` typesets the name and descriptor, synchronizes the activation effect, and exports both responsive sequences. Rendered movement uses 20fps. Slow motion confined to letterforms uses 12.5fps. Long holds are authored once, then remuxed into 40ms transparent continuation frames. These lossless 1 × 1 no-op frames preserve the existing canvas without duplicating the rendered artwork. This fixes a measured early-advance issue in the local WebKit browser; all original 50/80ms movement and lettering frames remain unchanged. The physically rendered pose cache is reused for compositing refinements.
 
-Three initial Cycles concepts were compared as real rendered images: a gantry-contained optical core, a robot simulation workcell, and a crystalline electromechanical instrument. The workcell was selected because its connection to robotics and reproducible engineering was immediate. Independent review found the laboratory concept too trophy-like and the optical instrument too suggestive of unexplained fantasy machinery.
+`remux_webp_holds.py` implements the final container-only timing adjustment according to the [official WebP ANMF specification](https://developers.google.com/speed/webp/docs/riff_container). Every remuxed frame was verified pixel-identical to the original timeline. Local WebKit checks then matched the intended 5.000s, 6.650s, 6.850s and 8.100s poses, including the full quiet opening.
 
-1. The selected workcell was composed alongside restrained Inter text. Initial feedback identified uniform cylindrical arms, bright decorative samples and an image boundary.
-2. Cast housings, inset panels, recessed bearings, real fastener geometry, wrist flange and gripper contact pads replaced the toy-like forms. A service cable follows the joints.
-3. A workpiece-to-tool approach curve replaced the disconnected dotted orbit. Point-cloud samples were reduced. A transparent Cycles shadow catcher removed the studio rectangle while preserving the contact shadow.
-4. Desktop and mobile typesetting were composed separately; mobile descriptor type was increased to remain approximately 14px at a 309px content width. The device, text and contrast were inspected at actual profile sizes before optimized WebP export.
+The authoritative editable animation source is the Python geometry and timing. `--save-scene` additionally saves a Blender inspection scene at the quiet pose; it is not a separate baked animation project. Intermediate frames, timing manifests and the review storyboard remain under `work/header-v2/` rather than bloating published assets. If geometry, materials or lighting change, clear that script's `pose-*.png` cache before rerendering; existing poses are deliberately reused for resumable rendering.
 
-Source render and comparison images are retained in the local `work/header/` review directory. The evidence includes the initial concept board, a second board exploring different compositional hierarchies, and the four intermediate compositions.
+## Development and review evidence
 
-## Typography and references
+The first version compared three real Cycles concepts: an optical core inside a gantry, a robot simulation workcell, and a crystalline electromechanical instrument. The workcell was selected for its direct engineering relevance. Independent review found the laboratory too trophy-like and the optical instrument too suggestive of unexplained fantasy machinery.
 
-Inter uses optical size 32 for the name, optical size 14 for body copy, weight 610 for the name and 400 for the descriptor. The final canvas is `#090b12`, type is `#f1f3ff`, descriptor is `#aab6ce`. The responsive layout retains name and descriptor as accessible alternative text in the README.
+The first four refinements replaced simple cylinders with detailed housings and recessed fasteners; corrected the approach visualization; removed the studio-image boundary through a transparent shadow catcher; and increased mobile descriptor readability. The accepted v1 static images remain preserved in the local review evidence and Git history.
+
+The second version adds the user's requested physical activation story. The initial preview exposed a power symbol that read as a C/G at the camera angle; it was reoriented toward the viewer before final rendering. Quiet optical channels were darkened so that the press produces an unambiguous lighting change. A six-moment desktop/mobile storyboard exposes rest, approach, pressed contact, release, energized hold and quiet reset.
+
+The encoded assets can be checked without Blender:
+
+```sh
+python3 scripts/art/validate_header_motion.py --manifest work/header-v2/motion-manifest.json
+```
+
+The delivered files total 1.99 MiB, each decode to 366 frames over exactly 20,000ms, and preserve a 5,000ms opening hold. The measured active-name interior contrast stays above 7.4:1 at the fifth percentile. Lossy WebP encoding introduces mean first/last pixel differences of 0.45/255 (desktop) and 0.61/255 (mobile); the unencoded first and last images are identical.
+
+The validator decodes the complete animation and checks the 20-second duration, five-second opening hold, quiet ending, loop-image continuity, active-name contrast and combined image budget. With the optional render manifest it also checks fixed link lengths and exact cap/tool contact across all contact frames.
+
+The scene is a stylized engineering illustration. Its path, device dimensions and optical behavior are authored for the composition and are not presented as measured robot telemetry or a validated industrial simulation.
+
+## Typography and reference provenance
+
+Inter uses optical size 32 for the name, optical size 14 for the descriptor, weight 610 for the name and 400 for the descriptor. The canvas is `#090b12`; quiet name text is `#f1f3ff`; the descriptor is `#aab6ce`. The energized name moves between luminous lavender and sapphire blue while retaining its silhouette and readable luminance.
 
 - [Inter 4.1 source and license](https://github.com/rsms/inter/tree/v4.1) — bundled unmodified from the official project.
-- [Blender 5.0.1 official release](https://download.blender.org/release/Blender5.0/) — portable Linux archive verified against its SHA-256 file before local use.
+- [Blender 5.0.1 official release](https://download.blender.org/release/Blender5.0/) — portable archive verified against its official SHA-256 file before local use.
 - [NVIDIA robotics platform](https://www.nvidia.com/en-us/industries/robotics/) — research reference for readable industrial simulation scenes; no artwork or models copied.
 
-No external fonts or images are loaded by either final header image. All visible text is typeset into the WebP. This preserves the chosen font through GitHub image proxying. The README supplies equivalent alt text, and the profile copy remains normal selectable text below it.
+All visible text is typeset into the WebP for consistent GitHub proxy rendering. The README supplies equivalent alternative text. The static and animated images contain no contribution numbers, secrets or external resource dependencies.
