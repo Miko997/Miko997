@@ -4,7 +4,7 @@ from __future__ import annotations
 import json
 import re
 import time
-from datetime import date, datetime, timedelta, timezone
+from datetime import date, datetime, timedelta
 from html.parser import HTMLParser
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode, urlsplit
@@ -44,6 +44,8 @@ class CalendarParser(HTMLParser):
                 date.fromisoformat(day)
             except ValueError as exc:
                 raise DataError("Invalid calendar date") from exc
+            if day in self.cells:
+                raise DataError("Duplicate contribution calendar date")
             raw = attrs.get("data-count")
             self.cells[day] = (attrs.get("id"), raw, attrs.get("aria-label", ""))
         if tag == "tool-tip" and attrs.get("for"):
@@ -110,8 +112,14 @@ class Client:
                     raw = response.read(10_000_001)
                 if len(raw) > 10_000_000:
                     raise DataError("Data response exceeds size limit")
-                text = raw.decode("utf-8")
-                return json.loads(text) if api else text
+                try:
+                    text = raw.decode("utf-8")
+                    result = json.loads(text) if api else text
+                except (UnicodeError, json.JSONDecodeError):
+                    raise DataError("Invalid GitHub response; previous snapshot retained") from None
+                if api and not isinstance(result, dict):
+                    raise DataError("Unexpected GitHub response structure; previous snapshot retained")
+                return result
             except HTTPError as exc:
                 if attempt == 2 or exc.code not in {403, 429, 500, 502, 503, 504}:
                     raise DataError(f"GitHub returned HTTP {exc.code}; previous snapshot retained") from None
@@ -126,7 +134,7 @@ def fetch_calendar(client: Client, login: str, today: date) -> tuple[dict[str, i
     """Never authenticate the public calendar or request private repository records."""
     metadata = client.request(f"https://api.github.com/users/{login}")
     created = date.fromisoformat(metadata["created_at"][:10])
-    if not 2007 <= created.year <= today.year:
+    if not 2007 <= created.year or created > today:
         raise DataError("Invalid account creation year")
     days = {}
     for year in range(created.year, today.year + 1):
@@ -161,10 +169,10 @@ def visible_commit_count(client: Client, login: str, today: date) -> int | None:
         return None
 
 
-def public_prs(client: Client, login: str, state: str) -> list[dict]:
-    if state not in {"merged", "open"}:
-        raise DataError("Unsupported PR state")
-    query = f"is:pr is:public author:{login} -user:{login} is:{state}"
+def public_prs(client: Client, login: str, state: str = "merged") -> list[dict]:
+    if state != "merged":
+        raise DataError("Only merged upstream evidence is collected")
+    query = f"is:pr is:public author:{login} -user:{login} is:merged draft:false"
     out = {}
     page = 1
     while True:
@@ -184,9 +192,18 @@ def public_prs(client: Client, login: str, state: str) -> list[dict]:
             repo = match[1]
             if repo.split("/")[0].lower() == login.lower():
                 raise DataError("Own repository included in upstream search")
+            merged_at = item["pull_request"].get("merged_at")
+            try:
+                merged_date = datetime.fromisoformat(merged_at.replace("Z", "+00:00"))
+            except (AttributeError, TypeError, ValueError):
+                raise DataError("Merged PR evidence lacks a valid merge date") from None
+            if item.get("state") != "closed" or item.get("draft") is not False or merged_date.tzinfo is None:
+                raise DataError("Unmerged or draft PR returned in merged evidence")
+            if item.get("number") != int(match[2]):
+                raise DataError("PR number does not match its public URL")
             # Explicit allowlist: bodies, branches, patches, and internal fields are discarded.
             out[url] = {"repo": repo, "number": int(match[2]), "title": str(item["title"]),
-                        "url": url, "state": state, "draft": bool(item.get("draft", False))}
+                        "url": url, "state": "merged", "draft": False, "merged_at": merged_at}
         if page * 100 >= total:
             if len(out) != total:
                 raise DataError("Public PR search changed during pagination; retry next run")
@@ -225,6 +242,8 @@ def summarize(days: dict[str, int], today: date) -> dict:
     if not days:
         raise DataError("No calendar data")
     cleaned = {d: count(n) for d, n in days.items() if date.fromisoformat(d) <= today}
+    if not cleaned:
+        raise DataError("No calendar data at or before the measurement date")
     first = date.fromisoformat(min(cleaned))
     # Detect gaps rather than silently interpreting unavailable days as inactivity.
     if any(d.isoformat() not in cleaned for d in dates(first, today)):
@@ -246,13 +265,10 @@ def collect(client: Client, login: str, today: date) -> dict:
     stats = summarize(days, today)
     stats["visible_commits_365"] = visible_commit_count(client, login, today)
     merged = public_prs(client, login, "merged")
-    opened = public_prs(client, login, "open")
-    if {p["url"] for p in merged} & {p["url"] for p in opened}:
-        raise DataError("PR state changed during collection; retry next run")
-    return {"schema_version": 1, "login": login, "as_of": today.isoformat(),
+    return {"schema_version": 2, "login": login, "as_of": today.isoformat(),
             "account_created": created, "source": "github-public-contribution-calendar",
             "privacy": "Published daily aggregates only. No private repository details requested.",
-            "stats": stats, "upstream": {"merged": merged, "open": opened}}
+            "stats": stats, "upstream": {"merged": merged}}
 
 
 def markdown_text(value: str) -> str:
@@ -260,32 +276,39 @@ def markdown_text(value: str) -> str:
     return re.sub(r"([\\`*_{}\[\]<>()|])", r"\\\1", value)
 
 
+# Selected engineering examples. A configured ecosystem appears only while its
+# linked contribution is present in the current, verified merged-public search.
+ECOSYSTEMS = (
+    ("Newton Physics", "newton-physics/newton", 4189, "MJCF orientation during import"),
+    ("ROS 2", "ros2/rclcpp", 3294, "Wait-set ownership on failed removal"),
+    ("Microsoft TypeSpec", "microsoft/typespec", 12042, "Valid deprecated OpenAPI parameter directives"),
+    ("conda-forge", "conda-forge/staged-recipes", 34480, "Metriplane package recipe"),
+    ("trimesh", "mikedh/trimesh", 2599, "Exact closure of discretized circles"),
+)
+
+
+def curated_upstream(snapshot: dict) -> list[dict]:
+    evidence = {}
+    for item in snapshot["upstream"]["merged"]:
+        # Defense in depth for manually supplied snapshots and offline previews.
+        expected_url = f"https://github.com/{item['repo']}/pull/{item['number']}"
+        if (item.get("state") == "merged" and item.get("draft") is False
+                and item.get("merged_at") and item.get("url") == expected_url):
+            evidence[(item["repo"].lower(), item["number"])] = item
+    selected = []
+    for name, repo, number, description in ECOSYSTEMS:
+        item = evidence.get((repo.lower(), number))
+        if item:
+            selected.append({"name": name, "repo": repo, "description": description,
+                             "url": item["url"]})
+    return selected
+
+
 def impact_markdown(snapshot: dict) -> str:
-    merged = snapshot["upstream"]["merged"]
-    opened = snapshot["upstream"]["open"]
-    by_repo = {}
-    for item in merged:
-        by_repo.setdefault(item["repo"], []).append(item)
-    priority = {"newton-physics/newton": 0, "ros2/rclcpp": 1, "ros2/rclpy": 2, "ros2/rviz": 3,
-                "ros2/rosidl": 4, "ros2/ros2cli": 5, "ros-perception/point_cloud_transport": 6,
-                "mikedh/trimesh": 7, "microsoft/typespec": 8}
-    rows = [f"**{len(merged)} merged upstream PRs across {len(by_repo)} public repositories.** "
-            "Open work is listed separately; it is not counted as merged.", "",
-            "| Project | Merged | Recent contribution |", "| :--- | ---: | :--- |"]
-    for repo, items in sorted(by_repo.items(), key=lambda item: (priority.get(item[0], 50), item[0])):
-        latest = max(items, key=lambda p: p["number"])
-        rows.append(f"| [{markdown_text(repo)}](https://github.com/{repo}) | {len(items)} | "
-                    f"[{markdown_text(latest['title'])}](<{latest['url']}>) |")
-    if not by_repo:
-        rows.append("| No merged upstream PRs returned | 0 | — |")
-    rows += ["", "<details>", f"<summary>Open upstream work · {len(opened)} PRs</summary>", "",
-             "| Project | Pull request | State |", "| :--- | :--- | :--- |"]
-    for item in sorted(opened, key=lambda p: (p["repo"].lower(), -p["number"])):
-        state = "Draft" if item["draft"] else "Open — not merged"
-        rows.append(f"| {markdown_text(item['repo'])} | "
-                    f"[#{item['number']} · {markdown_text(item['title'])}](<{item['url']}>) | {state} |")
-    rows += ["", "</details>", "", f"<sub>Verified from public GitHub PR searches · {snapshot['as_of']} · Updated automatically.</sub>"]
-    return "\n".join(rows)
+    selected = curated_upstream(snapshot)
+    if not selected:
+        return ""  # Missing evidence never becomes a fabricated affiliation.
+    return " · ".join(f"**[{markdown_text(item['name'])}]({item['url']})**" for item in selected)
 
 
 def replace_section(text: str, name: str, replacement: str) -> str:

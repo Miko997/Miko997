@@ -1,4 +1,4 @@
-name: Refresh Hextech profile
+name: Refresh profile activity
 
 on:
   schedule:
@@ -13,6 +13,8 @@ on:
       - 'scripts/**'
       - 'tests/**'
       - 'docs/**'
+      - 'assets/**'
+      - 'data/**'
       - '.github/workflows/profile.yml'
   pull_request:
     paths:
@@ -20,6 +22,8 @@ on:
       - 'scripts/**'
       - 'tests/**'
       - 'docs/**'
+      - 'assets/**'
+      - 'data/**'
       - '.github/workflows/profile.yml'
 
 permissions:
@@ -51,7 +55,7 @@ jobs:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           ref: main
-      - name: Fetch published counts and public upstream PRs
+      - name: Fetch published counts and merged public evidence
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: python3 scripts/update_profile.py
@@ -59,7 +63,7 @@ jobs:
         run: python3 -m unittest discover -s tests -v
       - name: Publish only changed profile data
         run: |
-          git add README.md data/public-activity.json assets/generated/ assets/hextech-header.svg assets/hextech-footer.svg
+          git add README.md data/public-activity.json assets/generated/contribution-core*.svg
           if git diff --cached --quiet; then
             echo 'No contribution or profile-data changes.'
             exit 0

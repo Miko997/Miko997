@@ -1,17 +1,20 @@
-"""Self-contained SVGs: real numbers are rendered on refresh; only light animates."""
+"""A dated crystal calendar and layered plasma. Motion never changes the data.
+
+Only Python's standard library is used by the scheduled refresh. Declarative
+SVG morphing uses complete static contours when animation is unavailable.
+"""
 from __future__ import annotations
 
 import math
 from datetime import date, timedelta
 from html import escape
 
-BG = "#090912"
-PANEL = "#111020"
-TEXT = "#f1f0ff"
-MUTED = "#aaa7c4"
-VIOLET = "#a77bff"
-BLUE = "#55b9ff"
-LEVELS = ["#191729", "#383063", "#6343ab", "#9565e6", "#73b9ff"]
+BG = "#090b12"
+TEXT = "#f1f3ff"
+MUTED = "#9ca9c4"
+VIOLET = "#aa91ff"
+BLUE = "#64c8ff"
+LEVELS = ["#151c2b", "#424574", "#675cac", "#9485de", "#87caff"]
 
 
 def text(x, y, value, size=18, fill=TEXT, weight=400, anchor="start", extra=""):
@@ -20,147 +23,220 @@ def text(x, y, value, size=18, fill=TEXT, weight=400, anchor="start", extra=""):
 
 
 def start(width, height, title, description, animated=True):
-    motion = """
-      @keyframes breathe {0%,100%{opacity:.52}50%{opacity:.95}}
-      @keyframes flame {0%,100%{transform:scale(.97,1);opacity:.87}50%{transform:scale(1.04,1.05);opacity:1}}
-      @keyframes flow {to{stroke-dashoffset:-360}}
-      .pulse{animation:breathe 5s ease-in-out infinite}
-      .fire{animation:flame 2.8s ease-in-out infinite;transform-box:fill-box;transform-origin:center bottom}
-      .orbit{animation:flow 28s linear infinite}
-      @media(prefers-reduced-motion:reduce){.pulse,.fire,.orbit{animation:none!important}}
-    """ if animated else ""
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">
 <title id="title">{escape(title)}</title><desc id="desc">{escape(description)}</desc>
 <defs>
-  <linearGradient id="edge" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#8b5cf6"/><stop offset=".5" stop-color="#29213c"/><stop offset="1" stop-color="#258edf"/></linearGradient>
-  <linearGradient id="energy" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#ac6cff"/><stop offset=".55" stop-color="#7955ff"/><stop offset="1" stop-color="#50c4ff"/></linearGradient>
-  <linearGradient id="flame" x1="0" x2=".6" y1="0" y2="1"><stop stop-color="#d5bbff"/><stop offset=".35" stop-color="#a166ff"/><stop offset=".73" stop-color="#6d5bff"/><stop offset="1" stop-color="#42bdff"/></linearGradient>
-  <radialGradient id="aura"><stop stop-color="#513183" stop-opacity=".38"/><stop offset="1" stop-color="#0b0916" stop-opacity="0"/></radialGradient>
-  <filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3"/></filter>
-  <style>text{{font-family:Inter,Segoe UI,Arial,sans-serif}}.mono{{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:2px}}{motion}</style>
-</defs>
-<rect x="1" y="1" width="{width-2}" height="{height-2}" rx="18" fill="{BG}" stroke="url(#edge)"/>
-<ellipse cx="{width*.82}" cy="{height*.35}" rx="{width*.35}" ry="{height*.7}" fill="url(#aura)"/>
+ <linearGradient id="plasma" x1="0" x2=".3" y1="0" y2="1"><stop stop-color="#9271ed"/><stop offset=".42" stop-color="#795ee8"/><stop offset=".78" stop-color="#63baf3"/><stop offset="1" stop-color="#cef4ff"/></linearGradient>
+ <linearGradient id="filament" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#bcb0ff" stop-opacity=".1"/><stop offset=".45" stop-color="#bdbaff"/><stop offset="1" stop-color="#e4fbff"/></linearGradient>
+ <radialGradient id="ignition"><stop stop-color="#e2f6ff" stop-opacity=".92"/><stop offset=".38" stop-color="#98dbff" stop-opacity=".65"/><stop offset=".7" stop-color="#77a3ff" stop-opacity=".26"/><stop offset="1" stop-color="#688bff" stop-opacity="0"/></radialGradient>
+ <radialGradient id="aura"><stop stop-color="#7964e3" stop-opacity=".25"/><stop offset=".58" stop-color="#484dc3" stop-opacity=".12"/><stop offset="1" stop-color="#343b82" stop-opacity="0"/></radialGradient>
+ <linearGradient id="face" x2=".2" y2="1"><stop stop-color="#d9e5ff" stop-opacity=".24"/><stop offset=".5" stop-color="#c4c8ff" stop-opacity=".01"/><stop offset="1" stop-color="#071426" stop-opacity=".3"/></linearGradient>
+ <filter id="bloom" x="-60%" y="-30%" width="220%" height="170%" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="5"/></filter>
+ <filter id="soft" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="1.6"/></filter>
+ <style>text{{font-family:Inter,"Segoe UI",Arial,sans-serif;font-variant-numeric:tabular-nums}}{motion_css() if animated else ''}</style>
+</defs><rect width="{width}" height="{height}" fill="{BG}"/>
 '''
 
 
-def header():
-    parts = [start(1200, 280, "Miko Parkkinen — Simulation, robotics and systems engineering",
-                   "Independent research, open source and real-time systems. Violet and blue technical identity.")]
-    parts += ['<path d="M42 34h28m-28 0v22M1158 246h-28m28 0v-22" fill="none" stroke="#5a4a8f" stroke-width="2"/>',
-              text(52, 67, "SIMULATION / ROBOTICS / PHYSICAL AI", 16, VIOLET, 600, extra='class="mono"'),
-              text(48, 131, "MIKO PARKKINEN", 56, TEXT, 700),
-              text(52, 170, "Software systems. Independent research. Open source.", 22, MUTED),
-              '<path d="M52 200h620" stroke="url(#energy)" stroke-width="2"/>',
-              text(52, 235, "BUILD  /  SIMULATE  /  VERIFY", 16, BLUE, 500, extra='class="mono"')]
-    cx, cy = 992, 140
-    for radius in (72, 108):
-        parts.append(f'<circle cx="{cx}" cy="{cy}" r="{radius}" fill="none" stroke="#3c2c65" stroke-width="1"/>')
-    parts.append(f'<circle class="orbit" cx="{cx}" cy="{cy}" r="108" fill="none" stroke="url(#energy)" stroke-width="2" stroke-dasharray="44 128 8 110"/>')
-    for i in range(6):
-        a = math.radians(i * 60 - 30)
-        x, y = cx + 108 * math.cos(a), cy + 108 * math.sin(a)
-        parts.append(f'<path d="M{cx} {cy}L{x:.1f} {y:.1f}" stroke="#31244f"/>')
-        parts.append(f'<circle class="pulse" cx="{x:.1f}" cy="{y:.1f}" r="3.5" fill="{BLUE if i%2 else VIOLET}" style="animation-delay:-{i}s"/>')
-    crystal = '<path d="M992 83l32 35-7 62-25 24-25-24-7-62zM992 83v121m-32-86 32 19 32-19m-57 62 25-43 25 43" fill="#1b1535" stroke="url(#energy)" stroke-width="2"/>'
-    parts += [crystal, '<path class="pulse" d="M992 88v110" stroke="#b195ff" stroke-width="5" filter="url(#glow)"/>', '</svg>']
-    return "".join(parts)
+# Sixteen advecting ribbons form a continuous plasma volume. Their centerlines
+# carry travelling waves upward; they do not scale an icon. The path command
+# topology is constant, so SMIL interpolates all eight phases smoothly.
+def plasma_path(index, phase):
+    side = index % 3 - 1
+    height = 140 if side == 0 else 104 + (index % 4)*5
+    spread = (index // 3 - 2) * 4.2
+    left, right = [], []
+    for step in range(13):
+        z = step / 12
+        wave = math.sin(z*7.5 - phase + index*.29)
+        curl = math.sin(z*12 - phase*2 + index*.51)
+        center = 83 + side*29*math.sin(z*2.6) + spread*(math.sin(z*math.pi)+.45*(1-z))
+        center += z*(16*wave + 4*curl) + 6*z*z
+        width = (7 + (index % 4)*2.2)*math.sin(math.pi*(.07 + z*.93))**.7
+        width *= (1-.35*z)*(1+.2*math.sin(z*9-phase+index))
+        y = 161-z*height
+        left.append((center-width,y)); right.append((center+width,y))
+    points = left + list(reversed(right))
+    # Closed Catmull–Rom contour: rounded optical density bands instead of
+    # visible polygon corners. All phases have identical command counts.
+    d = [f'M{points[0][0]:.2f} {points[0][1]:.2f}']
+    for j, a in enumerate(points):
+        before, b, after = points[j-1], points[(j+1)%len(points)], points[(j+2)%len(points)]
+        c1 = (a[0]+(b[0]-before[0])/6, a[1]+(b[1]-before[1])/6)
+        c2 = (b[0]-(after[0]-a[0])/6, b[1]-(after[1]-a[1])/6)
+        d.append(f'C{c1[0]:.2f} {c1[1]:.2f} {c2[0]:.2f} {c2[1]:.2f} {b[0]:.2f} {b[1]:.2f}')
+    return ''.join(d)+'Z'
+
+
+CONTOURS = [
+    (f'plasma{i}', 9.0, .11 + (i%4)*.04,
+     [plasma_path(i, j*math.tau/8) for j in range(8)])
+    for i in range(16)
+]
+
+
+def motion_css():
+    rules = [
+        '.plasma-still{display:none}',
+        '@keyframes current{to{stroke-dashoffset:-1200}}',
+        '@keyframes charge{0%,18%,65%,100%{opacity:0}35%{opacity:.55}48%{opacity:.12}}',
+        '@keyframes rise{0%{transform:translate(0,0);opacity:0}22%{opacity:.7}75%{opacity:.2}100%{transform:translate(8px,-44px);opacity:0}}',
+        '.current{animation:current 12s linear infinite}',
+        '.charge{opacity:0;animation:charge 12s ease-in-out infinite}',
+        '.spark{opacity:0;animation:rise 6s linear infinite}',
+        '@media(prefers-reduced-motion:reduce){.current,.charge,.spark{animation:none!important;display:none}.plasma-motion{display:none}.plasma-still{display:inline}}',
+    ]
+    return ''.join(rules)
+
+
+def flame(x, y, scale=1, active=True, animated=True):
+    if not active:
+        # Extinguished state: no colored fire, sparks or continuing motion.
+        return (f'<g transform="translate({x},{y}) scale({scale})" aria-label="No current streak">'
+                '<ellipse cx="83" cy="157" rx="25" ry="5" fill="#25304a"/>'
+                '<path d="M58 155Q83 161 108 155" fill="none" stroke="#71809e" stroke-width="1.5"/></g>')
+    out = [f'<g transform="translate({x},{y}) scale({scale})" aria-hidden="true">',
+           '<ellipse cx="82" cy="113" rx="98" ry="78" fill="url(#aura)"/>']
+    out.append('<defs>')
+    for name, duration, _, paths in CONTOURS:
+        out.append(f'<path id="{name}-still" d="{paths[0]}"/>')
+        if animated:
+            values = ';'.join(paths + [paths[0]])
+            out.append(f'<path id="{name}-motion" d="{paths[0]}"><animate attributeName="d" dur="{duration}s" repeatCount="indefinite" calcMode="linear" values="{values}"/></path>')
+    out.append('</defs>')
+    for variant in (('motion','still') if animated else ('still',)):
+        klass = f' class="plasma-{variant}"' if animated else ''
+        out.append(f'<g{klass}>')
+        for i, (name, _, opacity, paths) in enumerate(CONTOURS):
+            ref = f' href="#{name}-{variant}"'
+            if i % 3 == 0:
+                out.append(f'<use{ref} fill="url(#plasma)" opacity="{opacity*1.9}" filter="url(#bloom)"/>')
+            out.append(f'<use{ref} fill="url(#{"filament" if i%4 == 0 else "plasma"})" opacity="{opacity}"/>')
+            if i % 4 == 0:
+                out.append(f'<use{ref} fill="none" stroke="url(#filament)" stroke-width=".7" opacity=".18"/>')
+        out.append('</g>')
+    out.append('<ellipse cx="83" cy="149" rx="23" ry="17" fill="url(#ignition)" opacity=".72"/>')
+    if animated:
+        for i, (sx, sy) in enumerate(((59, 112), (104, 126), (87, 85), (120, 98))):
+            out.append(f'<circle class="spark" cx="{sx}" cy="{sy}" r="{1+i%2*.4}" fill="#b5c9ff" style="animation-delay:-{i*1.7}s"/>')
+    out += ['<ellipse cx="83" cy="165" rx="28" ry="3" fill="#4b7fb5" opacity=".22" filter="url(#soft)"/>', '</g>']
+    return ''.join(out)
 
 
 def level(n, maximum):
-    if n == 0:
-        return 0
-    return min(4, max(1, math.ceil(n * 4 / max(1, maximum))))
+    """Monotonic sqrt quantization retains low-volume activity under outliers."""
+    return 0 if n == 0 else min(4, max(1, math.ceil(math.sqrt(n / max(1, maximum)) * 4)))
 
 
-def dashboard(snapshot, animated=True):
-    stats = snapshot["stats"]
-    days = stats["days"]
-    st = stats["streak"]
-    visible = stats["visible_commits_365"]
-    desc = (f"{stats['last_365']} contributions in 365 days, {stats['all_time']} all-time contributions, "
-            f"{stats['active_days_365']} active days. Current contribution streak {st['current']} days, "
-            f"longest {st['longest']} days. Daily totals follow the public GitHub calendar, including "
-            "anonymized private activity only when enabled on the profile. Not all contributions are commits.")
-    parts = [start(1200, 604, "Miko997 — Live contribution core", desc, animated)]
-    parts += [text(38, 44, "CONTRIBUTION CORE", 17, VIOLET, 600, extra='class="mono"'),
-              text(1162, 44, "MIKO997 / AUTO-REFRESH", 14, MUTED, anchor="end", extra='class="mono"'),
-              '<path d="M38 65H1162M903 89V554" stroke="#282039"/>']
-    for x, value, label in ((40, stats["last_365"], "CONTRIBUTIONS / 365D"),
-                             (358, stats["all_time"], "ALL-TIME CONTRIBUTIONS"),
-                             (684, stats["active_days_365"], "ACTIVE DAYS / 365")):
-        parts += [text(x, 135, f"{value:,}", 48, TEXT, 650),
-                  text(x+2, 165, label, 13, MUTED, extra='class="mono"')]
-    parts += [text(42, 218, "Every day, recorded. Every change, counted.", 20, TEXT, 500)]
+def calendar(days, x, y, pitch, cell, maximum, animated=True, part=0, label_size=17):
     first = date.fromisoformat(days[0][0])
     origin = first - timedelta(days=(first.weekday()+1) % 7)
-    maximum = max(n for _, n in days) or 1
+    out, points, inactive = [], [], []
     last_month = None
-    # Exactly 365 days: no padding days or future dates are invented.
+    # Every date is present exactly once, with its immutable count and title.
     for idx, (iso, n) in enumerate(days):
         day = date.fromisoformat(iso)
         col, row = divmod((day-origin).days, 7)
-        x, y = 72 + col*15.2, 273 + row*16
-        if day.month != last_month and (idx == 0 or col < 52):
-            parts.append(text(round(x, 1), 253, day.strftime("%b"), 13, MUTED))
+        px, py = round(x + col*pitch, 2), round(y + row*pitch, 2)
+        if day.month != last_month:
+            # Avoid the partial month's label colliding with the next month.
+            if day.day == 1 or (idx == 0 and day.day < 23):
+                out.append(text(px, y-18, day.strftime('%b'), label_size, MUTED))
             last_month = day.month
         shade = LEVELS[level(n, maximum)]
         tip = f"{iso}: {n} contribution{'s' if n != 1 else ''}"
-        parts.append(f'<rect x="{x:.1f}" y="{y}" width="11.5" height="12" rx="2.5" fill="{shade}"><title>{tip}</title></rect>')
-        if n >= maximum*.65 and n:
-            parts.append(f'<rect class="pulse" x="{x:.1f}" y="{y}" width="11.5" height="12" rx="2.5" fill="{shade}" filter="url(#glow)" style="animation-delay:-{idx%7}s"/>')
+        out.append(f'<g class="day" data-date="{iso}" data-count="{n}"><title>{tip}</title>'
+                   f'<rect x="{px}" y="{py}" width="{cell}" height="{cell}" rx="2" fill="{shade}"/>')
+        if n:
+            # Faceted top and darker base give each recorded day a physical face.
+            out.append(f'<rect x="{px}" y="{py}" width="{cell}" height="{cell}" rx="2" fill="url(#face)"/>')
+            out.append(f'<path d="M{px+2} {py+1.1}h{cell-4}" stroke="#e2e6ff" stroke-opacity=".32" stroke-width=".8"/>')
+            points.append((px+cell/2, py+cell/2, iso, n))
+        else:
+            inactive.append(f'<rect x="{px-1}" y="{py-1}" width="{cell+2}" height="{cell+2}" rx="2" fill="black"/>')
+        out.append('</g>')
+    if animated and points:
+        out.append(f'<defs><mask id="routes-{part}"><rect x="{x-3}" y="{y-3}" width="1120" height="{7*pitch+6}" fill="white"/>{"".join(inactive)}</mask></defs>')
+        # A masked chronological route carries energy between real active days.
+        # Empty dates are fully excluded, including antialias and glow margins.
+        paths = [f'M{points[0][0]:g} {points[0][1]:g}']
+        for a, b in zip(points, points[1:]):
+            ax, ay, _, _ = a
+            bx, by, _, _ = b
+            mx = round((ax+bx)/2, 2)
+            paths.append(f'C{mx:g} {ay:g} {mx:g} {by:g} {bx:g} {by:g}')
+        if len(points) > 1:
+            d = ' '.join(paths)
+            out.append(f'<g mask="url(#routes-{part})" fill="none"><path d="{d}" stroke="#717bc3" stroke-width=".6" opacity=".13"/>')
+            out.append(f'<path class="current" d="{d}" pathLength="1200" stroke="#9abfff" stroke-width="4" stroke-dasharray="38 1162" opacity=".5" filter="url(#soft)"/>')
+            out.append(f'<path class="current" d="{d}" pathLength="1200" stroke="#e5f3ff" stroke-width="1.3" stroke-dasharray="14 1186" opacity=".9"/></g>')
+        for i, (px, py, iso, n) in enumerate(points):
+            delay = -(12 - i/max(1, len(points))*12)
+            # A white rim propagates chronologically, never replacing base color.
+            out.append(f'<rect class="charge" data-active-date="{iso}" x="{px-cell/2-.7:g}" y="{py-cell/2-.7:g}" width="{cell+1.4}" height="{cell+1.4}" rx="2.6" fill="none" stroke="#c8dfff" stroke-width="1" style="animation-delay:{delay:.3f}s"/>')
     for row, label in ((1, "M"), (3, "W"), (5, "F")):
-        parts.append(text(43, 283+row*16, label, 12, MUTED))
-    parts += [text(42, 409, f"{days[0][0]}  —  {days[-1][0]}", 13, MUTED),
-              text(716, 410, "LESS", 10, MUTED, extra='class="mono"')]
+        out.append(text(x-21, y+row*pitch+cell*.8, label, label_size-2, MUTED, anchor='end'))
+    return ''.join(out)
+
+
+def dashboard(snapshot, animated=True, compact=False):
+    stats = snapshot['stats']
+    days, st = stats['days'], stats['streak']
+    width, height = (640, 684) if compact else (1200, 440)
+    desc = (f"{stats['last_365']} contributions in 365 days, {days[0][0]} to {days[-1][0]}. "
+            f"Current contribution streak {st['current']} days. Each cell is one exact GitHub date; "
+            "brightness represents recorded contributions. Light only highlights active dates. "
+            "Includes anonymous private contributions only when published by GitHub.")
+    parts = [start(width, height, 'Miko997 — Contributions', desc, animated)]
+    num_size = 62 if compact else 66
+    parts += [text(32 if compact else 46, 96, f"{stats['last_365']:,}", num_size, weight=600),
+              text(34 if compact else 48, 128, 'Contributions', 24 if compact else 21, MUTED)]
+    if compact:
+        parts += [flame(272, 4, .90, st['current'] > 0, animated),
+                  text(470, 96, st['current'], 60, weight=600),
+                  text(466, 128, 'Day streak', 24, MUTED)]
+    else:
+        parts += [flame(788, 9, 1.0, st['current'] > 0, animated),
+                  text(991, 95, st['current'], 66, weight=600),
+                  text(993, 127, 'Current streak', 21, MUTED)]
+    start_day, end_day = (date.fromisoformat(days[i][0]) for i in (0, -1))
+    period = f'{start_day:%d %b %Y} — {end_day:%d %b %Y}'
+    parts += [text(34 if compact else 48, 168, period, 22, MUTED),
+              f'<path d="M{32 if compact else 48} 192H{width-32 if compact else width-48}" stroke="#222a3d"/>']
+    maximum = max(n for _, n in days) or 1
+    if compact:
+        # Split at a Sunday so both panels use identical Sunday-first weeks.
+        split = 182
+        while date.fromisoformat(days[split][0]).weekday() != 6:
+            split += 1
+        parts += [calendar(days[:split], 55, 247, 20.8, 15.5, maximum, animated, 0, 22),
+                  calendar(days[split:], 55, 478, 20.8, 15.5, maximum, animated, 1, 22)]
+        legend_x, legend_y = 395, 651
+    else:
+        parts.append(calendar(days, 70, 251, 20.5, 15.2, maximum, animated, 0, 22))
+        legend_x, legend_y = 950, 417
+    parts.append(text(legend_x-12, legend_y, 'Less', 20, MUTED, anchor='end'))
     for i, color in enumerate(LEVELS):
-        parts.append(f'<rect x="{760+i*18}" y="398" width="12" height="12" rx="2" fill="{color}"/>')
-    parts.append(text(42, 452, "365-DAY ACTIVITY SIGNAL", 13, VIOLET, extra='class="mono"'))
-    for idx, (_, n) in enumerate(days):
-        x = 42 + idx*2.29
-        parts.append(f'<rect x="{x:.2f}" y="464" width="1.65" height="{20 if n else 7}" rx=".7" fill="{LEVELS[level(n, maximum)]}"/>')
-    parts.append('<path d="M38 511H876" stroke="#282039"/>')
-    parts += [text(42, 541, "VISIBLE COMMIT CONTRIBUTIONS / 365D", 12, MUTED, extra='class="mono"'),
-              text(872, 545, "Unavailable" if visible is None else f"{visible:,}", 24, BLUE, 600, anchor="end")]
-    # The flame and orbital arcs move. The real streak number never flickers.
-    cx, cy = 1041, 224
-    parts += [f'<circle cx="{cx}" cy="{cy}" r="109" fill="url(#aura)"/>',
-              f'<circle cx="{cx}" cy="{cy}" r="102" fill="none" stroke="#322347"/>',
-              f'<circle class="orbit" cx="{cx}" cy="{cy}" r="102" fill="none" stroke="url(#energy)" stroke-width="2" stroke-dasharray="53 130 6 87"/>']
-    flame = 'M1041 128C1052 157 1022 163 1035 184C1045 178 1054 169 1056 157C1086 191 1081 218 1059 230C1085 195 1040 193 1046 173C1013 202 1029 225 1041 234C1009 232 993 208 1006 183C1013 169 1026 159 1022 145C1030 148 1033 154 1035 157Z'
-    opacity = "1" if st["current"] else ".3"
-    parts.append(f'<g opacity="{opacity}"><path class="fire" d="{flame}" fill="url(#flame)"/><path class="fire" d="{flame}" fill="url(#flame)" filter="url(#glow)" opacity=".35"/></g>')
-    parts += [text(cx, 290, st["current"], 56, TEXT, 700, anchor="middle"),
-              text(cx, 349, "DAY STREAK", 14, VIOLET, 600, anchor="middle", extra='class="mono"'),
-              text(cx, 374, "Contribution days", 15, MUTED, anchor="middle"),
-              '<path d="M947 398h188" stroke="#322347"/>',
-              text(cx, 450, st["longest"], 42, BLUE, 650, anchor="middle"),
-              text(cx, 479, "LONGEST STREAK", 13, MUTED, anchor="middle", extra='class="mono"')]
-    if st["current_end"]:
-        parts.append(text(cx, 523, f"Through {st['current_end']}", 12, MUTED, anchor="middle"))
-    parts += [text(40, 578, "PUBLISHED COUNTS ONLY  /  PRIVATE DETAILS NEVER REQUESTED", 12, MUTED, extra='class="mono"'),
-              text(1161, 578, snapshot["as_of"], 12, MUTED, anchor="end"), '</svg>']
-    return "".join(parts)
+        parts.append(f'<rect x="{legend_x+i*22}" y="{legend_y-12}" width="15" height="15" rx="2" fill="{color}"/>')
+    parts += [text(legend_x+117, legend_y, 'More', 20, MUTED), '</svg>']
+    return ''.join(parts)
 
 
 def impact(snapshot):
-    merged, opened = snapshot["upstream"]["merged"], snapshot["upstream"]["open"]
-    repos = len({p["repo"] for p in merged})
-    parts = [start(1200, 178, "Public open-source impact", f"{len(merged)} merged upstream pull requests in {repos} public repositories. {len(opened)} open, not counted as merged.")]
-    parts += [text(37, 38, "UPSTREAM / VERIFIED", 14, VIOLET, 600, extra='class="mono"')]
-    for x, value, label in ((40, len(merged), "MERGED PRs"), (440, repos, "PUBLIC REPOSITORIES"), (840, len(opened), "OPEN / NOT MERGED")):
-        parts += [text(x, 103, value, 44, TEXT, 650), text(x+2, 140, label, 14, MUTED, extra='class="mono"')]
-    parts += ['<path d="M389 63v82M789 63v82" stroke="#312447"/>', '</svg>']
-    return "".join(parts)
+    """Legacy import compatibility; public showcase is ordinary linked text."""
+    from profile_data import curated_upstream
+    names = [item['name'] for item in curated_upstream(snapshot)]
+    return start(1200, 100, 'Open source', 'Selected merged contributions.', False) + text(40, 59, '  ·  '.join(names), 27) + '</svg>'
+
+
+def header():
+    """Legacy static fallback. Production hero is rendered by scripts/art/."""
+    return start(1200, 280, 'Miko Parkkinen', 'Simulation systems, robotics and research software.', False) + text(48, 128, 'Miko Parkkinen', 58, weight=600) + text(50, 184, 'Simulation systems · Robotics · Research software', 25, MUTED) + '</svg>'
 
 
 def footer():
-    parts = [start(1200, 148, "Build. Simulate. Verify.", "Simulation architecture, robotics infrastructure and reproducible engineering.")]
-    parts += [text(40, 66, "BUILD. SIMULATE. VERIFY.", 29, TEXT, 650),
-              text(42, 107, "Simulation architecture / Robotics infrastructure / Reproducible engineering", 18, MUTED),
-              '<path class="pulse" d="M944 51h60l16 23 26-44 27 70 21-26h62" fill="none" stroke="url(#energy)" stroke-width="2"/>', '</svg>']
-    return "".join(parts)
+    return start(1200, 64, 'Miko Parkkinen', 'Simulation systems and research software.', False) + '</svg>'
 
 
 def pending():
-    return start(1200, 220, "Contribution core — awaiting verified data", "No example or estimated counts are displayed.") + text(42, 64, "CONTRIBUTION CORE", 19, VIOLET, extra='class="mono"') + text(42, 121, "Awaiting the first verified GitHub snapshot.", 27, TEXT, 600) + text(42, 165, "Counts are generated by the profile workflow, never copied from an example.", 19, MUTED) + "</svg>"
+    return start(1200, 220, 'Contributions unavailable', 'No estimated counts are displayed.', False) + text(48, 117, 'Awaiting verified GitHub data.', 30) + '</svg>'

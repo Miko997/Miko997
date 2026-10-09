@@ -1,3 +1,6 @@
 __pycache__/
 *.py[cod]
 .venv/
+
+# Local art renders and preview captures
+work/

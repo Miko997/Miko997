@@ -13,7 +13,7 @@ from urllib.request import Request
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 from profile_data import (CalendarParser, Client, DataError, SameHostRedirect, collect,
-                          count, dates, impact_markdown, public_prs, replace_section,
+                          count, curated_upstream, dates, impact_markdown, public_prs, replace_section,
                           streak, summarize, visible_commit_count)
 from render_profile import dashboard, footer, header, impact, pending
 from update_profile import write_changed
@@ -28,12 +28,13 @@ def fixture_snapshot():
     stats = summarize(history(date(2026, 1, 1), [1, 0, 2]), today)
     stats["visible_commits_365"] = 2
     return {"schema_version": 1, "login": "Miko997", "as_of": today.isoformat(), "stats": stats,
-            "upstream": {"merged": [], "open": []}}
+            "upstream": {"merged": []}}
 
 
 def pr(repo="org/project", title="Small fix", number=1):
     return {"html_url": f"https://github.com/{repo}/pull/{number}", "number": number,
-            "title": title, "user": {"login": "Miko997"}, "pull_request": {},
+            "title": title, "user": {"login": "Miko997"}, "state": "closed", "draft": False,
+            "pull_request": {"merged_at": "2026-01-01T12:00:00Z"},
             "body": "SECRET_INTERNAL_BODY", "internal_branch": "SECRET_BRANCH"}
 
 
@@ -73,6 +74,10 @@ class CalendarTests(unittest.TestCase):
     def test_missing_date_fails(self):
         with self.assertRaises(DataError):
             CalendarParser().result(date(2026, 1, 1), date(2026, 1, 1))
+
+    def test_duplicate_date_fails(self):
+        with self.assertRaises(DataError):
+            CalendarParser().feed('<td data-date="2026-01-01" data-count="2"></td>' * 2)
 
     def test_invalid_date_fails(self):
         with self.assertRaises(DataError):
@@ -122,6 +127,20 @@ class MetricTests(unittest.TestCase):
         self.assertEqual(s["streak"]["current"], 0)
         self.assertIsNone(s["first_contribution"])
 
+    def test_future_only_history_is_unavailable(self):
+        with self.assertRaises(DataError):
+            summarize({"2027-01-01": 1}, date(2026, 1, 1))
+
+    def test_unordered_dates_and_delayed_reporting(self):
+        raw = {"2026-01-03": 0, "2026-01-01": 2, "2026-01-02": 0}
+        before = summarize(raw, date(2026, 1, 3))
+        raw["2026-01-02"] = 5  # GitHub reports yesterday's count later.
+        after = summarize(raw, date(2026, 1, 3))
+        self.assertEqual(before["streak"]["current"], 0)
+        self.assertEqual(after["streak"]["current"], 2)
+        self.assertEqual(after["last_365"], 7)
+        self.assertEqual(after["days"], sorted(after["days"]))
+
 
 class PrivacyTests(unittest.TestCase):
     def test_only_public_prs_and_allowlisted_fields(self):
@@ -129,7 +148,25 @@ class PrivacyTests(unittest.TestCase):
         out = public_prs(client, "Miko997", "merged")
         self.assertIn("is%3Apublic", client.calls[0][0])
         self.assertNotIn("SECRET", json.dumps(out))
-        self.assertEqual(set(out[0]), {"repo", "number", "title", "url", "state", "draft"})
+        self.assertEqual(set(out[0]), {"repo", "number", "title", "url", "state", "draft", "merged_at"})
+
+    def test_missing_merge_evidence_and_drafts_rejected(self):
+        for mode in ("open", "draft", "no-date", "bad-date", "number"):
+            item = pr()
+            if mode == "open":
+                item["state"] = "open"
+            elif mode == "draft":
+                item["draft"] = True
+            elif mode == "number":
+                item["number"] = 50
+            else:
+                item["pull_request"]["merged_at"] = None if mode == "no-date" else "invalid"
+            with self.subTest(mode=mode), self.assertRaises(DataError):
+                public_prs(FakeClient({"total_count": 1, "items": [item]}), "Miko997")
+
+    def test_open_search_is_not_supported(self):
+        with self.assertRaises(DataError):
+            public_prs(FakeClient({}), "Miko997", "open")
 
     def test_incomplete_search_does_not_publish(self):
         for total, incomplete in ((1001, False), (1, True)):
@@ -181,6 +218,7 @@ class PrivacyTests(unittest.TestCase):
         self.assertEqual(out["stats"]["all_time"], 3)
         self.assertEqual(out["stats"]["streak"]["current"], 1)
         self.assertNotIn("private_repositories", json.dumps(out))
+        self.assertNotIn("open", out["upstream"])
 
 
 class RenderingTests(unittest.TestCase):
@@ -198,18 +236,42 @@ class RenderingTests(unittest.TestCase):
         self.assertNotIn("@keyframes", dashboard(fixture_snapshot(), False))
         self.assertIn("prefers-reduced-motion", dashboard(fixture_snapshot()))
 
+    def test_flame_morph_has_independent_static_preference_fallback(self):
+        snapshot = fixture_snapshot()
+        moving = ET.fromstring(dashboard(snapshot))
+        ns = {"s": "http://www.w3.org/2000/svg"}
+        animations = moving.findall(".//s:animate", ns)
+        self.assertEqual(len(animations), 16)
+        self.assertTrue(all(node.get("attributeName") == "d" for node in animations))
+        self.assertTrue(all(node.get("values").split(";")[0] == node.get("values").split(";")[-1]
+                            for node in animations))
+        still = ET.fromstring(dashboard(snapshot, False))
+        self.assertEqual(still.findall(".//s:animate", ns), [])
+        for suffix in ("motion", "still"):
+            self.assertIsNotNone(moving.find(f".//s:g[@class='plasma-{suffix}']", ns))
+        snapshot["stats"]["streak"]["current"] = 0
+        self.assertNotIn("<animate", dashboard(snapshot))
+
     def test_365_calendar_titles(self):
         content = dashboard(fixture_snapshot())
         self.assertEqual(content.count(" contribution</title>") + content.count(" contributions</title>"), 365)
         self.assertIn("3 contributions in 365 days", content)
 
-    def test_impact_open_work_is_separate(self):
+    def test_impact_excludes_open_drafts_and_unverified_ecosystems(self):
         s = fixture_snapshot()
-        s["upstream"]["open"] = [{"repo": "org/project", "number": 1, "title": "Fix | <tag>", "url": "https://github.com/org/project/pull/1", "state": "open", "draft": False}]
+        item = {"repo": "newton-physics/newton", "number": 4189, "title": "Fix",
+                "url": "https://github.com/newton-physics/newton/pull/4189", "state": "open",
+                "draft": False, "merged_at": "2026-01-01T12:00:00Z"}
+        for state, draft, merged_at in (("open", False, item["merged_at"]), ("merged", True, item["merged_at"]), ("merged", False, None)):
+            s["upstream"]["merged"] = [dict(item, state=state, draft=draft, merged_at=merged_at)]
+            self.assertEqual(curated_upstream(s), [])
+            self.assertEqual(impact_markdown(s), "")
+        s["upstream"]["merged"] = [dict(item, state="merged")] * 2
         content = impact_markdown(s)
-        self.assertIn("**0 merged", content)
-        self.assertIn("Open — not merged", content)
-        self.assertIn(r"Fix \| \<tag\>", content)
+        self.assertEqual(content.count("Newton Physics"), 1)
+        self.assertIn(item["url"], content)
+        self.assertNotIn("merged", content)
+        self.assertNotIn("Open", content)
 
     def test_marker_replacement_preserves_other_content(self):
         text = "PREFIX\n<!-- IMPACT:START -->old<!-- IMPACT:END -->\nSUFFIX"
@@ -234,10 +296,10 @@ class RenderingTests(unittest.TestCase):
         self.assertIn('src="https://raw.githubusercontent.com/Miko997/metriplane/main/docs/assets/metriplane-hero.jpg"', readme)
         self.assertIn('src="./assets/cursed-dawn-hero.jpg"', readme)
         path = ROOT/"assets/cursed-dawn-hero.jpg"
-        if path.exists():
-            raw = path.read_bytes()
-            blob = hashlib.sha1(f"blob {len(raw)}\0".encode()+raw).hexdigest()
-            self.assertEqual(blob, "8afda374869b2080925c8e70e05734c39bc28daf")
+        self.assertTrue(path.exists(), "Protected Cursed Dawn artwork must remain present")
+        raw = path.read_bytes()
+        blob = hashlib.sha1(f"blob {len(raw)}\0".encode()+raw).hexdigest()
+        self.assertEqual(blob, "8afda374869b2080925c8e70e05734c39bc28daf")
         self.assertNotIn("## Capability map", readme)
         self.assertNotIn("capability-panel.png", readme)
 
@@ -249,7 +311,12 @@ class RenderingTests(unittest.TestCase):
             self.assertEqual(len(s["stats"]["days"]), 365)
             self.assertEqual(sum(n for _, n in s["stats"]["days"]), s["stats"]["last_365"])
             for item in (ROOT/"assets/generated").glob("*.svg"):
-                ET.fromstring(item.read_text())
+                tree = ET.fromstring(item.read_text())
+                if item.name.startswith("contribution-core"):
+                    cells = [node for node in tree.iter() if "data-date" in node.attrib]
+                    self.assertEqual(len(cells), 365, item.name)
+                    self.assertEqual({node.attrib["data-date"]: int(node.attrib["data-count"])
+                                      for node in cells}, dict(s["stats"]["days"]), item.name)
 
 
 if __name__ == "__main__":
