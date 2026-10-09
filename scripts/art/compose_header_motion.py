@@ -13,8 +13,8 @@ import numpy as np
 from PIL import Image,ImageDraw,ImageFilter
 from compose_header import compose,font,ROOT,BACKGROUND,name_layout,lab_lights,draw_typography
 from remux_webp_holds import split_holds,close_quiet_loop
-p=argparse.ArgumentParser();p.add_argument('--preview',action='store_true');p.add_argument('--quality',type=int,default=86);p.add_argument('--desktop-width',type=int,default=1400);p.add_argument('--mobile-width',type=int,default=650);p.add_argument('--only',choices=['desktop','mobile','both'],default='both');a=p.parse_args()
-WORK=ROOT/'work/header-v4';WORK.mkdir(exist_ok=True,parents=True)
+p=argparse.ArgumentParser();p.add_argument('--preview',action='store_true');p.add_argument('--blink-preview',action='store_true');p.add_argument('--quality',type=int,default=86);p.add_argument('--desktop-width',type=int,default=1400);p.add_argument('--mobile-width',type=int,default=650);p.add_argument('--only',choices=['desktop','mobile','both'],default='both');a=p.parse_args()
+WORK=ROOT/'work/header-v5';WORK.mkdir(exist_ok=True,parents=True)
 POSE_WORK=ROOT/'work/header-v2'
 
 def smooth(t):
@@ -51,7 +51,7 @@ def name_effect(im,t,mobile=False):
  return im
 
 manifest_path=POSE_WORK/'motion-manifest.json'
-if a.preview and not manifest_path.exists():manifest_path=POSE_WORK/'preview-manifest.json'
+if (a.preview or a.blink_preview) and not manifest_path.exists():manifest_path=POSE_WORK/'preview-manifest.json'
 manifest=json.loads(manifest_path.read_text())
 rows=manifest['times']
 render_cache={}
@@ -85,7 +85,22 @@ for i,t in enumerate(boardtimes):
  board.paste(mob.resize((250,277),Image.Resampling.LANCZOS),((i%2)*800+275,(i//2)*650+320))
  ImageDraw.Draw(board).text(((i%2)*800+28,(i//2)*650+602),f'{t:.2f}s',font=font(23,500),fill='#aab6ce')
 board.save(WORK/'motion-storyboard.jpg',quality=95)
-if a.preview:
+if a.blink_preview:
+ # Low-cost review media shows true on/off states before final WebP encoding.
+ preview_times=[round(6.4+i*.10,3) for i in range(71)]
+ for mobile,width,label in [(False,800,'desktop'),(True,293,'mobile')]:
+  frames=[]
+  for t in preview_times:
+   im=render_at(t,mobile);im=im.resize((width,round(im.height*width/im.width)),Image.Resampling.LANCZOS)
+   frames.append(im)
+  frames[0].save(WORK/f'blink-preview-{label}.gif',save_all=True,append_images=frames[1:],duration=100,loop=0,optimize=True)
+  sheet=Image.new('RGB',(width*2,frames[0].height*3+90),BACKGROUND)
+  for j,idx in enumerate([8,16,24,32,40,48]):
+   x=(j%2)*width;y=(j//2)*(frames[0].height+30)
+   sheet.paste(frames[idx],(x,y));ImageDraw.Draw(sheet).text((x+15,y+frames[0].height+3),f'{preview_times[idx]:.2f}s',font=font(20),fill='#aab6ce')
+  sheet.save(WORK/f'blink-contact-sheet-{label}.jpg',quality=94)
+ print('Blink previews:',WORK)
+if a.preview or a.blink_preview:
  print('Preview storyboard:',WORK/'motion-storyboard.jpg');raise SystemExit(0)
 
 # One long quiet frame, 20fps during movement, 12.5fps during the delicate name
@@ -113,6 +128,6 @@ for mobile,width,filename in [(False,a.desktop_width,'signature-header-animated.
 # Keep compact reusable source stills; physical frame caches remain local.
 for state,row in [('quiet',rows[0]),('active',rows[-1])]:
  Image.open(POSE_WORK/'frames'/row['file']).save(ROOT/'assets/source'/f'switch-scene-{state}.webp',quality=98,method=6)
-metadata={'duration_ms':20000,'quiet_until':5,'press_starts':6.65,'activation_start':6.8,'return_complete':8.8,'activation_end':16.8,'fade_end':17.8,'frame_times':times,'durations_ms':durations,'motion_render_fps':20,'name_fps':12.5,'wall_strands':3,'wall_bulbs':27,'bulb_colors':['sapphire','violet','lavender'],'bulb_activation_spread_seconds':.55,'bulb_wave_base':.76,'bulb_wave_peak':1.0}
+metadata={'duration_ms':20000,'quiet_until':5,'press_starts':6.65,'activation_start':6.8,'return_complete':8.8,'activation_end':16.8,'fade_end':17.8,'frame_times':times,'durations_ms':durations,'motion_render_fps':20,'name_fps':12.5,'lighting_fps':12.5,'wall_strands':3,'wall_bulbs':{'desktop':33,'mobile':27},'bulb_colors':['sapphire','violet','lavender'],'bulb_activation_spread_seconds':.55,'bulb_on_dwell_seconds':[.50,1.18],'bulb_off_dwell_seconds':[.35,.90],'bulb_attack_seconds':[.08,.12],'bulb_release_seconds':[.10,.16]}
 (WORK/'composition-timing.json').write_text(json.dumps(metadata,indent=2)+'\n')
 print('Timing:',WORK/'composition-timing.json')

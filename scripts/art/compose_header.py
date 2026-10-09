@@ -53,24 +53,28 @@ def draw_typography(im,mobile=False):
   for yy,line in [(306,'Simulation systems · Robotics'),(351,'Research software')]:d.text((78,yy),line,font=font(29),fill='#aab6ce')
  return im
 
+@lru_cache(maxsize=2)
 def bulb_layout(mobile=False):
- """27 socket positions on three original, uneven catenary-like cable spans."""
+ """Three cable spans: 11 bulbs each on desktop, 9 on the narrower mobile wall."""
  # Each tuple is left/right height, sag, and an individual strand phase. Unequal
  # endpoints and irregular spacing deliberately avoid a regular LED matrix.
  strands=[(4,31,29,.25),(111,125,32,1.2),(224,218,38,2.1)] if mobile else [(55,96,66,.25),(184,201,49,1.2),(325,318,92,2.1)]
- left,right=(-17,763) if mobile else (22,795)
+ left,right=(-17,763) if mobile else (22,975)
  offsets=[.020,.136,.242,.349,.457,.570,.679,.793,.910]
+ if not mobile:
+  # Preserve the original horizontal spacing and add two lamps per strand.
+  offsets=[u*773/953 for u in offsets+[1.023,1.136]]
  result=[];paths=[]
  for row,(ya,yb,sag,phase) in enumerate(strands):
   def point(u):return (left+(right-left)*u,ya+(yb-ya)*u+4*sag*u*(1-u)+4*np.sin(u*7+phase))
   paths.append([point(u) for u in np.linspace(0,1,180)])
   for j,u in enumerate(offsets):
-   u+=.010*np.sin(j*3.1+row*1.5);x,y=point(u)
+   u+=(.010 if mobile else .010*773/953)*np.sin(j*3.1+row*1.5);x,y=point(u)
    # The suspension is short, irregular and gravity-aligned, with a mild glass
    # tilt. Every bulb has its own visible graphite collar and ribbed socket.
    size=(33 if mobile else 31)+(j+row)%3*2
    angle=round(9*np.sin(j*1.9+row*2.3),1)
-   result.append({'x':round(x),'y':round(y),'w':size,'angle':angle,'key':['sapphire','violet','lavender'][(j+row*2)%3],'index':row*9+j,'row':row})
+   result.append({'x':round(x),'y':round(y),'w':size,'angle':angle,'key':['sapphire','violet','lavender'][(j+row*2)%3],'index':row*len(offsets)+j,'row':row})
  return paths,result
 
 @lru_cache(maxsize=2)
@@ -79,7 +83,7 @@ def wall_and_cables(mobile=False):
  yy,xx=np.mgrid[:height,:width].astype(np.float32)
  # A faint graphite surface fades continuously into the existing near-black
  # canvas, rather than introducing a rectangular plaque behind the name.
- cx,cy,rx,ry=(360,150,400,195) if mobile else (390,250,450,295)
+ cx,cy,rx,ry=(360,150,400,195) if mobile else (468,250,530,295)
  field=np.exp(-(((xx-cx)/rx)**4+((yy-cy)/ry)**4)*1.6)
  rng=np.random.default_rng(997)
  fine=rng.normal(0,.5,(height,width))
@@ -119,20 +123,42 @@ def bulb_patch(mobile,index,active=False):
  patch.alpha_composite(art,(pad,pad))
  return patch,(b['x']-art.width//2-pad,b['y']-pad+1)
 
+@lru_cache(maxsize=64)
+def blink_schedule(index,mobile=False):
+ """Original deterministic lamp events, with distinct on and fully off dwells.
+
+ Adjacent sockets have independent seeded timings. These are local bulb blinks,
+ not a synchronized wall strobe. Slow name energy stays completely independent.
+ """
+ count=27 if mobile else 33
+ rng=np.random.default_rng(997+index*7919)
+ start=6.8+(count-1-index)/(count-1)*.55
+ events=[]
+ while start<17:
+  length=float(rng.uniform(.50,1.18))
+  events.append((start,start+length,float(rng.uniform(.08,.12)),float(rng.uniform(.10,.16))))
+  start+=length+float(rng.uniform(.35,.90))
+ return tuple(events)
+
+def bulb_brightness(index,time,mobile=False):
+ # Freeze the local state when the power interval ends; the shared activation
+ # envelope then fades every remaining illuminated lamp back to its quiet glass.
+ time=min(float(time),16.8)
+ for start,end,attack,release in blink_schedule(index,mobile):
+  if start<=time<end:
+   x=max(0,min(1,(time-start)/attack));y=max(0,min(1,(end-time)/release))
+   return x*x*(3-2*x)*y*y*(3-2*y)
+ return 0.0
+
 def fixture_layer(mobile=False,active=False,time=12.0):
- """Glass bulbs and local wall pools behind the foreground type, on 3 cords."""
+ """Independently blinking glass lamps and their local light pools, behind type."""
  layer=wall_and_cables(mobile).copy()
- for index in range(27):
+ for index in range(len(bulb_layout(mobile)[1])):
   off,pos=bulb_patch(mobile,index,False)
-  if active:
+  amplitude=bulb_brightness(index,time,mobile) if active else 0
+  if amplitude:
    on,_=bulb_patch(mobile,index,True)
-   # A broad, slow travelling maximum adds local life without any flash/strobe.
-   distance=(26-index)/26
-   phase=((time-7.35)*.19-distance)%1
-   wave=np.exp(-((min(phase,1-phase))/.16)**2)
-   amplitude=.76+.24*wave
-   elapsed=max(0,min(1,(time-6.8-distance*.55)/.28));elapsed=elapsed*elapsed*(3-2*elapsed)
-   layer.alpha_composite(Image.blend(off,on,float(amplitude*elapsed)),pos)
+   layer.alpha_composite(Image.blend(off,on,amplitude),pos)
   else:layer.alpha_composite(off,pos)
  return layer
 

@@ -1,8 +1,8 @@
 <picture>
   <source media="(prefers-reduced-motion: reduce) and (max-width: 600px)" srcset="./assets/signature-header-mobile--eff6179f4d1a.webp" />
-  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/signature-header--ab4f1bfd3c51.webp" />
-  <source media="(max-width: 600px)" srcset="./assets/signature-header-mobile-animated--de87886b1fb9.webp" />
-  <img src="./assets/signature-header-animated--a4d9ea2855e2.webp" width="100%" alt="Miko Parkkinen — Simulation systems · Robotics · Research software" />
+  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/signature-header--de0bfab87ea9.webp" />
+  <source media="(max-width: 600px)" srcset="./assets/signature-header-mobile-animated--31cbab66682b.webp" />
+  <img src="./assets/signature-header-animated--2ba68e78023c.webp" width="100%" alt="Miko Parkkinen — Simulation systems · Robotics · Research software" />
 </picture>
 
 <picture>
