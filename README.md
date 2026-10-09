@@ -18,7 +18,7 @@ I build software **where simulated environments meet physical systems**: robotic
   <img src="./assets/generated/contribution-core.svg?v=bba68b2aa0cf" width="100%" alt="Live GitHub contribution totals, 365-day activity and contribution streaks; private activity is represented only by published counts" />
 </picture>
 
-<sub>Real GitHub data, refreshed every 30 minutes and on profile updates. Calendar and streak include all contribution types, not just commits. Private counts follow my GitHub visibility settings; repository names and contents are never requested. [Data and definitions](./docs/PROFILE_SYSTEM.md) · [Refresh status](https://github.com/Miko997/Miko997/actions/workflows/profile.yml)</sub>
+<sub>Real GitHub data, with refreshes scheduled every 30 minutes and on profile updates. Calendar and streak include all contribution types, not just commits. Private counts follow my GitHub visibility settings; private repository names and contents are never requested. [Data and definitions](./docs/PROFILE_SYSTEM.md) · [Refresh status](https://github.com/Miko997/Miko997/actions/workflows/profile.yml) · [Static view](./assets/generated/contribution-core-static.svg?v=bba68b2aa0cf)</sub>
 
 ## Open-source impact
 
@@ -112,7 +112,7 @@ A released wave-survival FPS developed through **Cursed Studios**. Dynamic horde
 
 Interested in **simulation architecture, robotics infrastructure, physical AI evaluation, and reproducible engineering**.
 
-**[Email](mailto:Miko.Parkkinen99@gmail.com)** · [Metriplane](https://www.metriplane.com/) · [Publications and research](https://orcid.org/0009-0008-5214-0984)
+**[Email](mailto:Miko.Parkkinen99@gmail.com)** · [Metriplane](https://www.metriplane.com/) · [Research archive](https://doi.org/10.5281/zenodo.20736619)
 
 <p align="center">
   <img src="./assets/hextech-footer.svg" width="100%" alt="Build. Simulate. Verify." />

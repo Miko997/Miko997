@@ -63,8 +63,13 @@ Without that setting, the pipeline cannot infer or manufacture hidden activity.
 
 No personal access token with access to private repositories is needed. The
 workflow's built-in `GITHUB_TOKEN` is scoped to this public profile repository.
-The optional GraphQL query requests only an aggregate integer, not repository
-objects. Public upstream PR searches always include `is:public`; only repository
+GraphQL requests only aggregate integers and daily calendar counts, never
+repository objects. A second, complete calendar is validated against the public
+calendar before it is used. The `restrictedContributionsCount` value is recorded
+only as visibility evidence; it is **never added** to the calendar total, because
+those counts may already be included. `visibility` in the public snapshot records
+which source was used and whether anonymous private counts were returned. A zero
+restricted count does not prove that the account has no private work. Public upstream PR searches always include `is:public`; only repository
 name, public URL, title, number, state and draft flag are retained. PR bodies,
 patches and branch metadata are discarded. No private repository is enumerated,
 cloned, downloaded, or written into logs or public artifacts.
@@ -112,8 +117,9 @@ limits; the optional visible-commit metric needs the workflow token. Do not
 commit tokens. The GitHub-hosted runner provides its own token automatically.
 
 Edit the layout in `scripts/render_profile.py`; fetching and calculations are in
-`scripts/profile_data.py`. Keep the README's `IMPACT` markers intact. Generated
-assets should not be edited manually. Source/test changes trigger regeneration.
+`scripts/profile_data.py` and `scripts/calendar_visibility.py`. Keep the README's
+`IMPACT` markers intact. Generated assets should not be edited manually.
+Source/test changes trigger regeneration.
 A failed or incomplete collection does not publish fake zeroes or overwrite the
 last successful snapshot. Public PR search pagination is checked; more than
 1,000 results fails explicitly and requires date-partitioned retrieval rather

@@ -12,6 +12,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from profile_data import Client, DataError, collect, impact_markdown, replace_section
+from calendar_visibility import verify_visibility
 from render_profile import dashboard, footer, header, impact
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -29,7 +30,8 @@ def write_changed(path: Path, text: str):
 
 def main():
     today = datetime.now(timezone.utc).date()
-    snapshot = collect(Client(os.environ.get("GITHUB_TOKEN", "")), "Miko997", today)
+    client = Client(os.environ.get("GITHUB_TOKEN", ""))
+    snapshot = verify_visibility(collect(client, "Miko997", today), client, today)
     readme = ROOT.joinpath("README.md").read_text(encoding="utf-8")
     readme = replace_section(readme, "IMPACT", impact_markdown(snapshot))
     fingerprint = hashlib.sha256(json.dumps(snapshot, sort_keys=True).encode()).hexdigest()[:12]
@@ -51,6 +53,9 @@ def main():
     print(f"Verified {snapshot['login']}: {stats['last_365']} contributions / 365d; "
           f"{stats['all_time']} all-time; streak {stats['streak']['current']} / best {stats['streak']['longest']}; "
           f"{len(snapshot['upstream']['merged'])} merged upstream PRs.")
+    visibility = snapshot["visibility"]
+    print(f"Aggregate calendar: {visibility['aggregate_calendar']}; "
+          f"anonymous private contributions reported: {visibility['restricted_contributions_all_time']}.")
     print("Only published aggregate calendar data and explicitly public PR metadata were retained.")
 
 
