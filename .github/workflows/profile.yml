@@ -1,0 +1,70 @@
+name: Refresh Hextech profile
+
+on:
+  schedule:
+    - cron: '17,47 * * * *'
+  workflow_dispatch:
+  repository_dispatch:
+    types: [profile-refresh]
+  push:
+    branches: [main]
+    paths:
+      - 'README.md'
+      - 'scripts/**'
+      - 'tests/**'
+      - 'docs/**'
+      - '.github/workflows/profile.yml'
+  pull_request:
+    paths:
+      - 'README.md'
+      - 'scripts/**'
+      - 'tests/**'
+      - 'docs/**'
+      - '.github/workflows/profile.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: hextech-profile-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Test data, privacy, streaks, SVG and protected images
+        run: python3 -m unittest discover -s tests -v
+
+  refresh:
+    if: github.event_name != 'pull_request' && github.repository == 'Miko997/Miko997'
+    needs: test
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: main
+      - name: Fetch published counts and public upstream PRs
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python3 scripts/update_profile.py
+      - name: Verify generated outputs
+        run: python3 -m unittest discover -s tests -v
+      - name: Publish only changed profile data
+        run: |
+          git add README.md data/public-activity.json assets/generated/ assets/hextech-header.svg assets/hextech-footer.svg
+          if git diff --cached --quiet; then
+            echo 'No contribution or profile-data changes.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Refresh profile activity [skip ci]'
+          git push origin HEAD:main

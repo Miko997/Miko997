@@ -1,56 +1,41 @@
 <p align="center">
-  <img src="./assets/profile-header.png" width="100%" alt="Miko Parkkinen — Simulation, Robotics and Physical AI Software Engineer" />
+  <img src="./assets/hextech-header.svg" width="100%" alt="Miko Parkkinen — simulation, robotics, physical AI and software systems" />
 </p>
 
 <p align="center">
-  <a href="https://www.metriplane.com/"><img alt="Explore Metriplane" src="https://img.shields.io/badge/Metriplane-Explore-0F766E?style=for-the-badge" /></a>
-  <a href="https://store.steampowered.com/app/2713550/Cursed_Dawn/"><img alt="Play Cursed Dawn on Steam" src="https://img.shields.io/badge/Cursed_Dawn-Play_on_Steam-991B1B?style=for-the-badge&amp;logo=steam&amp;logoColor=white" /></a>
-  <a href="https://www.youtube.com/watch?v=7U5nbBbGGbw"><img alt="Watch the Metriplane demo" src="https://img.shields.io/badge/Watch-3_Minute_Demo-115E59?style=for-the-badge&amp;logo=youtube&amp;logoColor=white" /></a>
-  <a href="mailto:Miko.Parkkinen99@gmail.com"><img alt="Email Miko" src="https://img.shields.io/badge/Contact-Let's_Talk-7F1D1D?style=for-the-badge&amp;logo=gmail&amp;logoColor=white" /></a>
-</p>
-
-<p align="center">
-  <a href="#capability-map">Capabilities</a> ·
+  <a href="#engineering-activity">Activity</a> ·
   <a href="#open-source-impact">Open source</a> ·
   <a href="#selected-work">Selected work</a> ·
   <a href="#contact">Contact</a>
 </p>
 
-I build software where **virtual worlds meet physical systems**: simulation, robotics, digital twins, XR, computer vision, and production real-time 3D. I focus on explicit interfaces, observable behavior, reproducible results, and systems another engineer can inspect and trust.
+I build software **where simulated environments meet physical systems**: robotics, digital twins, real-time simulation, and the infrastructure that makes their behavior observable and repeatable. My focus is on clear interfaces, reliable integration, and engineering evidence that another person can inspect and reproduce.
 
----
+## Engineering activity
 
-## Capability map
+<picture>
+  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/generated/contribution-core-static.svg" />
+  <img src="./assets/generated/contribution-core.svg" width="100%" alt="Live GitHub contribution totals, 365-day activity and contribution streaks; private activity is represented only by published counts" />
+</picture>
 
-<p align="center">
-  <img src="./assets/capability-panel.png" width="100%" alt="Core capabilities across simulation, robotics, real-time 3D, XR, software systems, AI, and perception" />
-</p>
-
----
+<sub>Real GitHub data, refreshed every 30 minutes and on profile updates. Calendar and streak include all contribution types, not just commits. Private counts follow my GitHub visibility settings; repository names and contents are never requested. [Data and definitions](./docs/PROFILE_SYSTEM.md) · [Refresh status](https://github.com/Miko997/Miko997/actions/workflows/profile.yml)</sub>
 
 ## Open-source impact
 
 <p align="center">
-  <a href="https://github.com/conda-forge/metriplane-feedstock"><img alt="conda-forge feedstock maintainer" src="https://img.shields.io/badge/conda--forge-Feedstock_Maintainer-44A833?style=flat-square&amp;logo=anaconda&amp;logoColor=white" /></a>
-  <a href="https://github.com/ros2/rclpy/pull/1735"><img alt="ROS 2 merged contributor" src="https://img.shields.io/badge/ROS_2-Merged_Contributor-22314E?style=flat-square&amp;logo=ros&amp;logoColor=white" /></a>
-  <a href="https://github.com/newton-physics/newton/pull/3900"><img alt="Newton Physics merged contributor" src="https://img.shields.io/badge/Newton_Physics-Merged_Contributor-76B900?style=flat-square" /></a>
-  <a href="https://github.com/microsoft/typespec/pull/12042"><img alt="Microsoft TypeSpec merged contributor" src="https://img.shields.io/badge/Microsoft_TypeSpec-Merged_Contributor-5C2D91?style=flat-square&amp;logo=microsoft&amp;logoColor=white" /></a>
+  <img src="./assets/generated/open-source-impact.svg" width="100%" alt="Automatically verified merged public upstream pull requests, repository count and open work" />
 </p>
 
-Maintainer of the [Metriplane conda-forge feedstock](https://github.com/conda-forge/metriplane-feedstock), with focused, regression-covered fixes merged into [ROS 2](https://github.com/ros2/rclpy/pull/1735), [Newton Physics](https://github.com/newton-physics/newton/pull/3900), and [Microsoft TypeSpec](https://github.com/microsoft/typespec/pull/12042).
+Creator of **[Metriplane](https://github.com/Miko997/metriplane)** and maintainer of its **[conda-forge feedstock](https://github.com/conda-forge/metriplane-feedstock)**. I contribute focused fixes and regression coverage to simulation, robotics, geometry and developer tooling.
 
----
+<!-- IMPACT:START -->
+Public upstream contributions are being verified by the profile workflow. No example counts are shown.
+<!-- IMPACT:END -->
 
 ## Selected work
 
-### 01 / [Metriplane](https://github.com/Miko997/metriplane) — replayable physical evidence
-
-<p>
-  <img alt="Open source" src="https://img.shields.io/badge/Open_Source-MIT-0F766E?style=flat-square" />
-  <img alt="Robotics observability" src="https://img.shields.io/badge/Robotics-Observability-115E59?style=flat-square" />
-  <img alt="Research software" src="https://img.shields.io/badge/Research-Reproducible-0F766E?style=flat-square" />
-  <img alt="Observe only" src="https://img.shields.io/badge/Safety-Observe_Only-115E59?style=flat-square" />
-</p>
+### 01 / Metriplane
+**Recorded incidents → inspectable evidence → repeatable regression checks.**
 
 <p align="center">
   <a href="https://github.com/Miko997/metriplane">
@@ -58,24 +43,18 @@ Maintainer of the [Metriplane conda-forge feedstock](https://github.com/conda-fo
   </a>
 </p>
 
-Metriplane is an open-source, observe-only workcell black box that converts replayed or calibrated state into physical events, incident reports, portable evidence bundles, local verification, and generated regression checks.
-
-<p align="center">
-  <img src="./assets/metriplane-proof.png" width="100%" alt="Metriplane archived v0.2.0 release signals: 580 tests, 0.0 centimetre replay delta, 0 event mismatches, and a persistent DOI" />
-</p>
-
-**[View repository](https://github.com/Miko997/metriplane)** · [Project site](https://www.metriplane.com/) · [3-minute demo](https://www.youtube.com/watch?v=7U5nbBbGGbw) · [Reproduce v0.2.0](https://github.com/Miko997/metriplane#quick-reproduction-path) · [Zenodo DOI](https://doi.org/10.5281/zenodo.20736619)
-
----
-
-### 02 / [Cursed Dawn](https://store.steampowered.com/app/2713550/Cursed_Dawn/) — brutal wave-survival FPS
+An open-source, **observe-only** system for analyzing recorded workcell behavior. Timestamped state and process rules become incident timelines, integrity-verifiable evidence bundles, and regression checks an engineer can run again. It does not control machinery or make safety decisions.
 
 <p>
-  <img alt="Wave survival FPS" src="https://img.shields.io/badge/Wave_Survival-FPS-991B1B?style=flat-square" />
-  <img alt="Online co-op" src="https://img.shields.io/badge/Online-Co--op-7F1D1D?style=flat-square" />
-  <img alt="More than 24 weapons" src="https://img.shields.io/badge/Arsenal-24%2B_Weapons-991B1B?style=flat-square" />
-  <img alt="Physics combat" src="https://img.shields.io/badge/Combat-Physics_Driven-7F1D1D?style=flat-square" />
+  <a href="https://github.com/Miko997/metriplane"><img alt="Metriplane source" src="https://img.shields.io/badge/Source-Metriplane-8056D9?style=flat-square&amp;labelColor=171323" /></a>
+  <a href="https://www.metriplane.com/"><img alt="Project website" src="https://img.shields.io/badge/Explore-Website-547EE3?style=flat-square&amp;labelColor=171323" /></a>
+  <a href="https://doi.org/10.5281/zenodo.20736619"><img alt="Archived research release" src="https://img.shields.io/badge/Research-Archived_release-8056D9?style=flat-square&amp;labelColor=171323" /></a>
 </p>
+
+[Quickstart](https://github.com/Miko997/metriplane#quickstart) · [Watch the workcell demo](https://youtu.be/DGbQN8-sdLY)
+
+### 02 / Cursed Dawn
+**Real-time 3D, gameplay systems, physics — shipped as a playable product.**
 
 <p align="center">
   <a href="https://store.steampowered.com/app/2713550/Cursed_Dawn/">
@@ -83,25 +62,21 @@ Metriplane is an open-source, observe-only workcell black box that converts repl
   </a>
 </p>
 
-**Cursed Dawn** drops you into secret-packed maps where dynamic zombie hordes punish every pause. Master the routes, keep moving, and improvise with more than two dozen weapons and physics-driven explosives—solo or with a friend in online co-op.
+A released wave-survival FPS developed through **Cursed Studios**. Dynamic hordes, physics-driven combat, and online co-op: a different application of the same interest in interactive systems, performance, and building software people can use.
 
-<p align="center">
-  <img src="./assets/cursed-dawn-world.png" width="100%" alt="Cursed Dawn player experience: dynamic hordes, online co-op, more than 24 weapons, and physics-driven combat" />
+<p>
+  <a href="https://store.steampowered.com/app/2713550/Cursed_Dawn/"><img alt="Cursed Dawn on Steam" src="https://img.shields.io/badge/Play-Steam-8056D9?style=flat-square&amp;labelColor=171323&amp;logo=steam&amp;logoColor=white" /></a>
+  <a href="https://www.ign.com/videos/cursed-dawn-official-launch-trailer"><img alt="Launch trailer" src="https://img.shields.io/badge/Watch-Launch_trailer-547EE3?style=flat-square&amp;labelColor=171323" /></a>
 </p>
-
-**[Play on Steam](https://store.steampowered.com/app/2713550/Cursed_Dawn/)** · [Watch the launch trailer](https://www.ign.com/videos/cursed-dawn-official-launch-trailer)
-
----
 
 ## Contact
 
-Open to thoughtful technical collaboration around **simulation, robotics, Physical AI, XR, and real-time 3D**.
+Interested in **simulation architecture, robotics infrastructure, physical AI evaluation, and reproducible engineering**.
+
+**[Email](mailto:Miko.Parkkinen99@gmail.com)** · [Metriplane](https://www.metriplane.com/) · [Publications and research](https://orcid.org/0009-0008-5214-0984)
 
 <p align="center">
-  <a href="mailto:Miko.Parkkinen99@gmail.com"><img alt="Email Miko" src="https://img.shields.io/badge/Start_a_Conversation-Email-991B1B?style=for-the-badge&amp;logo=gmail&amp;logoColor=white" /></a>
-  <a href="https://www.metriplane.com/"><img alt="Visit Metriplane" src="https://img.shields.io/badge/Explore-Metriplane-0F766E?style=for-the-badge" /></a>
+  <img src="./assets/hextech-footer.svg" width="100%" alt="Build. Simulate. Verify." />
 </p>
 
-<p align="center">
-  <sub>Helsinki, Finland · Simulation · Robotics · Physical AI · Real-time 3D</sub>
-</p>
+<p align="center"><sub>Helsinki, Finland · Software engineering · Independent research · Open source</sub></p>
