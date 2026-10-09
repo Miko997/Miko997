@@ -14,16 +14,16 @@ I build software **where simulated environments meet physical systems**: robotic
 ## Engineering activity
 
 <picture>
-  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/generated/contribution-core-static.svg?v=bba68b2aa0cf" />
-  <img src="./assets/generated/contribution-core.svg?v=bba68b2aa0cf" width="100%" alt="Live GitHub contribution totals, 365-day activity and contribution streaks; private activity is represented only by published counts" />
+  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/generated/contribution-core-static.svg?v=e341cdcf53b8" />
+  <img src="./assets/generated/contribution-core.svg?v=e341cdcf53b8" width="100%" alt="Live GitHub contribution totals, 365-day activity and contribution streaks; private activity is represented only by published counts" />
 </picture>
 
-<sub>Real GitHub data, with refreshes scheduled every 30 minutes and on profile updates. Calendar and streak include all contribution types, not just commits. Private counts follow my GitHub visibility settings; private repository names and contents are never requested. [Data and definitions](./docs/PROFILE_SYSTEM.md) · [Refresh status](https://github.com/Miko997/Miko997/actions/workflows/profile.yml) · [Static view](./assets/generated/contribution-core-static.svg?v=bba68b2aa0cf)</sub>
+<sub>Real GitHub data, with refreshes scheduled every 30 minutes and on profile updates. Calendar and streak include all contribution types, not just commits. Private counts follow my GitHub visibility settings; private repository names and contents are never requested. [Data and definitions](./docs/PROFILE_SYSTEM.md) · [Refresh status](https://github.com/Miko997/Miko997/actions/workflows/profile.yml) · [Static view](./assets/generated/contribution-core-static.svg?v=e341cdcf53b8)</sub>
 
 ## Open-source impact
 
 <p align="center">
-  <img src="./assets/generated/open-source-impact.svg?v=bba68b2aa0cf" width="100%" alt="Automatically verified merged public upstream pull requests, repository count and open work" />
+  <img src="./assets/generated/open-source-impact.svg?v=e341cdcf53b8" width="100%" alt="Automatically verified merged public upstream pull requests, repository count and open work" />
 </p>
 
 Creator of **[Metriplane](https://github.com/Miko997/metriplane)** and maintainer of its **[conda-forge feedstock](https://github.com/conda-forge/metriplane-feedstock)**. I contribute focused fixes and regression coverage to simulation, robotics, geometry and developer tooling.

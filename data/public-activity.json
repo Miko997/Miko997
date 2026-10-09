@@ -6,8 +6,8 @@
   "source": "github-public-contribution-calendar",
   "privacy": "Published daily aggregates only. No private repository details requested.",
   "stats": {
-    "all_time": 967,
-    "last_365": 964,
+    "all_time": 968,
+    "last_365": 965,
     "active_days_365": 69,
     "days": [
       [
@@ -1468,7 +1468,7 @@
       ],
       [
         "2026-10-09",
-        2
+        3
       ]
     ],
     "first_contribution": "2023-08-05",
@@ -1480,7 +1480,7 @@
       "longest_start": "2026-08-30",
       "longest_end": "2026-09-14"
     },
-    "visible_commits_365": 647
+    "visible_commits_365": 648
   },
   "upstream": {
     "merged": [
@@ -1727,5 +1727,12 @@
         "draft": false
       }
     ]
+  },
+  "visibility": {
+    "aggregate_calendar": "public-calendar-retained",
+    "anonymous_private_counts_reported": false,
+    "restricted_contributions_all_time": 0,
+    "public_calendar_all_time": 968,
+    "aggregate_calendar_all_time": 961
   }
 }
