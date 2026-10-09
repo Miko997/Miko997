@@ -1,22 +1,22 @@
 {
   "signature-header": {
-    "file": "signature-header--265df1273139.webp",
-    "sha256": "265df1273139c44893ba702f49475904c380940ec7f93c7e79db2e9a0165e918",
-    "bytes": 47328
+    "file": "signature-header--ab4f1bfd3c51.webp",
+    "sha256": "ab4f1bfd3c51de3cedd7ab81aac7c81ff5bddd8f7e024ff689d0b940f1684565",
+    "bytes": 61952
   },
   "signature-header-mobile": {
-    "file": "signature-header-mobile--824129a1bfed.webp",
-    "sha256": "824129a1bfeddbee69f427f3a8ba244e88801cddec8cf6420525538ad51e7aaf",
-    "bytes": 44866
+    "file": "signature-header-mobile--eff6179f4d1a.webp",
+    "sha256": "eff6179f4d1aa28dfcc728a7173f1614a0acd39ae5bcd3a6b46ddc17e4d54423",
+    "bytes": 55480
   },
   "signature-header-animated": {
-    "file": "signature-header-animated--e6e6be62d483.webp",
-    "sha256": "e6e6be62d483aab73f78165ab70cdec9b38c0e390b59c0a3877e7faf0c64b31e",
-    "bytes": 1151620
+    "file": "signature-header-animated--a4d9ea2855e2.webp",
+    "sha256": "a4d9ea2855e2f756769c6ab143f9f7d21d693ffdd18b7e099a004380094293d6",
+    "bytes": 1432904
   },
   "signature-header-mobile-animated": {
-    "file": "signature-header-mobile-animated--76bd319038a8.webp",
-    "sha256": "76bd319038a8f870778a4393367f04d6191e5dec911ddeb3c6b7dfe28f990aed",
-    "bytes": 1028622
+    "file": "signature-header-mobile-animated--de87886b1fb9.webp",
+    "sha256": "de87886b1fb92e24eba55cc7094e7723739c30901538fe1d767622fbb80f01e7",
+    "bytes": 1280078
   }
 }

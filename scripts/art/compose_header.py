@@ -21,49 +21,128 @@ def name_bounds(mobile=False):
  bounds=font(size,610).getbbox('Miko Parkkinen')
  return (x+bounds[0],y+bounds[1],x+bounds[2],y+bounds[3])
 
-@lru_cache(maxsize=4)
-def fixture_layer(mobile=False,active=False):
- """Physical rendered housings with restrained composited light spill."""
+@lru_cache(maxsize=2)
+def typography_mask(mobile=False):
  width,height=(750,830) if mobile else (1600,600)
- layer=Image.new('RGBA',(width,height),(0,0,0,0))
- placements=[(65,169,280),(399,191,250)] if mobile else [(940,-70,300),(1250,-30,240)]
- quiet=Image.open(ROOT/'assets/source/lab-light-off.webp').convert('RGBA')
- lit=Image.open(ROOT/'assets/source/lab-light-on.webp').convert('RGBA')
- for x,y,w in placements:
-  h=round(w*quiet.height/quiet.width)
-  art=(lit if active else quiet).resize((w,h),Image.Resampling.LANCZOS)
-  if active:
-   # Soft violet-blue spill remains above/around the workcell, away from text.
-   cone=Image.new('L',(width,height),0);d=ImageDraw.Draw(cone)
-   left=(x+w*.23,y+h*.85);right=(x+w*.81,y+h*.75)
-   reach=100 if mobile else 150
-   d.polygon([left,right,(right[0]+38,right[1]+reach),(left[0]-32,left[1]+reach)],fill=22)
-   cone=cone.filter(ImageFilter.GaussianBlur(20 if mobile else 25))
-   glow=Image.new('RGBA',(width,height),(59,72,183,0));glow.putalpha(cone)
-   layer=Image.alpha_composite(layer,glow)
-   on=np.array(lit.resize((w,h),Image.Resampling.LANCZOS),dtype=float)
-   off=np.array(quiet.resize((w,h),Image.Resampling.LANCZOS),dtype=float)
-   emission=np.clip((on[:,:,:3].max(axis=2)-off[:,:,:3].max(axis=2)-15)/200,0,1)*on[:,:,3]
-   mask=Image.new('L',(width,height),0);mask.paste(Image.fromarray(emission.astype('uint8')),(x,y));mask=mask.filter(ImageFilter.GaussianBlur(7 if mobile else 8))
-   halo=Image.new('RGBA',(width,height),(111,140,255,0));halo.putalpha(mask.point(lambda v:round(v*.65)))
-   layer=Image.alpha_composite(layer,halo)
-  layer.alpha_composite(art,(x,y))
+ mask=Image.new('L',(width,height),0);d=ImageDraw.Draw(mask)
+ x,y,size=name_layout(mobile);d.text((x,y),'Miko Parkkinen',font=font(size,610),fill=255)
  if mobile:
-  # A quiet ceiling rail joins the cropped suspensions below the descriptor.
-  layer.paste((0,0,0,0),(0,0,width,252))
-  d=ImageDraw.Draw(layer);d.line((100,252,651,252),fill=(37,49,70,255),width=2)
-  for x,y,w in placements:
-   for fraction in [.24,.755]:
-    cx=round(x+w*fraction)
-    d.rounded_rectangle((cx-6,249,cx+6,256),radius=2,fill=(54,62,78,255))
+  for yy,line in [(151,'Simulation systems · Robotics'),(197,'Research software')]:d.text((54,yy),line,font=font(34),fill=255)
+ else:
+  for yy,line in [(306,'Simulation systems · Robotics'),(351,'Research software')]:d.text((78,yy),line,font=font(29),fill=255)
+ return mask
+
+@lru_cache(maxsize=2)
+def typography_shadow(mobile=False):
+ # Expand each individual glyph, then feather it. This protects the nearby wall
+ # as well as the stroke itself, without introducing a rectangular backdrop.
+ return typography_mask(mobile).filter(ImageFilter.MaxFilter(13 if mobile else 15)).filter(ImageFilter.GaussianBlur(4)).point(lambda v:round(v*.90))
+
+def protect_typography(im,mobile=False):
+ im=im.convert('RGB').copy()
+ im.paste(Image.new('RGB',im.size,BACKGROUND),(0,0),typography_shadow(mobile))
+ return im
+
+def draw_typography(im,mobile=False):
+ im=protect_typography(im,mobile)
+ d=ImageDraw.Draw(im);x,y,size=name_layout(mobile)
+ d.text((x,y),'Miko Parkkinen',font=font(size,610),fill='#f1f3ff')
+ if mobile:
+  for yy,line in [(151,'Simulation systems · Robotics'),(197,'Research software')]:d.text((54,yy),line,font=font(34),fill='#aab6ce')
+ else:
+  for yy,line in [(306,'Simulation systems · Robotics'),(351,'Research software')]:d.text((78,yy),line,font=font(29),fill='#aab6ce')
+ return im
+
+def bulb_layout(mobile=False):
+ """27 socket positions on three original, uneven catenary-like cable spans."""
+ # Each tuple is left/right height, sag, and an individual strand phase. Unequal
+ # endpoints and irregular spacing deliberately avoid a regular LED matrix.
+ strands=[(4,31,29,.25),(111,125,32,1.2),(224,218,38,2.1)] if mobile else [(55,96,66,.25),(184,201,49,1.2),(325,318,92,2.1)]
+ left,right=(-17,763) if mobile else (22,795)
+ offsets=[.020,.136,.242,.349,.457,.570,.679,.793,.910]
+ result=[];paths=[]
+ for row,(ya,yb,sag,phase) in enumerate(strands):
+  def point(u):return (left+(right-left)*u,ya+(yb-ya)*u+4*sag*u*(1-u)+4*np.sin(u*7+phase))
+  paths.append([point(u) for u in np.linspace(0,1,180)])
+  for j,u in enumerate(offsets):
+   u+=.010*np.sin(j*3.1+row*1.5);x,y=point(u)
+   # The suspension is short, irregular and gravity-aligned, with a mild glass
+   # tilt. Every bulb has its own visible graphite collar and ribbed socket.
+   size=(33 if mobile else 31)+(j+row)%3*2
+   angle=round(9*np.sin(j*1.9+row*2.3),1)
+   result.append({'x':round(x),'y':round(y),'w':size,'angle':angle,'key':['sapphire','violet','lavender'][(j+row*2)%3],'index':row*9+j,'row':row})
+ return paths,result
+
+@lru_cache(maxsize=2)
+def wall_and_cables(mobile=False):
+ width,height=(750,830) if mobile else (1600,600)
+ yy,xx=np.mgrid[:height,:width].astype(np.float32)
+ # A faint graphite surface fades continuously into the existing near-black
+ # canvas, rather than introducing a rectangular plaque behind the name.
+ cx,cy,rx,ry=(360,150,400,195) if mobile else (390,250,450,295)
+ field=np.exp(-(((xx-cx)/rx)**4+((yy-cy)/ry)**4)*1.6)
+ rng=np.random.default_rng(997)
+ fine=rng.normal(0,.5,(height,width))
+ grain=(np.sin(xx*.79+yy*.36)+np.sin(yy*1.23-xx*.2))*.20+fine
+ rgb=np.zeros((height,width,4),dtype=np.uint8)
+ for c,v in enumerate([19,23,35]):rgb[:,:,c]=np.clip(v+grain,0,255)
+ rgb[:,:,3]=(field*170).astype('uint8')
+ layer=Image.fromarray(rgb,'RGBA');draw=ImageDraw.Draw(layer)
+ paths,bulbs=bulb_layout(mobile)
+ for points in paths:
+  draw.line([(x+1,y+2) for x,y in points],fill=(0,0,0,160),width=5)
+  draw.line(points,fill=(55,58,68,255),width=3)
+  draw.line([(x,y-.8) for x,y in points],fill=(76,78,91,170),width=1)
+  for x,y in [points[0],points[-1]]:
+   draw.ellipse((x-4,y-4,x+4,y+4),fill=(60,55,51,255),outline=(105,96,80,255),width=1)
  return layer
 
-def lab_lights(im,activation=0.0,mobile=False):
+@lru_cache(maxsize=128)
+def bulb_patch(mobile,index,active=False):
+ _,placements=bulb_layout(mobile);b=placements[index]
+ source=Image.open(ROOT/f'assets/source/bulb-{b["key"]}-{"on" if active else "off"}.webp').convert('RGBA')
+ w=b['w'];h=round(w*source.height/source.width)
+ art=source.resize((w,h),Image.Resampling.LANCZOS).rotate(b['angle'],Image.Resampling.BICUBIC,expand=True)
+ # Sprites include the lead. Their first opaque pixel joins the sagging cable.
+ bbox=art.getbbox();art=art.crop((bbox[0],bbox[1],bbox[2],bbox[3]))
+ pad=70 if mobile else 76
+ patch=Image.new('RGBA',(art.width+pad*2,art.height+pad*2),(0,0,0,0))
+ if active:
+  yy,xx=np.mgrid[:patch.height,:patch.width]
+  cx,cy=patch.width/2,pad+art.height*.69
+  radius=39 if mobile else 46
+  field=np.exp(-((xx-cx)**2+(yy-cy)**2)/(radius*radius))
+  core=np.exp(-((xx-cx)**2+(yy-cy)**2)/(10*10))
+  color={'sapphire':(63,126,255),'violet':(135,73,255),'lavender':(153,137,255)}[b['key']]
+  glow=Image.new('RGBA',patch.size,(*color,0));glow.putalpha(Image.fromarray(np.clip(field*44+core*45,0,255).astype('uint8')))
+  patch=Image.alpha_composite(patch,glow)
+ patch.alpha_composite(art,(pad,pad))
+ return patch,(b['x']-art.width//2-pad,b['y']-pad+1)
+
+def fixture_layer(mobile=False,active=False,time=12.0):
+ """Glass bulbs and local wall pools behind the foreground type, on 3 cords."""
+ layer=wall_and_cables(mobile).copy()
+ for index in range(27):
+  off,pos=bulb_patch(mobile,index,False)
+  if active:
+   on,_=bulb_patch(mobile,index,True)
+   # A broad, slow travelling maximum adds local life without any flash/strobe.
+   distance=(26-index)/26
+   phase=((time-7.35)*.19-distance)%1
+   wave=np.exp(-((min(phase,1-phase))/.16)**2)
+   amplitude=.76+.24*wave
+   elapsed=max(0,min(1,(time-6.8-distance*.55)/.28));elapsed=elapsed*elapsed*(3-2*elapsed)
+   layer.alpha_composite(Image.blend(off,on,float(amplitude*elapsed)),pos)
+  else:layer.alpha_composite(off,pos)
+ return layer
+
+def lab_lights(im,activation=0.0,mobile=False,time=12.0):
  q=max(0,min(1,float(activation)))
- layer=fixture_layer(mobile,False) if q==0 else fixture_layer(mobile,True) if q==1 else Image.blend(fixture_layer(mobile,False),fixture_layer(mobile,True),q)
+ quiet=fixture_layer(mobile,False)
+ layer=quiet if q==0 else Image.blend(quiet,fixture_layer(mobile,True,time),q)
  return Image.alpha_composite(im.convert('RGBA'),layer).convert('RGB')
 
-def compose(scene,width=1600,height=600,mobile=False,with_lights=True):
+def compose(scene,width=1600,height=600,mobile=False,with_lights=True,with_text=True):
  im=Image.new('RGB',(width,height),BACKGROUND)
  art=Image.open(scene).convert('RGBA')
  size=670 if not mobile else 620
@@ -75,22 +154,15 @@ def compose(scene,width=1600,height=600,mobile=False,with_lights=True):
  x,y=(855,-45) if not mobile else (65,204)
  alpha=np.asarray(art)[:,:,3]/255.0
  im.paste(art,(x,y),Image.fromarray((mask*alpha*255).astype('uint8')))
- d=ImageDraw.Draw(im)
- if mobile:
-  d.text((52,51),'Miko Parkkinen',font=font(NAME_STYLES[True][2],610),fill='#f1f3ff')
-  d.text((54,151),'Simulation systems · Robotics',font=font(34),fill='#aab6ce')
-  d.text((54,197),'Research software',font=font(34),fill='#aab6ce')
- else:
-  d.text((75,194),'Miko Parkkinen',font=font(NAME_STYLES[False][2],610),fill='#f1f3ff')
-  d.text((78,306),'Simulation systems · Robotics',font=font(29),fill='#aab6ce')
-  d.text((78,351),'Research software',font=font(29),fill='#aab6ce')
- return lab_lights(im,0,mobile) if with_lights else im
+ if with_lights:im=lab_lights(im,0,mobile)
+ return draw_typography(im,mobile) if with_text else im
 
 def main():
  p=argparse.ArgumentParser();p.add_argument('--scene',type=Path,default=ROOT/'assets/source/switch-scene-quiet.webp');p.add_argument('--out',type=Path,default=ROOT/'assets/signature-header.webp');p.add_argument('--mobile-out',type=Path,default=ROOT/'assets/signature-header-mobile.webp');p.add_argument('--concept-sheet',action='store_true');p.add_argument('--save-source',action='store_true');p.add_argument('--package-lights',action='store_true');a=p.parse_args()
  if a.package_lights:
-  for state in ['off','on']:
-   Image.open(ROOT/f'work/header-v3/lab-light-{state}.png').save(ROOT/f'assets/source/lab-light-{state}.webp',quality=98,method=6)
+  for key in ['sapphire','violet','lavender']:
+   for state in ['off','on']:
+    Image.open(ROOT/f'work/header-v4/bulb-{key}-{state}.png').save(ROOT/f'assets/source/bulb-{key}-{state}.webp',quality=98,method=6)
  a.out.parent.mkdir(exist_ok=True,parents=True)
  if a.save_source:
   source=ROOT/'assets/source/simulation-scene.webp'

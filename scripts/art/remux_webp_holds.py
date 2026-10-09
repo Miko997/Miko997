@@ -24,6 +24,35 @@ def chunks(blob:bytes):
   yield blob[pos:pos+4],blob[pos+8:end]
   pos=end+(size%2)
 
+def close_quiet_loop(blob:bytes,quiet_start_ms:int=17840)->bytes:
+ """Reuse the first full-canvas image at an authored identical quiet ending.
+
+ Lossy encoding can independently approximate two identical input frames. The
+ header explicitly returns to the initial composition at 17.84s. Replacing just
+ that ANMF image payload with the first one makes the decoded loop exact; frame
+ durations, disposal, earlier frames and transparent continuation holds stay
+ intact. This accepts either the encoded timeline or its remuxed equivalent.
+ """
+ entries=list(chunks(blob));first=next(p for k,p in entries if k==b'ANMF')
+ canvas=next(p for k,p in entries if k==b'VP8X')
+ width=int.from_bytes(canvas[4:7],'little')+1;height=int.from_bytes(canvas[7:10],'little')+1
+ if first[:6]!=bytes(6) or int.from_bytes(first[6:9],'little')+1!=width or int.from_bytes(first[9:12],'little')+1!=height or first[15]!=2:
+  raise ValueError('Exact loop closure requires a full-canvas, no-blend first frame')
+ with Image.open(io.BytesIO(blob)) as image:
+  if image.convert('RGBA').getextrema()[3]!=(255,255):raise ValueError('The replacement frame must be fully opaque')
+ elapsed=0;replaced=False;output=[]
+ for kind,payload in entries:
+  if kind==b'ANMF':
+   duration=int.from_bytes(payload[12:15],'little')
+   if elapsed==quiet_start_ms:
+    if payload[15]&1:raise ValueError('The quiet hold must not dispose the canvas')
+    payload=first[:12]+payload[12:15]+first[15:];replaced=True
+   elapsed+=duration
+  output.append(chunk(kind,payload))
+ if not replaced:raise ValueError('No frame begins at the authored quiet boundary')
+ body=b'WEBP'+b''.join(output)
+ return b'RIFF'+struct.pack('<I',len(body))+body
+
 def split_holds(blob:bytes,max_duration:int=40,first_duration:int=40)->bytes:
  if not 1<=max_duration<=1000:raise ValueError('Hold interval must be 1–1000ms')
  if not 1<=first_duration<=max_duration:raise ValueError('First duration must fit the hold interval')

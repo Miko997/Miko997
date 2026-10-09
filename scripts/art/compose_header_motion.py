@@ -11,10 +11,10 @@ from pathlib import Path
 import argparse, json, math
 import numpy as np
 from PIL import Image,ImageDraw,ImageFilter
-from compose_header import compose,font,ROOT,BACKGROUND,name_layout,lab_lights
-from remux_webp_holds import split_holds
+from compose_header import compose,font,ROOT,BACKGROUND,name_layout,lab_lights,draw_typography
+from remux_webp_holds import split_holds,close_quiet_loop
 p=argparse.ArgumentParser();p.add_argument('--preview',action='store_true');p.add_argument('--quality',type=int,default=86);p.add_argument('--desktop-width',type=int,default=1400);p.add_argument('--mobile-width',type=int,default=650);p.add_argument('--only',choices=['desktop','mobile','both'],default='both');a=p.parse_args()
-WORK=ROOT/'work/header-v3';WORK.mkdir(exist_ok=True,parents=True)
+WORK=ROOT/'work/header-v4';WORK.mkdir(exist_ok=True,parents=True)
 POSE_WORK=ROOT/'work/header-v2'
 
 def smooth(t):
@@ -64,13 +64,13 @@ def render_at(t,mobile=False):
  else:filename=min(rows,key=lambda r:abs(r['time']-t))['file']
  key=(filename,mobile)
  if key not in render_cache:
-  render_cache[key]=compose(POSE_WORK/'frames'/filename,750,830,True,False) if mobile else compose(POSE_WORK/'frames'/filename,with_lights=False)
+  render_cache[key]=compose(POSE_WORK/'frames'/filename,750,830,True,False,False) if mobile else compose(POSE_WORK/'frames'/filename,with_lights=False,with_text=False)
  im=render_cache[key]
  if 16.8<t<17.8:
   quietkey=(rows[0]['file'],mobile)
-  if quietkey not in render_cache:render_cache[quietkey]=compose(POSE_WORK/'frames'/rows[0]['file'],750,830,True,False) if mobile else compose(POSE_WORK/'frames'/rows[0]['file'],with_lights=False)
+  if quietkey not in render_cache:render_cache[quietkey]=compose(POSE_WORK/'frames'/rows[0]['file'],750,830,True,False,False) if mobile else compose(POSE_WORK/'frames'/rows[0]['file'],with_lights=False,with_text=False)
   im=Image.blend(im,render_cache[quietkey],float(smooth(t-16.8)))
- return name_effect(lab_lights(im,activation(t),mobile),t,mobile)
+ return name_effect(draw_typography(lab_lights(im,activation(t),mobile,t),mobile),t,mobile)
 
 # Still evidence is always emitted at meaningful physical and visual moments.
 boardtimes=[0,6.35,6.85,7.3,12,17.8]
@@ -103,7 +103,7 @@ for mobile,width,filename in [(False,a.desktop_width,'signature-header-animated.
  out=ROOT/'assets'/filename
  temporary=WORK/('encoding-'+filename)
  frames[0].save(temporary,save_all=True,append_images=frames[1:],duration=durations,loop=0,quality=a.quality,method=6,minimize_size=True,allow_mixed=True)
- temporary.write_bytes(split_holds(temporary.read_bytes()))
+ temporary.write_bytes(split_holds(close_quiet_loop(temporary.read_bytes())))
  temporary.replace(out)
  with Image.open(out) as encoded:encoded_count=encoded.n_frames
  print(out,out.stat().st_size,frames[0].size,'authored_frames',len(frames),'encoded_frames',encoded_count,flush=True)
@@ -113,6 +113,6 @@ for mobile,width,filename in [(False,a.desktop_width,'signature-header-animated.
 # Keep compact reusable source stills; physical frame caches remain local.
 for state,row in [('quiet',rows[0]),('active',rows[-1])]:
  Image.open(POSE_WORK/'frames'/row['file']).save(ROOT/'assets/source'/f'switch-scene-{state}.webp',quality=98,method=6)
-metadata={'duration_ms':20000,'quiet_until':5,'press_starts':6.65,'activation_start':6.8,'return_complete':8.8,'activation_end':16.8,'fade_end':17.8,'frame_times':times,'durations_ms':durations,'motion_render_fps':20,'name_fps':12.5}
+metadata={'duration_ms':20000,'quiet_until':5,'press_starts':6.65,'activation_start':6.8,'return_complete':8.8,'activation_end':16.8,'fade_end':17.8,'frame_times':times,'durations_ms':durations,'motion_render_fps':20,'name_fps':12.5,'wall_strands':3,'wall_bulbs':27,'bulb_colors':['sapphire','violet','lavender'],'bulb_activation_spread_seconds':.55,'bulb_wave_base':.76,'bulb_wave_peak':1.0}
 (WORK/'composition-timing.json').write_text(json.dumps(metadata,indent=2)+'\n')
 print('Timing:',WORK/'composition-timing.json')

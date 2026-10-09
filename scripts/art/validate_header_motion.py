@@ -6,7 +6,7 @@ import argparse,json
 from pathlib import Path
 import numpy as np
 from PIL import Image
-from compose_header import name_bounds,fixture_layer
+from compose_header import name_bounds,fixture_layer,compose,lab_lights,protect_typography,typography_mask,typography_shadow,bulb_layout
 ROOT=Path(__file__).resolve().parents[2]
 p=argparse.ArgumentParser();p.add_argument('--manifest',type=Path);a=p.parse_args()
 results=[]
@@ -32,6 +32,10 @@ for mobile,name in [(False,'signature-header-animated.webp'),(True,'signature-he
  assert durations[0]<=40 and max(durations)<=500, f'{name}: incompatible long frame hold'
  seam=float(np.mean(np.abs(first.astype(float)-last.astype(float))))
  assert seam<2, f'{name}: visible loop discontinuity: {seam}'
+ fallback_path=ROOT/'assets'/('signature-header-mobile.webp' if mobile else 'signature-header.webp')
+ fallback=np.array(Image.open(fallback_path).convert('RGB').resize(im.size,Image.Resampling.LANCZOS),dtype=float)
+ fallback_error=float(np.mean(np.abs(fallback-first.astype(float))))
+ assert fallback_error<2.5, f'{name}: static fallback does not match the quiet frame'
  assert active is not None
  basew=750 if mobile else 1600;scale=im.width/basew
  roi=name_bounds(mobile)
@@ -41,21 +45,34 @@ for mobile,name in [(False,'signature-header-animated.webp'),(True,'signature-he
  assert interior.sum()>400
  color_delta=float(np.mean(np.abs(quiet[interior].astype(float)-energized[interior].astype(float))))
  assert color_delta>25, f'{name}: activation not visible'
- c=energized[interior].astype(float)/255
- linear=np.where(c<=.04045,c/12.92,((c+.055)/1.055)**2.4)
- luma=linear@np.array([.2126,.7152,.0722]);contrast=(luma+.05)/(.0034+.05)
- assert float(np.percentile(contrast,5))>=4.5, f'{name}: active name contrast too low'
+ # Measure against the actual protected wall beneath each glyph. A fixed
+ # #090b12 denominator would overstate readability where a lit bulb crosses it.
+ fullsize=(750,830) if mobile else (1600,600)
+ base=compose(ROOT/'assets/source/switch-scene-active.webp',*fullsize,mobile,with_lights=False,with_text=False)
+ background=protect_typography(lab_lights(base,1,mobile,12),mobile).resize(im.size,Image.Resampling.LANCZOS)
+ def luminance(pixels):
+  c=np.asarray(pixels,dtype=float)/255
+  return np.where(c<=.04045,c/12.92,((c+.055)/1.055)**2.4)@np.array([.2126,.7152,.0722])
+ actual_contrast=(luminance(active)+.05)/(luminance(background)+.05)
+ contrast=actual_contrast[y1:y2,x1:x2][interior]
+ assert float(np.percentile(contrast,5))>=4.5, f'{name}: active name contrast too low against the wall'
+ descriptor=np.array(typography_mask(mobile).resize(im.size,Image.Resampling.LANCZOS))>245
+ descriptor[y1:y2,x1:x2]=False
+ descriptor_contrast=actual_contrast[descriptor]
+ assert float(np.percentile(descriptor_contrast,5))>=4.5, f'{name}: descriptor contrast too low against the wall'
+ strands,bulbs=bulb_layout(mobile)
+ assert len(strands)==3 and len(bulbs)==27, 'The wall requires three strands and 27 individual glass bulbs'
  quiet_fixture=np.array(fixture_layer(mobile,False),dtype=float)
  active_fixture=np.array(fixture_layer(mobile,True),dtype=float)
- lens=((active_fixture[:,:,:3]-quiet_fixture[:,:,:3]).max(axis=2)>70)&(quiet_fixture[:,:,3]>240)
+ lens=((active_fixture[:,:,:3]-quiet_fixture[:,:,:3]).max(axis=2)>70)&(quiet_fixture[:,:,3]>240)&(np.array(typography_shadow(mobile))<5)
  lens=np.array(Image.fromarray((lens*255).astype('uint8')).resize(im.size,Image.Resampling.NEAREST))>240
- assert lens.sum()>200, f'{name}: fixture lenses missing'
+ assert lens.sum()>200, f'{name}: individual bulb bodies missing'
  light_delta=float(np.mean(active[lens].astype(float)-first[lens].astype(float)))
  early_delta=float(np.mean(np.abs(before_press[lens].astype(float)-first[lens].astype(float))))
  reset_delta=float(np.mean(np.abs(last[lens].astype(float)-first[lens].astype(float))))
- assert light_delta>40, f'{name}: fixtures do not visibly activate'
- assert early_delta<3 and reset_delta<3, f'{name}: fixtures violate switch timing or reset'
- results.append({'file':name,'size':list(im.size),'bytes':path.stat().st_size,'frames':im.n_frames,'duration_ms':elapsed,'opening_hold_ms':opening_hold,'closing_hold_ms':closing_hold,'first_frame_ms':durations[0],'max_frame_ms':max(durations),'loop_mean_pixel_error':round(seam,4),'active_text_p05_contrast':round(float(np.percentile(contrast,5)),2),'fixture_activation_delta':round(light_delta,2),'fixture_pre_press_delta':round(early_delta,2),'fixture_reset_delta':round(reset_delta,2)})
+ assert light_delta>40, f'{name}: bulbs do not visibly activate'
+ assert early_delta<3 and reset_delta<3, f'{name}: bulbs violate switch timing or reset'
+ results.append({'file':name,'size':list(im.size),'bytes':path.stat().st_size,'frames':im.n_frames,'duration_ms':elapsed,'opening_hold_ms':opening_hold,'closing_hold_ms':closing_hold,'first_frame_ms':durations[0],'max_frame_ms':max(durations),'loop_mean_pixel_error':round(seam,4),'static_fallback_mean_pixel_error':round(fallback_error,4),'active_text_p05_contrast':round(float(np.percentile(contrast,5)),2),'active_descriptor_p05_contrast':round(float(np.percentile(descriptor_contrast,5)),2),'bulb_count':len(bulbs),'strand_count':len(strands),'bulb_activation_delta':round(light_delta,2),'bulb_pre_press_delta':round(early_delta,2),'bulb_reset_delta':round(reset_delta,2)})
 assert sum(r['bytes'] for r in results)<4*1024*1024,'Header animation exceeds4MiB combined budget'
 if a.manifest:
  rows=json.loads(a.manifest.read_text())['times']
