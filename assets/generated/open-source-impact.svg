@@ -1,1 +1,21 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="140" viewBox="0 0 1200 140" role="img"><title>Open-source impact — verifying public PRs</title><desc>Open and merged contributions are counted separately.</desc><rect x="1" y="1" width="1198" height="138" rx="18" fill="#090912" stroke="#7955ff"/><text x="42" y="82" fill="#a77bff" font-family="Segoe UI,Arial,sans-serif" font-size="27">Verifying public upstream contributions.</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="178" viewBox="0 0 1200 178" role="img" aria-labelledby="title desc">
+<title id="title">Public open-source impact</title><desc id="desc">15 merged upstream pull requests in 11 public repositories. 15 open, not counted as merged.</desc>
+<defs>
+  <linearGradient id="edge" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#8b5cf6"/><stop offset=".5" stop-color="#29213c"/><stop offset="1" stop-color="#258edf"/></linearGradient>
+  <linearGradient id="energy" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#ac6cff"/><stop offset=".55" stop-color="#7955ff"/><stop offset="1" stop-color="#50c4ff"/></linearGradient>
+  <linearGradient id="flame" x1="0" x2=".6" y1="0" y2="1"><stop stop-color="#d5bbff"/><stop offset=".35" stop-color="#a166ff"/><stop offset=".73" stop-color="#6d5bff"/><stop offset="1" stop-color="#42bdff"/></linearGradient>
+  <radialGradient id="aura"><stop stop-color="#513183" stop-opacity=".38"/><stop offset="1" stop-color="#0b0916" stop-opacity="0"/></radialGradient>
+  <filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3"/></filter>
+  <style>text{font-family:Inter,Segoe UI,Arial,sans-serif}.mono{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:2px}
+      @keyframes breathe {0%,100%{opacity:.52}50%{opacity:.95}}
+      @keyframes flame {0%,100%{transform:scale(.97,1);opacity:.87}50%{transform:scale(1.04,1.05);opacity:1}}
+      @keyframes flow {to{stroke-dashoffset:-360}}
+      .pulse{animation:breathe 5s ease-in-out infinite}
+      .fire{animation:flame 2.8s ease-in-out infinite;transform-box:fill-box;transform-origin:center bottom}
+      .orbit{animation:flow 28s linear infinite}
+      @media(prefers-reduced-motion:reduce){.pulse,.fire,.orbit{animation:none!important}}
+    </style>
+</defs>
+<rect x="1" y="1" width="1198" height="176" rx="18" fill="#090912" stroke="url(#edge)"/>
+<ellipse cx="983.9999999999999" cy="62.3" rx="420.0" ry="124.6" fill="url(#aura)"/>
+<text x="37" y="38" fill="#a77bff" font-size="14" font-weight="600" text-anchor="start" class="mono">UPSTREAM / VERIFIED</text><text x="40" y="103" fill="#f1f0ff" font-size="44" font-weight="650" text-anchor="start" >15</text><text x="42" y="140" fill="#aaa7c4" font-size="14" font-weight="400" text-anchor="start" class="mono">MERGED PRs</text><text x="440" y="103" fill="#f1f0ff" font-size="44" font-weight="650" text-anchor="start" >11</text><text x="442" y="140" fill="#aaa7c4" font-size="14" font-weight="400" text-anchor="start" class="mono">PUBLIC REPOSITORIES</text><text x="840" y="103" fill="#f1f0ff" font-size="44" font-weight="650" text-anchor="start" >15</text><text x="842" y="140" fill="#aaa7c4" font-size="14" font-weight="400" text-anchor="start" class="mono">OPEN / NOT MERGED</text><path d="M389 63v82M789 63v82" stroke="#312447"/></svg>
