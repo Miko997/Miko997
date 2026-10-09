@@ -6,23 +6,23 @@
 </picture>
 
 <picture>
-  <source media="(prefers-reduced-motion: reduce) and (max-width: 600px)" srcset="./assets/generated/contribution-core-mobile-static.svg?v=26bb9a93faa5" />
-  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/generated/contribution-core-static.svg?v=26bb9a93faa5" />
-  <source media="(max-width: 600px)" srcset="./assets/generated/contribution-core-mobile.svg?v=26bb9a93faa5" />
-  <img src="./assets/generated/contribution-core.svg?v=26bb9a93faa5" width="100%" alt="1,576 GitHub contributions from 2025-10-10 to 2026-10-09; current contribution streak 6 days" />
+  <source media="(prefers-reduced-motion: reduce) and (max-width: 600px)" srcset="./assets/generated/contribution-core-mobile-static.svg?v=bdca9721a027" />
+  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/generated/contribution-core-static.svg?v=bdca9721a027" />
+  <source media="(max-width: 600px)" srcset="./assets/generated/contribution-core-mobile.svg?v=bdca9721a027" />
+  <img src="./assets/generated/contribution-core.svg?v=bdca9721a027" width="100%" alt="1,579 GitHub contributions from 2025-10-10 to 2026-10-09; current contribution streak 6 days" />
 </picture>
 
-<sub>[Static activity view](./assets/generated/contribution-core-static.svg?v=26bb9a93faa5) · [Data and definitions](./docs/PROFILE_SYSTEM.md)</sub>
+<sub>[Static activity view](./assets/generated/contribution-core-static.svg?v=bdca9721a027) · [Data and definitions](./docs/PROFILE_SYSTEM.md)</sub>
 
 ## Open source
 
 <!-- IMPACT:START -->
 <p>
-<a href="https://github.com/newton-physics/newton/pull/4189"><img src="./assets/generated/ecosystem-newton.svg?v=26bb9a93faa5" width="148" height="68" alt="Newton Physics" /></a>
-<a href="https://github.com/ros2/rclcpp/pull/3294"><img src="./assets/generated/ecosystem-ros2.svg?v=26bb9a93faa5" width="148" height="68" alt="ROS 2" /></a>
-<a href="https://github.com/microsoft/typespec/pull/12042"><img src="./assets/generated/ecosystem-typespec.svg?v=26bb9a93faa5" width="148" height="68" alt="Microsoft TypeSpec" /></a>
-<a href="https://github.com/conda-forge/staged-recipes/pull/34480"><img src="./assets/generated/ecosystem-conda-forge.svg?v=26bb9a93faa5" width="148" height="68" alt="conda-forge" /></a>
-<a href="https://github.com/mikedh/trimesh/pull/2599"><img src="./assets/generated/ecosystem-trimesh.svg?v=26bb9a93faa5" width="148" height="68" alt="trimesh" /></a>
+<a href="https://github.com/newton-physics/newton/pull/4189"><img src="./assets/generated/ecosystem-newton.svg?v=bdca9721a027" width="148" height="68" alt="Newton Physics" /></a>
+<a href="https://github.com/ros2/rclcpp/pull/3294"><img src="./assets/generated/ecosystem-ros2.svg?v=bdca9721a027" width="148" height="68" alt="ROS 2" /></a>
+<a href="https://github.com/microsoft/typespec/pull/12042"><img src="./assets/generated/ecosystem-typespec.svg?v=bdca9721a027" width="148" height="68" alt="Microsoft TypeSpec" /></a>
+<a href="https://github.com/conda-forge/staged-recipes/pull/34480"><img src="./assets/generated/ecosystem-conda-forge.svg?v=bdca9721a027" width="148" height="68" alt="conda-forge" /></a>
+<a href="https://github.com/mikedh/trimesh/pull/2599"><img src="./assets/generated/ecosystem-trimesh.svg?v=bdca9721a027" width="148" height="68" alt="trimesh" /></a>
 </p>
 <!-- IMPACT:END -->
 
