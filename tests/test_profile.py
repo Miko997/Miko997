@@ -329,7 +329,7 @@ class RenderingTests(unittest.TestCase):
             self.assertEqual(sum(n for _, n in s["stats"]["days"]), s["stats"]["last_365"])
             for item in (ROOT/"assets/generated").glob("*.svg"):
                 tree = ET.fromstring(item.read_text())
-                if item.name.startswith("contribution-core"):
+                if item.name.startswith("contribution-core") and "--" not in item.name:
                     cells = [node for node in tree.iter() if "data-date" in node.attrib]
                     self.assertEqual(len(cells), 365, item.name)
                     self.assertEqual({node.attrib["data-date"]: int(node.attrib["data-count"])

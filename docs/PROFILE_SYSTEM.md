@@ -69,8 +69,9 @@ or maintainership of the user's own project must be described separately.
 static plaques under `assets/generated/ecosystem-*.svg`. Their geometric motifs
 are original editorial artwork, not official project logos. Every plaque links
 to its selected merged PR. Missing, open, draft or unverified evidence produces
-neither a plaque output nor a README link. At their native 148 × 68 size, normal
-HTML wrapping fits two plaques across a 309-pixel mobile content area.
+neither a plaque output nor a README link. Their native canvas is 148 × 68;
+the README displays them at 144 × 66 so two fit inside GitHub's actual
+293-pixel mobile content area at a 375-pixel viewport.
 
 ## Refresh and failure behavior
 
@@ -93,14 +94,21 @@ is replaced atomically. Identical contents are not rewritten, and the workflow
 makes no commit when the generated files are unchanged. GitHub branch protection
 can block publication; the workflow fails rather than bypassing it.
 
-The image URL fingerprint hashes all four rendered activity variants and the
-verified ecosystem plaques, so both new activity and design changes invalidate
-the README URLs. Plaques and their evidence links are regenerated automatically
-on the same refresh. Alternative activity text is regenerated with the same total,
-date range and streak. The workflow writes only README, the JSON snapshot and
-generated activity and ecosystem SVGs; header and project artwork are outside its
-output list. All plaque rendering completes before any refresh output is written,
-so a plaque-rendering error also preserves the previous presentation.
+The image fingerprint hashes all four rendered activity variants and the verified
+ecosystem plaques. README images use filenames containing that fingerprint.
+GitHub's branch-image redirect can drop query parameters, and its raw CDN can
+return a cached image despite a new query string; changing the actual filename
+avoids that stale-image collision. Canonical filenames remain available for tools.
+The generated asset manifest retains three generations of fingerprinted files
+so recently cached README pages can still load their images. Older owned aliases
+are removed only after a successful refresh.
+
+Plaques and their evidence links are regenerated on the same refresh. Alternative
+activity text uses the same total, date range and streak as the image. The workflow
+writes README, the JSON snapshot, generated activity/ecosystem SVGs and their
+manifest; header and project artwork are outside its output list. All rendering
+finishes before any refresh output is written, so a rendering error preserves the
+previous presentation.
 
 ## Rendering and accessibility
 

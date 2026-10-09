@@ -74,13 +74,13 @@ class EcosystemTests(unittest.TestCase):
                     self.assertNotIn(banned, content)
                 self.assertLess(len(content.encode()), 4000)
 
-    def test_native_tiles_allow_two_columns_in_mobile_content(self):
-        self.assertLessEqual(2 * WIDTH + 5, 309)
+    def test_display_tiles_allow_two_columns_in_real_mobile_readme(self):
+        self.assertLessEqual(2 * 144 + 5, 293)
         markup = impact_markdown(snapshot())
         self.assertNotIn("<table", markup)
         self.assertNotIn("&nbsp;", markup)
-        self.assertEqual(markup.count(f'width="{WIDTH}"'), 5)
-        self.assertEqual(markup.count(f'height="{HEIGHT}"'), 5)
+        self.assertEqual(markup.count('width="144"'), 5)
+        self.assertEqual(markup.count('height="66"'), 5)
 
     def test_duplicate_evidence_does_not_duplicate_images_or_links(self):
         s = snapshot()
@@ -96,15 +96,15 @@ class EcosystemIntegrationTests(unittest.TestCase):
     def test_refresh_links_resolve_to_generated_plaques_with_cache_hashes(self):
         s = snapshot()
         outputs = prepare_outputs(s, self.readme)
-        images = re.findall(r'<img src="\./(assets/generated/ecosystem-[a-z0-9-]+\.svg)\?v=([0-9a-f]{12})"',
+        images = re.findall(r'<img src="\./(assets/generated/ecosystem-[a-z0-9-]+--([0-9a-f]{12})\.svg)"',
                             outputs["README.md"])
         self.assertEqual(len(images), 5)
-        self.assertEqual({name for name, _ in images}, set(ecosystem_assets(s)))
+        self.assertEqual({re.sub(r"--[0-9a-f]{12}", "", name) for name, _ in images}, set(ecosystem_assets(s)))
         for name, _ in images:
             self.assertIn(name, outputs)
             ET.fromstring(outputs[name])
         # Activity and plaques belong to one refreshed presentation snapshot.
-        all_hashes = re.findall(r"\?v=([0-9a-f]{12})", outputs["README.md"])
+        all_hashes = re.findall(r"--([0-9a-f]{12})\.svg", outputs["README.md"])
         self.assertEqual(len(all_hashes), 6)
         self.assertEqual(len(set(all_hashes)), 1)
 
@@ -115,8 +115,8 @@ class EcosystemIntegrationTests(unittest.TestCase):
             after = prepare_outputs(s, before["README.md"])
         self.assertNotEqual(before["assets/generated/ecosystem-newton.svg"],
                             after["assets/generated/ecosystem-newton.svg"])
-        self.assertNotEqual(re.findall(r"\?v=([0-9a-f]{12})", before["README.md"]),
-                            re.findall(r"\?v=([0-9a-f]{12})", after["README.md"]))
+        self.assertNotEqual(re.findall(r"--([0-9a-f]{12})\.svg", before["README.md"]),
+                            re.findall(r"--([0-9a-f]{12})\.svg", after["README.md"]))
         self.assertEqual(before["data/public-activity.json"], after["data/public-activity.json"])
 
     def test_missing_evidence_removes_previous_link_and_produces_no_tile(self):
@@ -125,9 +125,9 @@ class EcosystemIntegrationTests(unittest.TestCase):
         s["upstream"]["merged"].pop(0)
         after = prepare_outputs(s, before["README.md"])
         self.assertNotIn("assets/generated/ecosystem-newton.svg", after)
-        self.assertNotIn("ecosystem-newton.svg", after["README.md"])
+        self.assertNotIn("ecosystem-newton", after["README.md"])
         self.assertNotIn("https://github.com/newton-physics/newton/pull/4189", after["README.md"])
-        self.assertEqual(len([name for name in after if name.startswith("assets/generated/ecosystem-")]), 4)
+        self.assertEqual(len([name for name in after if name.startswith("assets/generated/ecosystem-") and "--" not in name]), 4)
 
 
 if __name__ == "__main__":

@@ -306,13 +306,13 @@ def curated_upstream(snapshot: dict) -> list[dict]:
 
 def impact_markdown(snapshot: dict) -> str:
     from html import escape
-    from render_ecosystems import HEIGHT, PLAQUES, WIDTH, ecosystem_filename
+    from render_ecosystems import PLAQUES, ecosystem_filename
 
     selected = curated_upstream(snapshot)
     if not selected:
         return ""  # Missing evidence never becomes a fabricated affiliation.
     tiles = [f'<a href="{escape(item["url"], quote=True)}"><img '
-             f'src="./{ecosystem_filename(item)}" width="{WIDTH}" height="{HEIGHT}" '
+             f'src="./{ecosystem_filename(item)}" width="144" height="66" '
              f'alt="{escape(item["name"], quote=True)}" /></a>'
              for item in selected if item["repo"] in PLAQUES]
     return "<p>\n" + "\n".join(tiles) + "\n</p>" if tiles else ""

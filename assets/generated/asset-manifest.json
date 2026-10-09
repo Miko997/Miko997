@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "generations": [
+    {
+      "fingerprint": "bdca9721a027",
+      "files": [
+        "contribution-core--bdca9721a027.svg",
+        "contribution-core-static--bdca9721a027.svg",
+        "contribution-core-mobile--bdca9721a027.svg",
+        "contribution-core-mobile-static--bdca9721a027.svg",
+        "ecosystem-newton--bdca9721a027.svg",
+        "ecosystem-ros2--bdca9721a027.svg",
+        "ecosystem-typespec--bdca9721a027.svg",
+        "ecosystem-conda-forge--bdca9721a027.svg",
+        "ecosystem-trimesh--bdca9721a027.svg"
+      ]
+    }
+  ]
+}

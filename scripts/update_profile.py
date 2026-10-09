@@ -17,6 +17,9 @@ from render_profile import dashboard
 from render_ecosystems import ecosystem_assets
 
 ROOT = Path(__file__).resolve().parents[1]
+MANIFEST_PATH = "assets/generated/asset-manifest.json"
+ASSET_STEM = r"(?:contribution-core(?:-mobile)?(?:-static)?|ecosystem-[a-z0-9]+(?:-[a-z0-9]+)*)"
+ALIAS_NAME = re.compile(ASSET_STEM + r"--[0-9a-f]{12}\.svg")
 
 
 def write_changed(path: Path, text: str):
@@ -29,7 +32,28 @@ def write_changed(path: Path, text: str):
     os.replace(name, path)
 
 
-def prepare_outputs(snapshot: dict, readme: str) -> dict[str, str]:
+def manifest_generations(manifest: dict | None) -> list[dict]:
+    if manifest is None:
+        return []
+    try:
+        generations = manifest["generations"]
+        if manifest["schema_version"] != 1 or not isinstance(generations, list):
+            raise ValueError
+        fingerprints = set()
+        for generation in generations:
+            fingerprint, files = generation["fingerprint"], generation["files"]
+            if (not re.fullmatch(r"[0-9a-f]{12}", fingerprint) or fingerprint in fingerprints
+                    or not isinstance(files, list) or len(set(files)) != len(files)
+                    or any(not ALIAS_NAME.fullmatch(name) or
+                           not name.endswith(f"--{fingerprint}.svg") for name in files)):
+                raise ValueError
+            fingerprints.add(fingerprint)
+        return generations
+    except (KeyError, TypeError, ValueError):
+        raise DataError("Invalid generated asset manifest; previous outputs retained") from None
+
+
+def prepare_outputs(snapshot: dict, readme: str, previous_manifest: dict | None = None) -> dict[str, str]:
     """Render every output before changing any file; no network or side effects."""
     outputs = {}
     for compact in (False, True):
@@ -38,11 +62,17 @@ def prepare_outputs(snapshot: dict, readme: str) -> dict[str, str]:
             outputs[f"assets/generated/contribution-core{suffix}.svg"] = dashboard(
                 snapshot, animated=animated, compact=compact)
     outputs.update(ecosystem_assets(snapshot))
-    # Include artwork in the fingerprint: a design-only edit also invalidates caches.
+    # Immutable filenames work even when GitHub's image CDN discards query strings.
+    # Canonical filenames remain available to local tooling and static inspections.
     fingerprint = hashlib.sha256("\n".join(outputs.values()).encode()).hexdigest()[:12]
+    aliases = {name[:-4] + f"--{fingerprint}.svg": content for name, content in outputs.items()}
+    generations = [{"fingerprint": fingerprint, "files": [Path(name).name for name in aliases]}]
+    generations += [g for g in manifest_generations(previous_manifest) if g["fingerprint"] != fingerprint][:2]
+    manifest = {"schema_version": 1, "generations": generations}
+    outputs.update(aliases)
     readme = replace_section(readme, "IMPACT", impact_markdown(snapshot))
-    readme = re.sub(r"(assets/generated/(?:contribution-core(?:-mobile)?(?:-static)?|ecosystem-[a-z0-9-]+)\.svg)(?:\?v=[0-9a-f]+)?",
-                    lambda m: m[1] + "?v=" + fingerprint, readme)
+    readme = re.sub(r"(assets/generated/" + ASSET_STEM + r")(?:--[0-9a-f]{12})?\.svg(?:\?v=[0-9a-f]+)?",
+                    lambda m: m[1] + f"--{fingerprint}.svg", readme)
     stats = snapshot["stats"]
     alt = (f"{stats['last_365']:,} GitHub contributions from {stats['days'][0][0]} to "
            f"{snapshot['as_of']}; current contribution streak {stats['streak']['current']} days")
@@ -56,7 +86,16 @@ def prepare_outputs(snapshot: dict, readme: str) -> dict[str, str]:
     readme = re.sub(r"<img\b[^>]*>", update_alt, readme, flags=re.S)
     outputs["data/public-activity.json"] = json.dumps(snapshot, ensure_ascii=False, indent=2) + "\n"
     outputs["README.md"] = readme
+    outputs[MANIFEST_PATH] = json.dumps(manifest, indent=2) + "\n"
     return outputs
+
+
+def prune_expired_aliases(root: Path, previous_manifest: dict | None, manifest: dict):
+    """Remove only expired aliases named in our previous validated manifest."""
+    retained = {name for g in manifest_generations(manifest) for name in g["files"]}
+    previous = {name for g in manifest_generations(previous_manifest) for name in g["files"]}
+    for name in sorted(previous - retained):
+        (root / "assets/generated" / name).unlink(missing_ok=True)
 
 
 def validate_refresh(previous: dict | None, snapshot: dict):
@@ -79,9 +118,14 @@ def refresh(root: Path = ROOT, client=None, today=None):
     previous = json.loads(previous_path.read_text()) if previous_path.exists() else None
     validate_refresh(previous, snapshot)
     readme = root.joinpath("README.md").read_text(encoding="utf-8")
-    outputs = prepare_outputs(snapshot, readme)
+    manifest_path = root / MANIFEST_PATH
+    previous_manifest = json.loads(manifest_path.read_text()) if manifest_path.exists() else None
+    outputs = prepare_outputs(snapshot, readme, previous_manifest)
     for name, content in outputs.items():
         write_changed(root / name, content)
+    # Cached README HTML can still use the two preceding generations. Never
+    # remove their files, nor prune anything after a failed collection or write.
+    prune_expired_aliases(root, previous_manifest, json.loads(outputs[MANIFEST_PATH]))
     return snapshot
 
 

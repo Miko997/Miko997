@@ -14,7 +14,7 @@ from urllib.error import HTTPError
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 from profile_data import Client, DataError, summarize
-from update_profile import prepare_outputs, refresh, validate_refresh
+from update_profile import MANIFEST_PATH, prepare_outputs, refresh, validate_refresh
 
 
 def snapshot():
@@ -73,7 +73,7 @@ class RefreshTests(unittest.TestCase):
     def test_all_four_variants_match_dates_counts_and_metrics(self):
         s = snapshot()
         out = prepare_outputs(s, readme())
-        images = {name: content for name, content in out.items() if name.endswith(".svg")}
+        images = {name: content for name, content in out.items() if name.endswith(".svg") and "--" not in name}
         self.assertEqual(len(images), 4)
         for name, content in images.items():
             tree = ET.fromstring(content)
@@ -90,7 +90,12 @@ class RefreshTests(unittest.TestCase):
         out = prepare_outputs(snapshot(), readme())
         tags = re.findall(r'contribution-core[^"\s]+', out["README.md"])
         self.assertEqual(len(tags), 4)
-        self.assertEqual(len({s.split("?v=")[1] for s in tags}), 1)
+        self.assertEqual(len({re.search(r"--([0-9a-f]{12})\.svg", s)[1] for s in tags}), 1)
+        self.assertNotIn("?v=", out["README.md"])
+        for tag in tags:
+            alias = "assets/generated/" + tag
+            canonical = re.sub(r"--[0-9a-f]{12}", "", alias)
+            self.assertEqual(out[alias], out[canonical])
         self.assertIn('alt="3 GitHub contributions from 2025-01-04 to 2026-01-03; current contribution streak 1 days"', out["README.md"])
         self.assertIn('alt="Miko"', out["README.md"])
         self.assertFalse(any("header" in name or "footer" in name for name in out))
@@ -99,7 +104,55 @@ class RefreshTests(unittest.TestCase):
         before = prepare_outputs(snapshot(), readme())["README.md"]
         with patch("update_profile.dashboard", return_value="<svg>new art</svg>"):
             after = prepare_outputs(snapshot(), readme())["README.md"]
-        self.assertNotEqual(re.findall(r"v=([0-9a-f]+)", before), re.findall(r"v=([0-9a-f]+)", after))
+        self.assertNotEqual(re.findall(r"--([0-9a-f]{12})\.svg", before), re.findall(r"--([0-9a-f]{12})\.svg", after))
+
+    def test_three_generations_retained_and_only_expired_owned_aliases_pruned(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            (root / "README.md").write_text(readme())
+            seen = []
+            with patch("update_profile.collect", side_effect=lambda *a: snapshot()):
+                for index in range(4):
+                    with patch("update_profile.dashboard", return_value=f"<svg>design {index}</svg>"):
+                        refresh(root, Client(), date(2026, 1, 3))
+                    manifest = json.loads((root / MANIFEST_PATH).read_text())
+                    seen.append(manifest["generations"][0])
+                    if index == 0:
+                        unrelated = root / "assets/generated/unrelated--111111111111.svg"
+                        unrelated.write_text("not owned")
+            self.assertEqual(manifest["generations"], list(reversed(seen[-3:])))
+            for index, generation in enumerate(seen[-3:], 1):
+                for name in generation["files"]:
+                    self.assertEqual((root / "assets/generated" / name).read_text(), f"<svg>design {index}</svg>")
+            for name in seen[0]["files"]:
+                self.assertFalse((root / "assets/generated" / name).exists())
+            self.assertEqual(unrelated.read_text(), "not owned")
+            self.assertTrue((root / "assets/generated/contribution-core.svg").exists())
+
+    def test_write_failure_does_not_prune_old_aliases(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            (root / "README.md").write_text(readme())
+            with patch("update_profile.collect", side_effect=lambda *a: snapshot()):
+                for index in range(3):
+                    with patch("update_profile.dashboard", return_value=f"<svg>design {index}</svg>"):
+                        refresh(root, Client(), date(2026, 1, 3))
+                old_manifest = json.loads((root / MANIFEST_PATH).read_text())
+                with patch("update_profile.dashboard", return_value="<svg>new</svg>"), patch(
+                        "update_profile.write_changed", side_effect=OSError("disk failure")):
+                    with self.assertRaises(OSError):
+                        refresh(root, Client(), date(2026, 1, 3))
+            self.assertEqual(json.loads((root / MANIFEST_PATH).read_text()), old_manifest)
+            for generation in old_manifest["generations"]:
+                for name in generation["files"]:
+                    self.assertTrue((root / "assets/generated" / name).exists())
+
+    def test_manifest_cannot_name_files_outside_owned_alias_namespace(self):
+        for name in ("../../README.md", "signature-header.webp", "unrelated--111111111111.svg"):
+            manifest = {"schema_version": 1, "generations": [
+                {"fingerprint": "111111111111", "files": [name]}]}
+            with self.subTest(name=name), self.assertRaises(DataError):
+                prepare_outputs(snapshot(), readme(), manifest)
 
     def test_optional_api_outage_cannot_erase_previously_verified_counts(self):
         old = snapshot()
