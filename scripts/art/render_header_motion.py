@@ -5,6 +5,9 @@ blender -b --python scripts/art/render_header_motion.py -- --size 1000 --samples
 
 The 2-link arm uses exact planar IK: both link lengths remain constant and the
 vertical tool contacts the moving switch cap without scaling or sliding.
+Pose timestamps deliberately retain the original 20-second authoring clock for
+cache compatibility. compose_header_motion.py removes its opening five-second
+hold at export: authored 6.8s activation is published at 1.8s in a 15-second loop.
 """
 import argparse, json, math, runpy, sys
 from pathlib import Path

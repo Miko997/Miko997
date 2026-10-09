@@ -10,13 +10,13 @@
     "bytes": 55480
   },
   "signature-header-animated": {
-    "file": "signature-header-animated--2ba68e78023c.webp",
-    "sha256": "2ba68e78023c29171c3e0db6ad4f4b6271bcfe9a8905fba71b108b0572400324",
-    "bytes": 1785180
+    "file": "signature-header-animated--51b5ba0d83f8.webp",
+    "sha256": "51b5ba0d83f84b74dd0e15fd35b3200d7445241bc89c81874b1c4ff629fe907a",
+    "bytes": 1779476
   },
   "signature-header-mobile-animated": {
-    "file": "signature-header-mobile-animated--31cbab66682b.webp",
-    "sha256": "31cbab66682bb2bb640313955cab78946fc82a6f8c2404b238e58de5da877e6f",
-    "bytes": 1495018
+    "file": "signature-header-mobile-animated--45a80a0dc854.webp",
+    "sha256": "45a80a0dc854098a7786f13cc966bc3ce7ff73720d5556284af70a253c6bc913",
+    "bytes": 1489314
   }
 }

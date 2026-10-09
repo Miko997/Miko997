@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="144" height="44" viewBox="0 0 144 44" role="img" aria-labelledby="title">
+<title id="title">Email</title>
+<defs>
+<linearGradient id="metal" x2=".7" y2="1"><stop stop-color="#202537"/><stop offset="1" stop-color="#0d1320"/></linearGradient>
+<linearGradient id="light"><stop stop-color="#bda1ff"/><stop offset=".52" stop-color="#8acaff"/><stop offset="1" stop-color="#7b67c9"/></linearGradient>
+</defs>
+<style>@media(prefers-reduced-motion:reduce){.energy{display:none}}</style>
+<path d="M8 .5H135.5L143.5 8.5V35.5L135.5 43.5H8.5L.5 35.5V8Z" fill="url(#metal)" stroke="#354052"/>
+<path d="M8 1H135L143 9M1 35L9 43H135" fill="none" stroke="#90734e" stroke-opacity=".65"/>
+<path d="M37 8V35" stroke="#394254" stroke-width=".65"/>
+<svg xmlns="http://www.w3.org/2000/svg" height="22" viewBox="0 0 24 24" width="22" fill="#b1bdd7" x="9" y="10" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><defs><filter id="brand-email-4777d11c54b7-theme-tint" x="-10%" y="-10%" width="120%" height="120%" filterUnits="objectBoundingBox" color-interpolation-filters="sRGB"><feFlood flood-color="#aa91ff" result="theme-color" /><feComposite in="theme-color" in2="SourceAlpha" operator="in" /></filter></defs><g filter="url(#brand-email-4777d11c54b7-theme-tint)"><path d="M0 0h24v24H0z" fill="none" /><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8l8 5 8-5v10zm-8-7L4 6h16l-8 5z" /></g></svg>
+<path d="M43 36H123L129 30" fill="none" stroke="#4e5176" stroke-width=".65"/>
+<g class="energy" opacity="0"><path d="M43 36H123L129 30" fill="none" stroke="url(#light)" stroke-width="1.5"/><circle cx="132" cy="14" r="1.5" fill="#c0caff"/></g>
+<text x="45" y="25" fill="#ececf7" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="13" font-weight="500">Email</text>
+</svg>

@@ -1,9 +1,31 @@
 {
-  "checked_on": "2026-10-09",
+  "checked_on": "2026-10-10",
   "purpose": "Official artwork for the existing profile buttons; no affiliation or endorsement claim.",
-  "presentation": "Official source geometry with transparent canvases; explicitly selected organization marks for the first three project buttons. RViz uses its original isolated native lettering layer.",
+  "presentation": "All current button marks are painted #aa91ff at embedding time by one shared source-alpha filter in scripts/brand_icons.py. Source geometry, native artwork files, original download bytes and their recorded checksums remain unchanged. The tint is the profile owner's presentation choice, not an official brand variant.",
   "presentation_filters": {
-    "pixar": "SVG paint filter maps original transparent bitmap to #e8e7f5 without modifying alpha."
+    "shared_theme_tint": {
+      "color": "#aa91ff",
+      "renderer": "scripts/brand_icons.py:brand_icon",
+      "method": "A solid SVG feFlood composited in SourceAlpha, with sRGB interpolation. The input is each complete rendered native asset including any existing raster/paint filters. No background is added and no alpha, source path, mask or image bytes are edited.",
+      "scope": [
+        "nvidia",
+        "google",
+        "pixar",
+        "ros2",
+        "rviz",
+        "ros-perception",
+        "linkedin",
+        "orcid",
+        "youtube",
+        "steam",
+        "email",
+        "zenodo"
+      ],
+      "id_scoping": "Source IDs, fragment references and the tint filter are namespaced by icon name plus deterministic placement hash.",
+      "native_alpha_validation": "librsvg rendered all 12 current icons before/after tint at 128×64: alpha channels pixel-identical, every fully opaque pixel exactly RGB(170,145,255).",
+      "source_assets": "Existing per-source normalization records describe retained source files; this shared final presentation layer supersedes their visible color. Source-specific trademark guidance is retained unchanged.",
+      "tradeoff": "Flattens RViz's gray tonal shading to a single silhouette, while preserving its lettering and antialiased alpha. Sparse ROS Perception geometry naturally has less pixel coverage and can look lighter/smaller despite the same RGB."
+    }
   },
   "sources": {
     "science": {

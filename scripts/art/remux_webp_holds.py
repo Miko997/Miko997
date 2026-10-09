@@ -81,7 +81,51 @@ def split_holds(blob:bytes,max_duration:int=40,first_duration:int=40)->bytes:
  body=b'WEBP'+b''.join(output)
  return b'RIFF'+struct.pack('<I',len(body))+body
 
+def trim_quiet_opening(blob:bytes,trim_ms:int=5000,init_duration_ms:int=40)->bytes:
+ """Remove a quiet prefix while retaining the original opaque initialization.
+
+ The original first motion frame is a delta that needs the quiet canvas beneath
+ it. Keep that canvas for 40ms, subtract those 40ms from the first retained frame,
+ and preserve every later timestamp shifted by exactly trim_ms. No image payload
+ is re-encoded. The source must have an exact frame boundary at trim_ms, and every
+ earlier decoded frame must be identical to its full-canvas opaque first frame.
+ """
+ if trim_ms<=0 or init_duration_ms<=0:raise ValueError('Trim and initialization must be positive')
+ entries=list(chunks(blob));frames=[p for k,p in entries if k==b'ANMF']
+ if not frames:raise ValueError('Animation has no frames')
+ first=frames[0];canvas=next(p for k,p in entries if k==b'VP8X')
+ width=int.from_bytes(canvas[4:7],'little')+1;height=int.from_bytes(canvas[7:10],'little')+1
+ if first[:6]!=bytes(6) or int.from_bytes(first[6:9],'little')+1!=width or int.from_bytes(first[9:12],'little')+1!=height or first[15]!=2:
+  raise ValueError('Quiet initialization must replace the full canvas without disposal')
+ elapsed=0;boundary=None
+ with Image.open(io.BytesIO(blob)) as image:
+  image.load();initial=image.convert('RGBA')
+  if initial.getextrema()[3]!=(255,255):raise ValueError('Quiet initialization must be opaque')
+  initial_bytes=initial.tobytes()
+  for index,frame in enumerate(frames):
+   if elapsed==trim_ms:boundary=index;break
+   if elapsed>trim_ms:break
+   image.seek(index);image.load()
+   if image.convert('RGBA').tobytes()!=initial_bytes:
+    raise ValueError('The removed prefix contains visible changes')
+   elapsed+=int.from_bytes(frame[12:15],'little')
+ if boundary is None:raise ValueError('No exact frame boundary at the requested trim time')
+ retained_duration=int.from_bytes(frames[boundary][12:15],'little')
+ if retained_duration<=init_duration_ms:raise ValueError('First retained frame is too short to absorb initialization')
+ output=[];frame_index=0
+ for kind,payload in entries:
+  if kind!=b'ANMF':output.append(chunk(kind,payload));continue
+  if frame_index==0:output.append(chunk(kind,first[:12]+init_duration_ms.to_bytes(3,'little')+first[15:]))
+  if frame_index>=boundary:
+   if frame_index==boundary:payload=payload[:12]+(retained_duration-init_duration_ms).to_bytes(3,'little')+payload[15:]
+   output.append(chunk(kind,payload))
+  frame_index+=1
+ body=b'WEBP'+b''.join(output)
+ return b'RIFF'+struct.pack('<I',len(body))+body
+
 if __name__=='__main__':
- p=argparse.ArgumentParser();p.add_argument('source',type=Path);p.add_argument('destination',type=Path);p.add_argument('--max-duration',type=int,default=40);a=p.parse_args()
- a.destination.write_bytes(split_holds(a.source.read_bytes(),a.max_duration))
+ p=argparse.ArgumentParser();p.add_argument('source',type=Path);p.add_argument('destination',type=Path);p.add_argument('--max-duration',type=int,default=40);p.add_argument('--trim-opening-ms',type=int,default=0);a=p.parse_args()
+ result=split_holds(a.source.read_bytes(),a.max_duration)
+ if a.trim_opening_ms:result=trim_quiet_opening(result,a.trim_opening_ms)
+ a.destination.write_bytes(result)
  print(a.destination,a.destination.stat().st_size)

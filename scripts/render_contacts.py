@@ -2,7 +2,7 @@
 """Build self-contained contact plaques; independent of the activity refresh.
 
 Images cannot receive events from another image in a GitHub README. Their
-quiet 20-second light cycle is independent; the entire label stays static.
+15-second light cycle is independent; the entire label stays static.
 """
 from __future__ import annotations
 import hashlib
@@ -21,7 +21,7 @@ def plaque(item: dict, animated: bool) -> str:
     title = escape(item['label'])
     small = len(item['label']) > 12
     pulse = ('<animate attributeName="opacity" values="0;0;.65;.2;.55;.24;.24;0;0" '
-             'keyTimes="0;.34;.36;.385;.41;.44;.84;.89;1" dur="20s" repeatCount="indefinite"/>') if animated else ''
+             'keyTimes="0;.12;.146667;.18;.213333;.253333;.786667;.853333;1" dur="15s" repeatCount="indefinite"/>') if animated else ''
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{WIDTH}" height="{HEIGHT}" viewBox="0 0 {WIDTH} {HEIGHT}" role="img" aria-labelledby="title">
 <title id="title">{title}</title>
 <defs>

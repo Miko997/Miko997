@@ -9,7 +9,8 @@ from PIL import Image
 from compose_header import (name_bounds,compose,lab_lights,protect_typography,
                             typography_mask,typography_shadow,bulb_layout,bulb_patch)
 ROOT=Path(__file__).resolve().parents[2]
-p=argparse.ArgumentParser();p.add_argument('--manifest',type=Path);a=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('--manifest',type=Path);p.add_argument('--assets',type=Path,default=ROOT/'assets');p.add_argument('--baseline',type=Path);a=p.parse_args()
+ART_CLOCK_OFFSET_MS=5000
 
 def luminance(pixels):
  c=np.asarray(pixels,dtype=float)/255
@@ -41,16 +42,36 @@ def dwell_lengths(samples,predicate):
 
 results=[]
 for mobile,name in [(False,'signature-header-animated.webp'),(True,'signature-header-mobile-animated.webp')]:
- path=ROOT/'assets'/name;im=Image.open(path)
+ path=a.assets/name;im=Image.open(path)
  assert im.info.get('loop')==0, 'Animation must repeat'
  indices,masks=bulb_masks(mobile,im.size)
- targets=[9000,10400,12000,13600,15200,16400]
+ targets=[4000,5400,7000,8600,10200,11400]
  active_samples={};history=[];elapsed=0;first=None;before_press=None;last=None;durations=[]
  opening_hold=0;closing_hold=0;opening=True;previous=None
+ motion_start=None;motion_pixels_at_100ms=None;baseline_frames_checked=0
+ if a.baseline:
+  baseline=Image.open(a.baseline/name);baseline_elapsed=0;baseline_index=0
+  baseline.load();baseline_pixels=np.asarray(baseline.convert('RGB')).copy()
+  baseline_end=baseline.info['duration']
  for index in range(im.n_frames):
   im.seek(index);im.load();pixels=np.asarray(im.convert('RGB')).copy()
   duration=im.info['duration'];durations.append(duration)
   if first is None:first=pixels
+  # The unchanged robot easing must become measurably visible by 100ms; tiny
+  # codec differences alone do not qualify as the start of physical movement.
+  roi=(25,230,640,710) if mobile else (820,30,1380,515)
+  rx1,ry1,rx2,ry2=roi
+  robot_delta=np.max(np.abs(pixels[ry1:ry2,rx1:rx2].astype(float)-first[ry1:ry2,rx1:rx2].astype(float)),axis=2)
+  changed=int((robot_delta>24).sum())
+  if motion_start is None and changed>=100:motion_start=elapsed
+  if elapsed<=100<elapsed+duration:motion_pixels_at_100ms=changed
+  if a.baseline:
+   target=0 if elapsed==0 else elapsed+ART_CLOCK_OFFSET_MS
+   while baseline_end<=target:
+    baseline_elapsed=baseline_end;baseline_index+=1;baseline.seek(baseline_index);baseline.load()
+    baseline_pixels=np.asarray(baseline.convert('RGB')).copy();baseline_end+=baseline.info['duration']
+   assert np.array_equal(pixels,baseline_pixels),f'{name}: changed artwork at {elapsed}ms'
+   baseline_frames_checked+=1
   if opening and np.array_equal(pixels,first):opening_hold+=duration
   else:opening=False
   closing_hold=closing_hold+duration if previous is not None and np.array_equal(pixels,previous) else duration
@@ -60,15 +81,17 @@ for mobile,name in [(False,'signature-header-animated.webp'),(True,'signature-he
     # The frame's real timestamp matters at blink boundaries; do not reconstruct
     # a background for the requested sample time if its frame started earlier.
     active_samples[target]=(elapsed/1000,pixels)
-  if elapsed<=6600<elapsed+duration:before_press=pixels
+  if elapsed<=1600<elapsed+duration:before_press=pixels
   history.append((elapsed,duration,[float(pixels[mask].mean()) for mask in masks]))
   last=pixels;elapsed+=duration
- assert elapsed==20000, f'{name}: timeline drift: {elapsed}'
- assert opening_hold>=5000, f'{name}: quiet hold too short'
+ assert elapsed==15000, f'{name}: timeline drift: {elapsed}'
+ assert opening_hold<=40, f'{name}: unwanted opening wait'
+ assert motion_start is not None and motion_start<=100, f'{name}: robot movement begins too late: {motion_start}'
+ assert motion_pixels_at_100ms>=100, f'{name}: robot remains visually still at 100ms'
  assert closing_hold>=2000, f'{name}: settling hold too short'
  assert durations[0]<=40 and max(durations)<=500, f'{name}: incompatible long frame hold'
  seam=float(np.mean(np.abs(first.astype(float)-last.astype(float))))
- assert seam<2, f'{name}: visible loop discontinuity: {seam}'
+ assert seam==0, f'{name}: loop must return to the exact initialization canvas: {seam}'
  fallback_path=ROOT/'assets'/('signature-header-mobile.webp' if mobile else 'signature-header.webp')
  fallback=np.array(Image.open(fallback_path).convert('RGB').resize(im.size,Image.Resampling.LANCZOS),dtype=float)
  fallback_error=float(np.mean(np.abs(fallback-first.astype(float))))
@@ -84,7 +107,9 @@ for mobile,name in [(False,'signature-header-animated.webp'),(True,'signature-he
  base=compose(ROOT/'assets/source/switch-scene-active.webp',*fullsize,mobile,with_lights=False,with_text=False)
  name_contrasts=[];descriptor_contrasts=[]
  for instant,pixels in active_samples.values():
-  background=protect_typography(lab_lights(base,1,mobile,instant),mobile).resize(im.size,Image.Resampling.LANCZOS)
+  # Physical pose/bulb caches retain their original authoring clock. Published
+  # time zero starts five seconds later; every visual effect shares this offset.
+  background=protect_typography(lab_lights(base,1,mobile,instant+ART_CLOCK_OFFSET_MS/1000),mobile).resize(im.size,Image.Resampling.LANCZOS)
   local_contrast=(luminance(pixels)+.05)/(luminance(background)+.05)
   name_contrasts.append(float(np.percentile(local_contrast[y1:y2,x1:x2][interior],5)))
   descriptor_contrasts.append(float(np.percentile(local_contrast[descriptor],5)))
@@ -97,7 +122,7 @@ for mobile,name in [(False,'signature-header-animated.webp'),(True,'signature-he
  temporal=[]
  for slot,index in enumerate(indices):
   quiet_level=history[0][2][slot]
-  active_history=[(t,d,values[slot]) for t,d,values in history if 8000<=t and t+d<=16800]
+  active_history=[(t,d,values[slot]) for t,d,values in history if 3000<=t and t+d<=11800]
   peak=max(level for _,_,level in active_history)-quiet_level
   assert peak>50, f'{name}: lamp {index} never becomes visibly illuminated'
   normalized=[(t,d,(level-quiet_level)/peak) for t,d,level in active_history]
@@ -115,7 +140,7 @@ for mobile,name in [(False,'signature-header-animated.webp'),(True,'signature-he
  early_delta=float(np.mean(np.abs(before_press[lens].astype(float)-first[lens].astype(float))))
  reset_delta=float(np.mean(np.abs(last[lens].astype(float)-first[lens].astype(float))))
  assert early_delta<3 and reset_delta<3, f'{name}: bulbs violate switch timing or reset'
- results.append({'file':name,'size':list(im.size),'bytes':path.stat().st_size,'frames':im.n_frames,'duration_ms':elapsed,'opening_hold_ms':opening_hold,'closing_hold_ms':closing_hold,'first_frame_ms':durations[0],'max_frame_ms':max(durations),'loop_mean_pixel_error':round(seam,4),'static_fallback_mean_pixel_error':round(fallback_error,4),'active_text_worst_p05_contrast':round(min(name_contrasts),2),'active_descriptor_worst_p05_contrast':round(min(descriptor_contrasts),2),'contrast_sample_frame_times':[t for t,_ in active_samples.values()],'bulb_count':len(bulbs),'strand_count':len(strands),'bulb_pre_press_delta':round(early_delta,2),'bulb_reset_delta':round(reset_delta,2),'decoded_bulb_blinks':temporal})
+ results.append({'file':name,'size':list(im.size),'bytes':path.stat().st_size,'frames':im.n_frames,'duration_ms':elapsed,'opening_hold_ms':opening_hold,'visible_robot_motion_ms':motion_start,'robot_pixels_changed_gt24_at_100ms':motion_pixels_at_100ms,'baseline_pixel_identical_frames_checked':baseline_frames_checked,'closing_hold_ms':closing_hold,'first_frame_ms':durations[0],'max_frame_ms':max(durations),'loop_mean_pixel_error':round(seam,4),'static_fallback_mean_pixel_error':round(fallback_error,4),'active_text_worst_p05_contrast':round(min(name_contrasts),2),'active_descriptor_worst_p05_contrast':round(min(descriptor_contrasts),2),'contrast_sample_frame_times':[t for t,_ in active_samples.values()],'bulb_count':len(bulbs),'strand_count':len(strands),'bulb_pre_press_delta':round(early_delta,2),'bulb_reset_delta':round(reset_delta,2),'decoded_bulb_blinks':temporal})
 assert sum(r['bytes'] for r in results)<4*1024*1024,'Header animation exceeds 4MiB combined budget'
 if a.manifest:
  rows=json.loads(a.manifest.read_text())['times']
