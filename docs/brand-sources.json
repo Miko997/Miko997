@@ -1,10 +1,9 @@
 {
   "checked_on": "2026-10-09",
   "purpose": "Official artwork for the existing profile buttons; no affiliation or endorsement claim.",
-  "presentation": "Original vector paths or original embedded PNG bytes. White variants and restrained lavender presentation match the existing plaque theme.",
+  "presentation": "Official source geometry with transparent canvases; explicitly selected organization marks for the first three project buttons. RViz uses its original isolated native lettering layer.",
   "presentation_filters": {
-    "newton": "Constant #b1bdd7 SVG paint matrix; source alpha and original PNG bytes preserved.",
-    "rviz": "Luminance-to-#b1bdd7 SVG paint matrix; original PNG bytes and alpha preserved."
+    "pixar": "SVG paint filter maps original transparent bitmap to #e8e7f5 without modifying alpha."
   },
   "sources": {
     "science": {
@@ -192,17 +191,10 @@
         },
         "rviz": {
           "file": "assets/brands/icons/rviz.svg",
-          "source": "https://raw.githubusercontent.com/ros2/rviz/0d5c197fabebb0fe25ad4ca1076e28a7be967b5c/rviz_common/images/splash.png",
-          "choice": "Actual official RViz project splash/logo embedded unchanged as a self-contained PNG data URI.",
-          "reason": "A wider top icon slot preserves the real RViz artwork; no substitute symbol is needed. The SVG is a lossless wrapper around the exact original 400×260 PNG.",
-          "official_rviz_raster": "https://raw.githubusercontent.com/ros2/rviz/0d5c197fabebb0fe25ad4ca1076e28a7be967b5c/rviz_common/images/splash.png",
-          "official_rviz_readme": "https://raw.githubusercontent.com/ros2/rviz/0d5c197fabebb0fe25ad4ca1076e28a7be967b5c/README.md",
-          "rviz_art_license_note": "The package README dedicates these icons and graphics to the public domain. ROS artwork CC BY-NC license applies only to the separate ROS/ROS Perception vectors.",
-          "inspection": "Reviewed recursive ros2/rviz tree at 0d5c197fabebb0fe25ad4ca1076e28a7be967b5c and original README/splash; ROS1 README also labels the corresponding image rviz logo. Generic ROS fallback was considered, then rejected in favor of original image embedding.",
-          "original": "assets/brands/originals/rviz-splash-original.png",
-          "geometry": "Original PNG bytes retained; aspect ratio preserved; SVG luminance paint filter maps it to the existing cool monochrome palette.",
-          "license": "Public Domain dedication for all package icons/graphics in the pinned ros2/rviz README.",
-          "recommended_display": "43.08×28px in a 28px-high top slot; retain aspect ratio. A 52×33.8px preview is also supplied."
+          "source": "https://raw.githubusercontent.com/ros-visualization/rviz/c4964de840d97b1377456a2054662551816b0a54/image_src/rviz_isolated.xcf",
+          "original": "assets/brands/originals/rviz-isolated-original.xcf",
+          "geometry": "Native Pasted Layer pixels exported losslessly; separate shadow omitted; only transparent margin trimmed via SVG viewBox.",
+          "license": "The official repository README dedicates all package icons and graphics to the public domain."
         }
       },
       "files": {
@@ -247,8 +239,8 @@
           "bytes": 821
         },
         "assets/brands/icons/rviz.svg": {
-          "sha256": "aac1d9d36254e4acc1a29e59884100858950ff8fef99315dc791d6bfdbb84393",
-          "bytes": 68360
+          "sha256": "0f9550776ba3beab6204907a9b104dc1930145d7e17128e59f1d8eb4cc71b2c6",
+          "bytes": 10936
         },
         "assets/brands/icons/ros-perception.svg": {
           "sha256": "a80ae0cfb31465f767936e1b5b0bd3c27922ee17f3d0a3fc31784fdcbe44053f",
@@ -405,68 +397,258 @@
         "sha256": "78517ba88b607ab546591b07f79bb37e95a1ba4345b2d83cce684eb9c7a1d407",
         "adaptation": "Original mail_outline geometry; fill changed to #b1bdd7. Generic email symbol, not a Gmail brand claim."
       }
+    },
+    "v7_requested_marks": {
+      "nvidia_google": {
+        "retrieved_at": "2026-10-09",
+        "purpose": "Only replace Newton Physics and MuJoCo button symbols using NVIDIA and Google per explicit user request; retain surrounding layout, labels, links, animation and other icons.",
+        "palette": "Existing light lavender #aa91ff on transparent canvas.",
+        "geometry_policy": "Original official path data copied verbatim, no raster tracing, invented curves, or distortion.",
+        "assets": [
+          {
+            "brand": "nvidia",
+            "title": "NVIDIA eye",
+            "source_original": "assets/brands/originals/nvidia-official-site-logo.svg",
+            "source_sha256": "e4fb11a8a54c3a4da355f33bb127b38d3d6fe2c0f339afaa3916773b8dbed2d0",
+            "icon": "assets/brands/icons/nvidia.svg",
+            "sha256": "c8b3bbd94248caa07d947449af9318be772136c421ebe13efed0a74f5d93cafa",
+            "bytes": 1657,
+            "viewBox": [
+              0.0644531,
+              11.5128,
+              31.1637469,
+              20.9662
+            ],
+            "path_count": 1,
+            "path_data_identical_to_selected_original_paths": true,
+            "transparent_background": true,
+            "self_contained": true,
+            "fill": "#aa91ff",
+            "requested_project_mapping": "Newton Physics → NVIDIA eye (explicit user choice; project title/link are unchanged)",
+            "source_url": "https://www.nvidia.com/en-us/",
+            "source_location": "First displayed header SVG, viewBox 0 0 117 35, second path with original fill #76B900. Full inline SVG preserved in source_original.",
+            "changes": "Extract only the existing separate eye path; remove surrounding wordmark and original whitespace, retain path d verbatim and original aspect ratio; replace green fill with #aa91ff.",
+            "rights": {
+              "owner": "NVIDIA Corporation",
+              "asset_license": "NVIDIA trademark artwork; no open-source license for the logo inferred from public website availability.",
+              "guidance_url": "https://www.nvidia.com/content/dam/en-zz/Solutions/about-us/documents/NVIDIA-Trademark-and-Logo-Usage-Guidelines.pdf",
+              "guidance_note": "The published 2019 logo guidelines specify NVIDIA green/dark gray/white and discourage unspecified colors, cropping and modification. This is the user-requested palette/symbol adaptation, not a claimed brand-approved variant."
+            }
+          },
+          {
+            "brand": "google",
+            "title": "Google G",
+            "source_original": "assets/brands/originals/google-official-signin-icon.svg",
+            "source_sha256": "4d197ab476078c8979c90ea9c4ed98e56a6748e118ace7a07caeb43266cad469",
+            "icon": "assets/brands/icons/google.svg",
+            "sha256": "003da5784c9f4c1fc94284c00471fd282dad5708747be19b1a14699d0fe01354",
+            "bytes": 1107,
+            "viewBox": [
+              10.0,
+              10.0,
+              19.6,
+              20.0
+            ],
+            "path_count": 4,
+            "path_data_identical_to_selected_original_paths": true,
+            "transparent_background": true,
+            "self_contained": true,
+            "fill": "#aa91ff",
+            "requested_project_mapping": "MuJoCo → Google G (explicit user choice; project title/link are unchanged)",
+            "source_url": "https://developers.google.com/static/identity/images/branding_guideline_sample_lt_rd_sl.svg",
+            "source_page": "https://developers.google.com/identity/branding-guidelines",
+            "source_location": "Official light round icon example, four colored paths inside the 20×20 logo clipping rectangle.",
+            "changes": "Extract all four official G paths; remove external button fill/stroke and vacuous 20×20 clipping rectangle (all path bounds are inside it); preserve each path d verbatim and aspect ratio; replace four brand colors with #aa91ff.",
+            "rights": {
+              "owner": "Google LLC",
+              "asset_license": "Google trademark artwork. Developer page content is generally CC BY 4.0 and code examples Apache 2.0, but neither is treated as a trademark grant.",
+              "guidance_url": "https://developers.google.com/identity/branding-guidelines",
+              "general_guidance_url": "https://about.google/brand-resource-center/guidance/",
+              "guidance_note": "The source page is specifically for Sign in with Google and requires the standard color G for authentication buttons. These project-link plaques are not authentication buttons. The requested monochrome adaptation is recorded as a user choice, not as an officially approved Google treatment; no affiliation/endorsement is asserted."
+            }
+          }
+        ],
+        "validation": {
+          "svg_xml_parses": true,
+          "only_svg_title_path_elements": true,
+          "no_external_resources": true,
+          "no_fonts": true,
+          "no_embedded_raster": true,
+          "no_background_shapes": true,
+          "source_and_final_path_d_equality": true
+        }
+      },
+      "pixar": {
+        "schema_version": 1,
+        "retrieved_on": "2026-10-09",
+        "brand": "Pixar",
+        "source_page_url": "https://www.pixar.com/",
+        "source_asset_url": "https://images.squarespace-cdn.com/content/v1/60241cb68df65b530cd84d95/1613495438818-408JDVSTB7NWSHVC20M7/logo.png?format=1500w",
+        "source_evidence": "Main site desktop and mobile header image, alt=\"Pixar Animation Studios\". The image is the PIXAR wordmark without a tagline.",
+        "original_path": "assets/brands/originals/pixar-official-header.png",
+        "icon_path": "assets/brands/icons/pixar.svg",
+        "original_format": "PNG RGBA, 683×131, transparent background",
+        "adaptation": "Original PNG is embedded byte-for-byte inside a self-contained SVG. A constant-color SVG matrix paints the visible wordmark #e8e7f5 (the existing plaque text color) while retaining the original alpha exactly. No tracing, recreated lettering, crop, distortion, pixel resampling, or opaque background added.",
+        "vector_status": "Raster original preserved in SVG container; not represented as an official vector. Checked official Pixar/RenderMan sites and OpenUSD repository exposed no native Pixar vector; research PDF URLs redirected to HTML.",
+        "display_guidance": "Preserve 683:131 aspect ratio; fit within the 64×28 icon slot. This produces an approximately 64×12.3 wordmark centered in the slot.",
+        "license": "Pixar/Disney trademark. Official source does not supply an open-source logo license. This source record does not claim endorsement or affiliation.",
+        "sha256": {
+          "assets/brands/originals/pixar-official-header.png": "e82982662384b50272e40df77948a102b898084639e0596324f7180663801970",
+          "assets/brands/icons/pixar.svg": "8eb55d72b2e29358d867a7375129cdaca0875a5199f49b3133ffb36c35f0149a"
+        },
+        "checks": {
+          "embedded_original_byte_identical": true,
+          "source_has_transparency": true,
+          "alpha_range": [
+            0,
+            255
+          ],
+          "external_references": false
+        }
+      },
+      "rviz": {
+        "checked_on": "2026-10-09",
+        "project": "RViz",
+        "source_repository": "https://github.com/ros-visualization/rviz",
+        "source_revision": "c4964de840d97b1377456a2054662551816b0a54",
+        "native_source": "https://raw.githubusercontent.com/ros-visualization/rviz/c4964de840d97b1377456a2054662551816b0a54/image_src/rviz_isolated.xcf",
+        "native_3d_source": "https://raw.githubusercontent.com/ros-visualization/rviz/c4964de840d97b1377456a2054662551816b0a54/image_src/RViz.blend",
+        "license_source": "https://raw.githubusercontent.com/ros-visualization/rviz/c4964de840d97b1377456a2054662551816b0a54/README.md",
+        "license": "The official repository README dedicates all package icons and graphics to the public domain.",
+        "output": "assets/brands/icons/rviz.svg",
+        "transparent_export": "assets/brands/derived/rviz-transparent.png",
+        "export": {
+          "native_format": "GIMP XCF version0 /8bitRGBA /RLE",
+          "layer": "Pasted Layer",
+          "layer_index": 0,
+          "source_canvas": [
+            500,
+            320
+          ],
+          "alpha_bounds": [
+            25,
+            25,
+            478,
+            296
+          ],
+          "omitted_layer": "New Layer: separate shadow; not included in the isolated wordmark export.",
+          "process": "Losslessly decoded the stored RGBA tile channels using the documented GIMP XCF RLE format; exported native pixels directly as PNG. Embedded exact PNG bytes in self-contained SVG. ViewBox only trims empty canvas margins; artwork pixels and coordinates remain unchanged.",
+          "no_image_generation": true,
+          "no_recolor_or_tracing_or_background_estimation": true,
+          "decoder": "scripts/art/export_rviz_xcf.py",
+          "format_reference": "https://developer.gimp.org/core/standards/xcf/"
+        },
+        "verification": {
+          "pixel_exact_to_decoded_source_layer": true,
+          "embedded_png_bytes_identical": true,
+          "alpha_range": [
+            0,
+            255
+          ],
+          "transparent_pixels": 102073,
+          "opaque_pixels": 57927,
+          "all_canvas_corners_transparent": true,
+          "background_geometry_in_svg": false
+        },
+        "files": {
+          "assets/brands/originals/rviz-isolated-original.xcf": {
+            "sha256": "5c6ddcae1e212df6b6778678c8fe7bec852933cae4bc4c5acd8bca178389e0c6",
+            "bytes": 159774
+          },
+          "assets/brands/originals/rviz-logo-original.blend": {
+            "sha256": "ca14e2bccc867729d329142d6a749d4be3fba83fa33331b32764d667be39d2c9",
+            "bytes": 405916
+          },
+          "assets/brands/originals/rviz-noetic-README-original.md": {
+            "sha256": "042c29712b1e72125de9e6b6c4a879c207970df0bbd05292663d382132c4a394",
+            "bytes": 2994
+          },
+          "assets/brands/derived/rviz-transparent.png": {
+            "sha256": "7b57ae6a0d38bece5a5518662acba2d6d7f8d44237087bb9e1e5e0ebfce4faa2",
+            "bytes": 7940
+          },
+          "assets/brands/icons/rviz.svg": {
+            "sha256": "0f9550776ba3beab6204907a9b104dc1930145d7e17128e59f1d8eb4cc71b2c6",
+            "bytes": 10936
+          }
+        }
+      }
     }
   },
   "final_icons": {
     "email": {
       "file": "assets/brands/icons/email.svg",
-      "sha256": "9608694d586f063b3ea0b94c3689cec9d75065daab6225d57f79ff934cf75a50",
-      "bytes": 278
+      "bytes": 278,
+      "sha256": "9608694d586f063b3ea0b94c3689cec9d75065daab6225d57f79ff934cf75a50"
+    },
+    "google": {
+      "file": "assets/brands/icons/google.svg",
+      "bytes": 1107,
+      "sha256": "003da5784c9f4c1fc94284c00471fd282dad5708747be19b1a14699d0fe01354"
     },
     "linkedin": {
       "file": "assets/brands/icons/linkedin.svg",
-      "sha256": "fa49b558845b3f0e40bc205022e008d533e007c7bd75a2df770883a5858329a5",
-      "bytes": 469
+      "bytes": 469,
+      "sha256": "fa49b558845b3f0e40bc205022e008d533e007c7bd75a2df770883a5858329a5"
     },
-    "mujoco": {
-      "file": "assets/brands/icons/mujoco.svg",
-      "sha256": "41dde932d67ee6c2e687d1c77dd3c7ad41d64772368975b0a1a8fe2e27b6c82a",
-      "bytes": 3077
-    },
-    "newton": {
-      "file": "assets/brands/icons/newton.svg",
-      "sha256": "87d414b66255157de59b5cce93da2678326f9687b14389e3529165d26d44b3b3",
-      "bytes": 10553
-    },
-    "openusd": {
-      "file": "assets/brands/icons/openusd.svg",
-      "sha256": "b83c7d9067ed5c1d42a08706fc96ebb63ca705ba1d330264e3cf5b97bb5a2043",
-      "bytes": 751
+    "nvidia": {
+      "file": "assets/brands/icons/nvidia.svg",
+      "bytes": 1657,
+      "sha256": "c8b3bbd94248caa07d947449af9318be772136c421ebe13efed0a74f5d93cafa"
     },
     "orcid": {
       "file": "assets/brands/icons/orcid.svg",
-      "sha256": "94fb1d3ab2460945d117336e1c977e04d85c5ea66106ce1b0b06cc779eb17cca",
-      "bytes": 717
+      "bytes": 717,
+      "sha256": "94fb1d3ab2460945d117336e1c977e04d85c5ea66106ce1b0b06cc779eb17cca"
+    },
+    "pixar": {
+      "file": "assets/brands/icons/pixar.svg",
+      "bytes": 14135,
+      "sha256": "8eb55d72b2e29358d867a7375129cdaca0875a5199f49b3133ffb36c35f0149a"
     },
     "ros-perception": {
       "file": "assets/brands/icons/ros-perception.svg",
-      "sha256": "a80ae0cfb31465f767936e1b5b0bd3c27922ee17f3d0a3fc31784fdcbe44053f",
-      "bytes": 15337
+      "bytes": 15337,
+      "sha256": "a80ae0cfb31465f767936e1b5b0bd3c27922ee17f3d0a3fc31784fdcbe44053f"
     },
     "ros2": {
       "file": "assets/brands/icons/ros2.svg",
-      "sha256": "5ffc8af4a8985097dc30c25ad2130b4f50aa69a2101521f6b1aadc1de27317f7",
-      "bytes": 821
+      "bytes": 821,
+      "sha256": "5ffc8af4a8985097dc30c25ad2130b4f50aa69a2101521f6b1aadc1de27317f7"
     },
     "rviz": {
       "file": "assets/brands/icons/rviz.svg",
-      "sha256": "aac1d9d36254e4acc1a29e59884100858950ff8fef99315dc791d6bfdbb84393",
-      "bytes": 68360
+      "bytes": 10936,
+      "sha256": "0f9550776ba3beab6204907a9b104dc1930145d7e17128e59f1d8eb4cc71b2c6"
     },
     "steam": {
       "file": "assets/brands/icons/steam.svg",
-      "sha256": "bb5121b81a9ece5b97622482c5b60ff50b996affb67fa21f33ad6bf718c37424",
-      "bytes": 1361
+      "bytes": 1361,
+      "sha256": "bb5121b81a9ece5b97622482c5b60ff50b996affb67fa21f33ad6bf718c37424"
     },
     "youtube": {
       "file": "assets/brands/icons/youtube.svg",
-      "sha256": "6f0a12a3c9ef245c820aef518a17262284862cf51a173fc5a610446c887362a2",
-      "bytes": 504
+      "bytes": 504,
+      "sha256": "6f0a12a3c9ef245c820aef518a17262284862cf51a173fc5a610446c887362a2"
     },
     "zenodo": {
       "file": "assets/brands/icons/zenodo.svg",
-      "sha256": "3d45981080740395296566619b82c79c1d26bcbd1d4e8e2da2ff65266cae1672",
-      "bytes": 2002
+      "bytes": 2002,
+      "sha256": "3d45981080740395296566619b82c79c1d26bcbd1d4e8e2da2ff65266cae1672"
     }
+  },
+  "current_button_icons": {
+    "Newton Physics": "nvidia",
+    "MuJoCo": "google",
+    "OpenUSD": "pixar",
+    "ROS 2": "ros2",
+    "RViz": "rviz",
+    "ROS Perception": "ros-perception",
+    "LinkedIn": "linkedin",
+    "ORCID": "orcid",
+    "YouTube": "youtube",
+    "Steam": "steam",
+    "Email": "email",
+    "Research archive": "zenodo"
   }
 }

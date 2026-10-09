@@ -78,7 +78,7 @@ class EcosystemTests(unittest.TestCase):
                 self.assertTrue(root.find("{http://www.w3.org/2000/svg}desc").text)
                 for banned in ("<script", "<animate", "@keyframes", "foreignObject", "onload="):
                     self.assertNotIn(banned, content)
-                # Newton and RViz publish raster marks. Their original PNGs are
+                # Pixar and RViz use raster source artwork. Their PNGs are
                 # vendored inline; no network references may enter an SVG image.
                 for node in root.iter():
                     for attr, value in node.attrib.items():

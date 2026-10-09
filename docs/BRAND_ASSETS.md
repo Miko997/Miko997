@@ -7,13 +7,18 @@ The complete source inventory, licenses, adaptations and checksums are in
 `assets/brands/originals/`; self-contained presentation SVGs are in
 `assets/brands/icons/`.
 
+The first three associations were explicitly selected by the profile owner:
+NVIDIA for Newton Physics, Google for MuJoCo, and Pixar for OpenUSD. The project
+labels and links continue to identify the actual upstream contribution; the
+chosen marks do not assert exclusive project ownership or employment.
+
 | Button | Official source | Presentation |
 | --- | --- | --- |
-| Newton Physics | [Newton documentation artwork](https://github.com/newton-physics/newton/blob/c361452db95979eac77679bc49ef3c6b7c6dd9c4/docs/_static/newton-logo-dark.png) | Original PNG and alpha silhouette; lavender SVG paint filter. |
-| MuJoCo | [MuJoCo banner](https://github.com/google-deepmind/mujoco/blob/0998957cf026b78f35e3a1eebd2cd3312d810b08/doc/images/banner.svg) | Complete original vector wordmark in lavender. |
-| OpenUSD | [OpenUSD symbol](https://openusd.org/images/USDLogoUnsized.svg) | All four original paths in lavender. |
+| Newton Physics | [NVIDIA website mark](https://www.nvidia.com/en-us/) | Original NVIDIA eye path in lavender, transparent. |
+| MuJoCo | [Google identity artwork](https://developers.google.com/identity/branding-guidelines) | All four original Google G paths in lavender, without button framing. |
+| OpenUSD | [Pixar website wordmark](https://www.pixar.com/) | Original transparent PNG, with a pale SVG paint filter preserving alpha. |
 | ROS 2 | [Open Robotics artwork](https://github.com/openrobotics/artwork/blob/4024191d62211c4d4fa024e9974dd372d92aa23a/orgunits/ros.svg) | Official white nine-dot mark; ROS 2 is identified by the existing label. |
-| RViz | [RViz project logo](https://github.com/ros2/rviz/blob/0d5c197fabebb0fe25ad4ca1076e28a7be967b5c/rviz_common/images/splash.png) | Original PNG, with a cool monochrome SVG paint filter. |
+| RViz | [Original isolated RViz artwork](https://github.com/ros-visualization/rviz/blob/c4964de840d97b1377456a2054662551816b0a54/image_src/rviz_isolated.xcf) | Exact RGBA pixels from its isolated lettering layer; transparent, with no ground, rectangle or shadow layer. |
 | ROS Perception | [Original organization artwork](https://github.com/openrobotics/artwork/blob/4024191d62211c4d4fa024e9974dd372d92aa23a/orgunits/ros_logos.graffle) | All 234 rectangles from the named perception layer, in official white. |
 | LinkedIn | [LinkedIn brand resources](https://brand.linkedin.com/in-logo) | Official inbug vector geometry, white variant. |
 | ORCID | [ORCID brand library](https://info.orcid.org/brand-guidelines/) | Supplied reversed-white iD vector. |
@@ -31,8 +36,12 @@ the inventory. The trademarks belong to their respective owners. These links
 identify projects and profile destinations and do not claim endorsement.
 
 The palette adaptations are presentation choices for this profile, not new
-official brand variants. Newton and RViz retain the downloaded bitmap bytes
-inside the SVG; no tracing or generative redraw is involved. The ROS Perception
+official brand variants. Pixar retains its downloaded bitmap bytes inside the
+SVG. RViz is losslessly decoded from the original native XCF lettering layer,
+omitting the separate shadow layer. Its source layers can be exported with
+`scripts/art/export_rviz_xcf.py`. No tracing, matting or generated pixels are
+used in the published icons. Earlier splash-image and project-mark sources are
+retained for provenance. The ROS Perception
 vector can be reproduced with `scripts/art/extract_ros_brand_icons.py` from its
 vendored editable source. `scripts/brand_icons.py` embeds each asset directly
 inside its plaque, so GitHub needs no external icon service.

@@ -1,4 +1,4 @@
-"""Static evidence plaques with locally vendored official project artwork."""
+"""Static evidence plaques with locally vendored project/organization artwork."""
 from __future__ import annotations
 
 from html import escape
@@ -10,9 +10,9 @@ WIDTH, HEIGHT = 148, 68
 
 # Repository identity is stable; display copy and geometry are intentionally small.
 PLAQUES = {
-    "newton-physics/newton": ("newton", "Newton Physics", "newton"),
-    "google-deepmind/mujoco": ("mujoco", "MuJoCo", "mujoco"),
-    "PixarAnimationStudios/OpenUSD": ("openusd", "OpenUSD", "openusd"),
+    "newton-physics/newton": ("newton", "Newton Physics", "nvidia"),
+    "google-deepmind/mujoco": ("mujoco", "MuJoCo", "google"),
+    "PixarAnimationStudios/OpenUSD": ("openusd", "OpenUSD", "pixar"),
     "ros2/rclcpp": ("ros2", "ROS 2", "ros2"),
     "ros2/rviz": ("rviz", "RViz", "rviz"),
     "ros-perception/point_cloud_transport": ("ros-perception", "ROS Perception", "ros-perception"),
@@ -26,15 +26,14 @@ def ecosystem_filename(item: dict) -> str:
 
 def plaque(item: dict) -> str:
     _, label, kind = PLAQUES[item["repo"]]
-    # The official MuJoCo wordmark and RViz splash have wider proportions than
-    # the square symbols. Fit their complete artwork into the same top band.
-    icon_width = {"newton": 43, "mujoco": 64, "rviz": 43}.get(kind, 28)
+    # Fit wider marks into the same top band without stretching their geometry.
+    icon_width = {"nvidia": 36, "pixar": 64, "rviz": 43}.get(kind, 28)
     seam_start = max(53, 14 + icon_width + 11)
     # The muted brass seam and clipped corners refer to machined instrument labels.
     # This narrow frame remains subordinate to the activity and original project art.
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{WIDTH}" height="{HEIGHT}" viewBox="0 0 {WIDTH} {HEIGHT}" role="img" aria-labelledby="title desc">
 <title id="title">{escape(item['name'])} — {escape(item['description'])}</title>
-<desc id="desc">Official project artwork on a plaque linked to publicly verified upstream work.</desc>
+<desc id="desc">Project or organization artwork on a plaque linked to publicly verified upstream work.</desc>
 <defs>
  <linearGradient id="plate" x2=".9" y2="1"><stop stop-color="#171b2b"/><stop offset="1" stop-color="#0b101a"/></linearGradient>
  <linearGradient id="seam"><stop stop-color="#9b8054" stop-opacity=".65"/><stop offset=".45" stop-color="#605579" stop-opacity=".6"/><stop offset="1" stop-color="#364158" stop-opacity=".3"/></linearGradient>
