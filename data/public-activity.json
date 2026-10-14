@@ -1,19 +1,15 @@
 {
   "schema_version": 3,
   "login": "Miko997",
-  "as_of": "2026-10-13",
+  "as_of": "2026-10-14",
   "account_created": "2023-08-05",
   "source": "github-public-contribution-calendar",
   "privacy": "Published daily aggregates only. No private repository details requested.",
   "stats": {
-    "all_time": 1728,
-    "last_365": 1723,
-    "active_days_365": 89,
+    "all_time": 1787,
+    "last_365": 1782,
+    "active_days_365": 90,
     "days": [
-      [
-        "2025-10-14",
-        0
-      ],
       [
         "2025-10-15",
         0
@@ -1469,13 +1465,17 @@
       [
         "2026-10-13",
         77
+      ],
+      [
+        "2026-10-14",
+        59
       ]
     ],
     "first_contribution": "2023-08-05",
     "streak": {
-      "current": 10,
+      "current": 11,
       "current_start": "2026-10-04",
-      "current_end": "2026-10-13",
+      "current_end": "2026-10-14",
       "longest": 16,
       "longest_start": "2026-08-30",
       "longest_end": "2026-09-14"
@@ -1651,8 +1651,8 @@
   "visibility": {
     "aggregate_calendar": "public-calendar-retained",
     "anonymous_private_counts_reported": true,
-    "restricted_contributions_all_time": 747,
-    "public_calendar_all_time": 1728,
-    "aggregate_calendar_all_time": 1721
+    "restricted_contributions_all_time": 806,
+    "public_calendar_all_time": 1787,
+    "aggregate_calendar_all_time": 1780
   }
 }
