@@ -6,22 +6,22 @@
 </picture>
 
 <picture>
-  <source media="(prefers-reduced-motion: reduce) and (max-width: 600px)" srcset="./assets/generated/contribution-core-mobile-static--4632410189df.svg" />
-  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/generated/contribution-core-static--4632410189df.svg" />
-  <source media="(max-width: 600px)" srcset="./assets/generated/contribution-core-mobile--4632410189df.svg" />
-  <img src="./assets/generated/contribution-core--4632410189df.svg" width="100%" alt="1,796 GitHub contributions from 2025-10-21 to 2026-10-20; current contribution streak 0 days" />
+  <source media="(prefers-reduced-motion: reduce) and (max-width: 600px)" srcset="./assets/generated/contribution-core-mobile-static--0d58fc0c57ce.svg" />
+  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/generated/contribution-core-static--0d58fc0c57ce.svg" />
+  <source media="(max-width: 600px)" srcset="./assets/generated/contribution-core-mobile--0d58fc0c57ce.svg" />
+  <img src="./assets/generated/contribution-core--0d58fc0c57ce.svg" width="100%" alt="1,797 GitHub contributions from 2025-10-21 to 2026-10-20; current contribution streak 1 days" />
 </picture>
 
 ## Open source
 
 <!-- IMPACT:START -->
 <p>
-<a href="https://github.com/newton-physics/newton/pull/4205"><img src="./assets/generated/ecosystem-newton--4632410189df.svg" width="126" height="58" alt="Newton Physics — GPU benchmarks for full and partial simulation resets" title="GPU benchmarks for full and partial simulation resets" /></a>
-<a href="https://github.com/google-deepmind/mujoco/commit/76e31d377ed4718366431b947720aea837d94ea5"><img src="./assets/generated/ecosystem-mujoco--4632410189df.svg" width="126" height="58" alt="MuJoCo — URDF inertia regression coverage across recompilation and XML round trips" title="URDF inertia regression coverage across recompilation and XML round trips" /></a>
-<a href="https://github.com/PixarAnimationStudios/OpenUSD/commit/581fa24e8c887346f14e7edb5f3e88fb1fe33372"><img src="./assets/generated/ecosystem-openusd--4632410189df.svg" width="126" height="58" alt="OpenUSD — Hydra scene-index prefixing for absolute and membership path expressions" title="Hydra scene-index prefixing for absolute and membership path expressions" /></a>
-<a href="https://github.com/ros2/rclcpp/pull/3294"><img src="./assets/generated/ecosystem-ros2--4632410189df.svg" width="126" height="58" alt="ROS 2 — Wait-set ownership on failed removal" title="Wait-set ownership on failed removal" /></a>
-<a href="https://github.com/ros2/rviz/pull/1891"><img src="./assets/generated/ecosystem-rviz--4632410189df.svg" width="126" height="58" alt="RViz — Keyboard event routing after native render-window interaction" title="Keyboard event routing after native render-window interaction" /></a>
-<a href="https://github.com/ros-perception/point_cloud_transport/pull/198"><img src="./assets/generated/ecosystem-ros-perception--4632410189df.svg" width="126" height="58" alt="ROS Perception — Caller transport defaults and existing parameter declarations" title="Caller transport defaults and existing parameter declarations" /></a>
+<a href="https://github.com/newton-physics/newton/pull/4205"><img src="./assets/generated/ecosystem-newton--0d58fc0c57ce.svg" width="126" height="58" alt="Newton Physics — GPU benchmarks for full and partial simulation resets" title="GPU benchmarks for full and partial simulation resets" /></a>
+<a href="https://github.com/google-deepmind/mujoco/commit/76e31d377ed4718366431b947720aea837d94ea5"><img src="./assets/generated/ecosystem-mujoco--0d58fc0c57ce.svg" width="126" height="58" alt="MuJoCo — URDF inertia regression coverage across recompilation and XML round trips" title="URDF inertia regression coverage across recompilation and XML round trips" /></a>
+<a href="https://github.com/PixarAnimationStudios/OpenUSD/commit/581fa24e8c887346f14e7edb5f3e88fb1fe33372"><img src="./assets/generated/ecosystem-openusd--0d58fc0c57ce.svg" width="126" height="58" alt="OpenUSD — Hydra scene-index prefixing for absolute and membership path expressions" title="Hydra scene-index prefixing for absolute and membership path expressions" /></a>
+<a href="https://github.com/ros2/rclcpp/pull/3294"><img src="./assets/generated/ecosystem-ros2--0d58fc0c57ce.svg" width="126" height="58" alt="ROS 2 — Wait-set ownership on failed removal" title="Wait-set ownership on failed removal" /></a>
+<a href="https://github.com/ros2/rviz/pull/1891"><img src="./assets/generated/ecosystem-rviz--0d58fc0c57ce.svg" width="126" height="58" alt="RViz — Keyboard event routing after native render-window interaction" title="Keyboard event routing after native render-window interaction" /></a>
+<a href="https://github.com/ros-perception/point_cloud_transport/pull/198"><img src="./assets/generated/ecosystem-ros-perception--0d58fc0c57ce.svg" width="126" height="58" alt="ROS Perception — Caller transport defaults and existing parameter declarations" title="Caller transport defaults and existing parameter declarations" /></a>
 </p>
 <!-- IMPACT:END -->
 
