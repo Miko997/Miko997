@@ -6,9 +6,9 @@
   "source": "github-public-contribution-calendar",
   "privacy": "Published daily aggregates only. No private repository details requested.",
   "stats": {
-    "all_time": 1802,
-    "last_365": 1797,
-    "active_days_365": 92,
+    "all_time": 1803,
+    "last_365": 1798,
+    "active_days_365": 93,
     "days": [
       [
         "2025-10-22",
@@ -1468,19 +1468,19 @@
       ],
       [
         "2026-10-21",
-        0
+        1
       ]
     ],
     "first_contribution": "2023-08-05",
     "streak": {
-      "current": 1,
+      "current": 2,
       "current_start": "2026-10-20",
-      "current_end": "2026-10-20",
+      "current_end": "2026-10-21",
       "longest": 16,
       "longest_start": "2026-08-30",
       "longest_end": "2026-09-14"
     },
-    "visible_commits_365": 659
+    "visible_commits_365": 660
   },
   "upstream": {
     "merged": [
@@ -1564,6 +1564,15 @@
         "state": "merged",
         "draft": false,
         "merged_at": "2026-10-05T22:19:27Z"
+      },
+      {
+        "repo": "newton-physics/newton",
+        "number": 4595,
+        "title": "Fix MJCF spatial tendon site-name lookup",
+        "url": "https://github.com/newton-physics/newton/pull/4595",
+        "state": "merged",
+        "draft": false,
+        "merged_at": "2026-10-21T10:46:24Z"
       },
       {
         "repo": "newton-physics/newton",
@@ -1652,7 +1661,7 @@
     "aggregate_calendar": "public-calendar-retained",
     "anonymous_private_counts_reported": true,
     "restricted_contributions_all_time": 819,
-    "public_calendar_all_time": 1802,
-    "aggregate_calendar_all_time": 1794
+    "public_calendar_all_time": 1803,
+    "aggregate_calendar_all_time": 1795
   }
 }
