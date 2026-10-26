@@ -1531,6 +1531,15 @@
       },
       {
         "repo": "ros2/rclcpp",
+        "number": 3318,
+        "title": "Synchronize Jazzy action-server clock callback changes",
+        "url": "https://github.com/ros2/rclcpp/pull/3318",
+        "state": "merged",
+        "draft": false,
+        "merged_at": "2026-10-26T05:57:37Z"
+      },
+      {
+        "repo": "ros2/rclcpp",
         "number": 3310,
         "title": "[Humble] Updates to not use std::move in some places. (backport #2353)",
         "url": "https://github.com/ros2/rclcpp/pull/3310",
