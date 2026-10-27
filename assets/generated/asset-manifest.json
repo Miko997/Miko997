@@ -2,6 +2,21 @@
   "schema_version": 1,
   "generations": [
     {
+      "fingerprint": "8f0d2c4095c3",
+      "files": [
+        "contribution-core--8f0d2c4095c3.svg",
+        "contribution-core-static--8f0d2c4095c3.svg",
+        "contribution-core-mobile--8f0d2c4095c3.svg",
+        "contribution-core-mobile-static--8f0d2c4095c3.svg",
+        "ecosystem-newton--8f0d2c4095c3.svg",
+        "ecosystem-mujoco--8f0d2c4095c3.svg",
+        "ecosystem-openusd--8f0d2c4095c3.svg",
+        "ecosystem-ros2--8f0d2c4095c3.svg",
+        "ecosystem-rviz--8f0d2c4095c3.svg",
+        "ecosystem-ros-perception--8f0d2c4095c3.svg"
+      ]
+    },
+    {
       "fingerprint": "af3357c5916f",
       "files": [
         "contribution-core--af3357c5916f.svg",
@@ -29,21 +44,6 @@
         "ecosystem-ros2--31593846fb4e.svg",
         "ecosystem-rviz--31593846fb4e.svg",
         "ecosystem-ros-perception--31593846fb4e.svg"
-      ]
-    },
-    {
-      "fingerprint": "0ce704db4386",
-      "files": [
-        "contribution-core--0ce704db4386.svg",
-        "contribution-core-static--0ce704db4386.svg",
-        "contribution-core-mobile--0ce704db4386.svg",
-        "contribution-core-mobile-static--0ce704db4386.svg",
-        "ecosystem-newton--0ce704db4386.svg",
-        "ecosystem-mujoco--0ce704db4386.svg",
-        "ecosystem-openusd--0ce704db4386.svg",
-        "ecosystem-ros2--0ce704db4386.svg",
-        "ecosystem-rviz--0ce704db4386.svg",
-        "ecosystem-ros-perception--0ce704db4386.svg"
       ]
     }
   ]
