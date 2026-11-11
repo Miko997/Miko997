@@ -6,9 +6,9 @@
   "source": "github-public-contribution-calendar",
   "privacy": "Published daily aggregates only. No private repository details requested.",
   "stats": {
-    "all_time": 1936,
-    "last_365": 1931,
-    "active_days_365": 97,
+    "all_time": 1952,
+    "last_365": 1947,
+    "active_days_365": 98,
     "days": [
       [
         "2025-11-12",
@@ -1464,18 +1464,18 @@
       ],
       [
         "2026-11-10",
-        21
+        31
       ],
       [
         "2026-11-11",
-        0
+        6
       ]
     ],
     "first_contribution": "2023-08-05",
     "streak": {
-      "current": 3,
+      "current": 4,
       "current_start": "2026-11-08",
-      "current_end": "2026-11-10",
+      "current_end": "2026-11-11",
       "longest": 16,
       "longest_start": "2026-08-30",
       "longest_end": "2026-09-14"
@@ -1669,8 +1669,8 @@
   "visibility": {
     "aggregate_calendar": "public-calendar-retained",
     "anonymous_private_counts_reported": true,
-    "restricted_contributions_all_time": 950,
-    "public_calendar_all_time": 1936,
-    "aggregate_calendar_all_time": 1928
+    "restricted_contributions_all_time": 966,
+    "public_calendar_all_time": 1952,
+    "aggregate_calendar_all_time": 1944
   }
 }
